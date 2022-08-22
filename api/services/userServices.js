@@ -1,7 +1,7 @@
 const User = require('../models/User')
 
-const create = (firstName,lastName,email,country,city,street) => {
-    return User.create({firstName,lastName,email,country,city,street})
+const create = (firstName,lastName,password,email,country,city,street) => {
+    return User.create({firstName,lastName,password,email,country,city,street})
 }
 
 const findOne = (email) => {
