@@ -4,8 +4,7 @@ const userController = require('./controllers/userControllers')
 
 router.use('/users',userController)
 router.all('*', (req,res) => {
-    res.send('Error')
-    res.end();
+    res.status(404).json({error:'This service does not exist!'})
 })
 
 

@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
 
 const userServices = require("../services/userServices");
+const tokenServices = require("../services/tokenServices");
 
 const registerHandler = async(req,res)=> {
   console.log(`POST ${req.originalUrl}`);
@@ -15,7 +15,7 @@ const registerHandler = async(req,res)=> {
           const user = await userServices.findOne(email);
           const isUserFound = Boolean(user);
           if(isUserFound) return res.status(409).json({error:'User with this email already exist!'});
-          
+
           const dbResponse = await userServices.create(
               firstName,
               lastName,
@@ -34,11 +34,11 @@ const registerHandler = async(req,res)=> {
       }
 }
 
-
 const loginHandler = async(req,res) => {
   console.log(`POST ${req.originalUrl}`);
   const {email,password} = req.body;
   if(!email || !password) return res.status(400).json({error:'Email and Password are required in order to continue'});
+
     try {
         const user = await userServices.findOne(email);
 
@@ -49,35 +49,26 @@ const loginHandler = async(req,res) => {
         if(!isValid) return res.status(404).json({error:'Incorrect email or password'});
         
         delete user.password
-        const accessToken = generateAccessToken(user);
+        const accessToken = tokenServices.generate(user);
         return res.status(200).json({user,accessToken});
     } catch(err){
         console.log(err);
     }
 }
 
-const logoutHandler = async(req,res) => {
+const logoutHandler = (req,res) => {
   console.log(`POST ${req.originalUrl}`);
-
   const token = req.headers.authorization;
   if(!token) return res.status(401).json({error:'No access token provided!'});
    
   try {
-    const decodedToken = verifyAccessToken(token);
+    const decodedToken = tokenServices.verify(token);
     res.status(200).json({successMessage: 'You have successfully loged out!'});
   } catch(err) {
     return res.status(401).json({error:'Your accessToken have expired!'});
   }
 }
 
-
-const verifyAccessToken = (token) => {
-   return jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
-}
-
-const generateAccessToken = (user) => {
-  return jwt.sign(user,process.env.ACCESS_TOKEN_SECRET,{expiresIn: '30s'});
-}
 
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
