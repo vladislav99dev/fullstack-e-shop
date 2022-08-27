@@ -1,32 +1,33 @@
 import { useState } from "react";
 
-import {
-  MobileUserMenu,
-  CommonNavBar,
-  IconsManager,
-  MobileNavBar,
-} from "./NavBarPartials";
+import { DesktopNavBar, SomethingIShouldName } from "./NavBarPartials";
 
 const NavBar = () => {
-  // const [navBar, setNavbar] = useState(false);
-  // const [userNavbar, setuserNavbar] = useState(false);
+  const [isUserMenuActive, setIsUserMenuActive] = useState(false);
+  const [isProductsMenuActive, setIsProductsMenuActive] = useState(false);
 
-  // const handleToggleNav = () => {
-  //   setNavbar(!navBar);
-  // };
+  const toggleUserMenu = () => {
+    setIsUserMenuActive(!isUserMenuActive);
+    setIsProductsMenuActive(false);
+    console.log("clicking");
+  };
 
-  // const handleUserToggleNavbar = () => {
-  //   setuserNavbar(!userNavbar);
-  // };
+  const toggleProductsMenu = () => {
+    setIsProductsMenuActive(!isProductsMenuActive);
+    setIsUserMenuActive(false);
+    console.log("clicking");
+  };
 
   return (
     <>
-      <MobileNavBar />
-      <CommonNavBar />
+      <SomethingIShouldName
+        toggleUserMenu={toggleUserMenu}
+        isUserMenuActive={isUserMenuActive}
+        toggleProductsMenu={toggleProductsMenu}
+        isProductsMenuActive={isProductsMenuActive}
+      />
+      <DesktopNavBar />
     </>
-    /* <IconsManager navBar={navBar} userNavbar={userNavbar} handleToggleNav={handleToggleNav} handleUserToggleNavbar={handleUserToggleNavbar}/>
-      <MobileUserMenu userNavbar={userNavbar} />
-      <MobileCommonMenu navBar={navBar} /> */
   );
 };
 export default NavBar;
