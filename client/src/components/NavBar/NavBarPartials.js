@@ -21,11 +21,11 @@ export const MobileUserMenu = ({
     <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20" onClick={toggleUserMenu} />
   </div>
   <div className="h-30 flex-row">
-    <div className="mt-0 py-4 flex justify-center border-b-2 border-gray-400">
-    <Link to={"/login"} className="text-2xl font-bold text-white" >Login</Link>
+    <div className="mt-0 py-4 flex justify-center border-b-2 border-[#d9b99b]">
+    <Link to={"/login"} className="text-2xl font-bold text-white drop-shadow-xl" >Login</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
-    <Link to={"/login"} className="text-2xl font-bold text-white">Register</Link>
+    <div className=" py-4 flex justify-center border-b-2 border-[#d9b99b]">
+    <Link to={"/login"} className="text-2xl font-bold text-white drop-shadow-xl">Register</Link>
     </div>
   </div>
   </>
@@ -37,7 +37,7 @@ const MobileNavBar = ({
 }) => {
   return(
     <div className="flex w-full mt-4 lg:hidden">
-    <h1 className="text-3xl font-bold text-[#00df9a] mt-4 w-1/2 xs:ml-4 ">
+    <h1 className="text-3xl font-serif italic text-[#00df9a] mt-4 w-1/2 xs:ml-4 drop-shadow-xl">
     Supreme
     <br />
     Fashion Shop
@@ -57,7 +57,7 @@ const MobileProductsMenu = ({
 }) => (
 <>
 <div className="h-24 mt-4 flex">
-  <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4">  
+  <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4 drop-shadow-xl">  
     Supreme
      <br />
     Fashion Shop
@@ -65,23 +65,23 @@ const MobileProductsMenu = ({
   <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20" onClick={toggleProductsMenu} />
 </div>
   <div className="h-30 flex-row">
-    <div className="mt-0 py-4 flex justify-center border-b-2 border-gray-400">
-      <Link to={"/men"} className="text-2xl font-bold text-white" >Men</Link>
+    <div className="mt-0 py-4 flex justify-center border-b-2 border-[#d9b99b]">
+      <Link to={"/men"} className="text-2xl font-bold text-white  drop-shadow-xl" >Men</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
-      <Link to={"/women"} className="text-2xl font-bold text-white">Women</Link>
+    <div className=" py-4 flex justify-center border-b-2 border-[#d9b99b]">
+      <Link to={"/women"} className="text-2xl font-bold text-white drop-shadow-xl">Women</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
-      <Link to={"/kids"} className="text-2xl font-bold text-white">Kids</Link>
+    <div className=" py-4 flex justify-center border-b-2 border-[#d9b99b]">
+      <Link to={"/kids"} className="text-2xl font-bold text-white drop-shadow-xl">Kids</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
-      <Link to={"/new"} className="text-2xl font-bold text-white">New</Link>
+    <div className=" py-4 flex justify-center border-b-2 border-[#d9b99b]">
+      <Link to={"/new"} className="text-2xl font-bold text-white drop-shadow-xl">New</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
-      <Link to={"/sale"} className="text-2xl font-extrabold text-[#00df9a] uppercase ">Sale</Link>
+    <div className=" py-4 flex justify-center border-b-2 border-[#d9b99b]">
+      <Link to={"/sale"} className="text-2xl font-extrabold text-[#00df9a] uppercase">Sale</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2  border-gray-400">
-      <Link to={"/brands"} className="text-2xl font-bold text-white">Brands</Link>
+    <div className=" py-4 flex justify-center border-b-2  border-[#d9b99b]">
+      <Link to={"/brands"} className="text-2xl font-bold text-white drop-shadow-xl">Brands</Link>
     </div>
   </div>
 </>
@@ -104,7 +104,7 @@ export const MobileNavManager = ({
 
 export const DesktopNavBar = () => (
   <div className="text-white hidden lg:flex justify-between items-center h-26 mx-auto px-4 xl:mx-12">
-    <h1 className="w-full text-3xl font-bold text-[#00df9a]">
+    <h1 className="w-full text-3xl font-bold text-[#00df9a] drop-shadow-xl">
       Supreme
       <br />
       Fashion Shop
