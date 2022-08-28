@@ -5,10 +5,12 @@ import ValidationMessage from "../ValidationMessage/validationMessage";
 import * as userRequester from '../../services/userRequester'
 
 import { useAuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [messages,setMessaage] = useState(false)
     const {login} = useAuthContext();
+    const navigate = useNavigate();
 
     const loginHandler = async (event) => {
         event.preventDefault();
@@ -29,9 +31,12 @@ const Login = () => {
                 return  setMessaage([json.error])
             }
             login(json)
-            //should redirect to home
+            navigate('/')
         } catch(err){
-            throw(err)
+            console.log(err);
+            console.log('Server time out');
+
+            // throw(err)
         }
     }
 
@@ -44,13 +49,13 @@ const Login = () => {
             : null
             }
             <form onSubmit={loginHandler}>
-            <div className="flex mt-10 justify-center items-align">
-                <label htmlFor="email" className="italic text-[#ffe0bd] font-bold text-xl ">Email:</label>
-                <input type="input" name="email" id="email" className="max-w-xl rounded-md w-48" placeholder="ex.petrpetrov@abv.bg" />
+            <div className="flex mt-10 justify-between items-align">
+                <label htmlFor="email" className="italic text-[#ffe0bd] font-bold text-xl ml-6 ">Email:</label>
+                <input type="input" name="email" id="email" className="max-w-xl rounded-md w-48 mr-4" placeholder="ex.petrpetrov@abv.bg" />
             </div>
-            <div className="flex mt-4 justify-center items-align">
-                <label htmlFor="password" className="italic text-[#ffe0bd] font-bold text-xl ">Password:</label>
-                <input type="password" name="password" id="password" className="max-w-xl rounded-md w-48" />
+            <div className="flex mt-4 justify-between items-align">
+                <label htmlFor="password" className="italic text-[#ffe0bd] font-bold text-xl ml-6">Password:</label>
+                <input type="password" name="password" id="password" className="max-w-xl rounded-md w-48 mr-4" />
             </div>
             <div className="flex justify-center mt-4">
                 <label htmlFor="rememberMe" className="text-lg italic text-[#ffe0bd] font-bold ">Remember me?</label>

@@ -22,10 +22,10 @@ export const MobileUserMenu = ({
   </div>
   <div className="h-30 flex-row">
     <div className="mt-0 py-4 flex justify-center border-b-2 border-[#d9b99b]">
-    <Link to={"/login"} className="text-2xl font-bold text-white drop-shadow-xl" >Login</Link>
+    <Link to={"users/login"} className="text-2xl font-bold text-white drop-shadow-xl" >Login</Link>
     </div>
     <div className=" py-4 flex justify-center border-b-2 border-[#d9b99b]">
-    <Link to={"/login"} className="text-2xl font-bold text-white drop-shadow-xl">Register</Link>
+    <Link to={"users/register"} className="text-2xl font-bold text-white drop-shadow-xl">Register</Link>
     </div>
   </div>
   </>

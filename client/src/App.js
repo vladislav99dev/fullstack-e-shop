@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 
+import { AuthProvider } from "./context/AuthContext.js";
+
 import NavBar from "./components/NavBar/NavBar.js";
 import Login from "./components/Login/Login.js";
-
-import { AuthProvider } from "./context/AuthContext.js";
+import Register from "./components/Register/Register.js";
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
           <Routes>
             <Route path="/users/">
               <Route path="login" element={<Login />} />
-              {/* <Route path='register' element={<Login />}/>
-            <Route path='logout' element={<Login />}/> */}
+              <Route path='register' element={<Register />}/>
+            {/* <Route path='logout' element={<Login />}/> */}
             </Route>
           </Routes>
         </div>
