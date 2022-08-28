@@ -12,7 +12,7 @@ export const MobileUserMenu = ({
   toggleUserMenu
 }) => (
   <>
-  <div className="h-24 mt-4 flex lg:hidden">
+  <div className="h-24 mt-4 flex">
     <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4">
       Supreme
        <br />
@@ -21,10 +21,10 @@ export const MobileUserMenu = ({
     <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20" onClick={toggleUserMenu} />
   </div>
   <div className="h-30 flex-row">
-    <div className="mt-0 py-4 flex justify-center border-b-2 border-t-2">
+    <div className="mt-0 py-4 flex justify-center border-b-2 border-gray-400">
     <Link to={"/login"} className="text-2xl font-bold text-white" >Login</Link>
     </div>
-    <div className=" py-4 flex justify-center border-b-2 border-">
+    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
     <Link to={"/login"} className="text-2xl font-bold text-white">Register</Link>
     </div>
   </div>
@@ -32,7 +32,8 @@ export const MobileUserMenu = ({
 );
 
 const MobileNavBar = ({
-  toggleUserMenu
+  toggleUserMenu,
+  toggleProductsMenu
 }) => {
   return(
     <div className="flex w-full mt-4 lg:hidden">
@@ -45,17 +46,48 @@ const MobileNavBar = ({
     <Link className="px-2" to="/favorite"><MdFavorite size={35} color={"#00df9a"} className="mt-4"  /></Link>
     <Link className="px-2" to="/favorite"><RiShoppingCart2Fill size={35} color={"#00df9a"} className="mt-4"/></Link>
     <RiUserAddFill size={35} color={"#00df9a"} className="mt-4 ml-2 mr-4" onClick={toggleUserMenu}/>
-    <ImMenu size={35} color={"#00df9a"} className="mt-4 mr-2"/>
+    <ImMenu size={35} color={"#00df9a"} className="mt-4 mr-2" onClick={toggleProductsMenu}/>
     </div>
   </div>
   )
 }
 
-const MobileProductsMenu = () => {
+const MobileProductsMenu = ({
+  toggleProductsMenu
+}) => (
+<>
+<div className="h-24 mt-4 flex">
+  <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4">  
+    Supreme
+     <br />
+    Fashion Shop
+  </h1>
+  <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20" onClick={toggleProductsMenu} />
+</div>
+  <div className="h-30 flex-row">
+    <div className="mt-0 py-4 flex justify-center border-b-2 border-gray-400">
+      <Link to={"/men"} className="text-2xl font-bold text-white" >Men</Link>
+    </div>
+    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
+      <Link to={"/women"} className="text-2xl font-bold text-white">Women</Link>
+    </div>
+    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
+      <Link to={"/kids"} className="text-2xl font-bold text-white">Kids</Link>
+    </div>
+    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
+      <Link to={"/new"} className="text-2xl font-bold text-white">New</Link>
+    </div>
+    <div className=" py-4 flex justify-center border-b-2 border-gray-400">
+      <Link to={"/sale"} className="text-2xl font-extrabold text-[#00df9a] uppercase ">Sale</Link>
+    </div>
+    <div className=" py-4 flex justify-center border-b-2  border-gray-400">
+      <Link to={"/brands"} className="text-2xl font-bold text-white">Brands</Link>
+    </div>
+  </div>
+</>
+)
 
-}
-
-export const SomethingIShouldName = ({
+export const MobileNavManager = ({
   toggleUserMenu,
   isUserMenuActive,
   toggleProductsMenu,
@@ -66,56 +98,8 @@ export const SomethingIShouldName = ({
   } else if(isProductsMenuActive){
     return (<MobileProductsMenu toggleProductsMenu={toggleProductsMenu}/>)
   } else {
-    return (<MobileNavBar toggleUserMenu={toggleUserMenu}/>)
+    return (<MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu}/>)
   }
- 
-
-
-  // <div
-  //   className={
-  //     props.navBar
-  //       ? "lg:hidden fixed left-0 top-0 w-[94%] h-full  bg-[#000300]"
-  //       : "fixed left-[-100%]"
-  //   }
-  // >
-  //   <h1 className="w-full text-3xl font-bold text-[#00df9a] ml-4 mt-4">
-  //     Supreme
-  //     <br />
-  //     Fashion Shop
-  //   </h1>
-  //   <ul className="pt-10 uppercase">
-  //     <Link to={"/men"}>
-  //       <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-  //         Men
-  //       </li>
-  //     </Link>
-  //     <Link to={"/women"}>
-  //       <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-  //         Women
-  //       </li>
-  //     </Link>
-  //     <Link to={"/kids"}>
-  //       <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-  //         Kids
-  //       </li>
-  //     </Link>
-  //     <Link to={"/new"}>
-  //       <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-  //         New
-  //       </li>
-  //     </Link>
-  //     <Link to={"/sale"}>
-  //       <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-  //         Sale
-  //       </li>
-  //     </Link>
-  //     <Link to={"/brands"}>
-  //       <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-  //         Brands
-  //       </li>
-  //     </Link>
-  //   </ul>
-  // </div>
 };
 
 export const DesktopNavBar = () => (
@@ -161,32 +145,3 @@ export const DesktopNavBar = () => (
     </div>
   </div>
 );
-
-
-// export const MobileUserMenu = () => (
-//   <div
-//     className={
-//       props.userNavbar
-//         ? "lg:hidden fixed left-0 top-0 w-[95%] h-full  bg-[#000300]"
-//         : "fixed left-[-100%]"
-//     }
-//   >
-//     <h1 className="w-full text-3xl font-bold text-[#00df9a] ml-4 mt-4">
-//       Supreme
-//       <br />
-//       Fashion Shop
-//     </h1>
-//     <ul className="pt-10 uppercase">
-//       <Link to={"/men"}>
-//         <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-//           Login
-//         </li>
-//       </Link>
-//       <Link to={"/women"}>
-//         <li className="p-4 text-xl border-b w-[100%] border-gray-600 font-bold text-center">
-//           Register
-//         </li>
-//       </Link>
-//     </ul>
-//   </div>
-// );
