@@ -5,7 +5,11 @@ module.exports = {
     extend: {},
     screens: {
       'xxs': '350px',
+      // => @media (min-width: 350px) { ... }
+      
       'xs': '440px',
+      // => @media (min-width: 440px) { ... }
+
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
 
