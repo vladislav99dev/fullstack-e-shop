@@ -59,7 +59,7 @@ const Login = () => {
             </div>
             <div className="flex justify-center mt-4">
                 <label htmlFor="rememberMe">Remember me?</label>
-                <input type="checkbox" name="rememberMe" className=""/>
+                <input type="checkbox" name="rememberMe"/>
             </div> 
             <div className="flex justify-center mt-4 ">
                 <button type="submit" className="py-2 px-10 rounded-md text-white bg-[#d9b99b] font-bold">Submit</button>
