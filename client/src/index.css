@@ -2,14 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background-color: #ffe0bd;
+
+@layer base {
+    body{
+       @apply bg-[#ffe0bd];
+    }
+    label{
+        @apply italic text-[#ffe0bd] font-bold text-xl  
+    }
+    /* input {
+        @apply max-w-xl rounded-md w-48 
+    } */
 }
+
 
 
 /* #D3D3D3 */
 /* #000300 */
 /* 696969  gray*/
 /* faf0e6  beige*/
+
+/* input  mr-4 xs:mr-[20%] sm:mr-[30%] md:mr-[35%]*/
+/* label ml-6 xs:ml-[20%] sm:ml-[30%] md:ml-[35%]*/
+
 
 /*maybe some pink at places*/

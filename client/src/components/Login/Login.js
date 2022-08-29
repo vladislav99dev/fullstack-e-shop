@@ -49,17 +49,17 @@ const Login = () => {
             : null
             }
             <form onSubmit={loginHandler}>
-            <div className="flex mt-10 justify-between items-align">
-                <label htmlFor="email" className="italic text-[#ffe0bd] font-bold text-xl ml-6 ">Email:</label>
-                <input type="input" name="email" id="email" className="max-w-xl rounded-md w-48 mr-4" placeholder="ex.petrpetrov@abv.bg" />
+            <div className="flex mt-10 justify-center">
+                <label htmlFor="email">Email:</label>
+                <input type="input" name="email" id="email" className="ml-8" placeholder="ex.petrpetrov@abv.bg" />
             </div>
-            <div className="flex mt-4 justify-between items-align">
-                <label htmlFor="password" className="italic text-[#ffe0bd] font-bold text-xl ml-6">Password:</label>
-                <input type="password" name="password" id="password" className="max-w-xl rounded-md w-48 mr-4" />
+            <div className="flex mt-4 justify-center">
+                <label htmlFor="password">Password:</label>
+                <input type="password" name="password" id="password"  />
             </div>
             <div className="flex justify-center mt-4">
-                <label htmlFor="rememberMe" className="text-lg italic text-[#ffe0bd] font-bold ">Remember me?</label>
-                <input type="checkbox" name="rememberMe" className="ml-2"/>
+                <label htmlFor="rememberMe">Remember me?</label>
+                <input type="checkbox" name="rememberMe" className=""/>
             </div> 
             <div className="flex justify-center mt-4 ">
                 <button type="submit" className="py-2 px-10 rounded-md text-white bg-[#d9b99b] font-bold">Submit</button>
