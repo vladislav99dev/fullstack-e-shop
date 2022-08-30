@@ -7,7 +7,6 @@ const tokenServices = require("../services/tokenServices");
 const registerHandler = async(req,res)=> {
   console.log(`POST ${req.originalUrl}`);
   const { firstName, lastName, password, email, country, city, street } = req.body;
-  
   if(!firstName || !lastName || !password || !email || !country || !city || !street) 
   return res.status(400)
   .json({error:'FisrtName, LastName, Password, Email, Country, City and Street need to be provided in order to continue!'});
@@ -49,14 +48,20 @@ const loginHandler = async(req,res) => {
         if(!isValid) return res.status(404).json({error:'Incorrect email or password'});
         
         delete user.password
-        const accessToken = tokenServices.generate(user);
-        return res.status(200).json({user,accessToken});
+        if(user.isAdmin){
+          const accessToken = tokenServices.generate(user);
+          user.accessToken = accessToken
+          return res.status(200).json(user);
+        } else {
+          return res.status(200).json(user);
+        }
+
     } catch(err){
         console.log(err);
     }
 }
 
-const logoutHandler = (req,res) => {
+const logoutAdminHandler = (req,res) => {
   console.log(`POST ${req.originalUrl}`);
   const token = req.headers.authorization;
   if(!token) return res.status(401).json({error:'No access token provided!'});
@@ -69,11 +74,16 @@ const logoutHandler = (req,res) => {
   }
 }
 
+const logoutHandler = (req,res) => {
+  console.log(`POST ${req.originalUrl}`);
+  res.status(200).json({successMessage: 'You have successfully loged out!'});
+}
+
 
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
 router.post("/logout", logoutHandler);
-
+router.post("/logout-admin", logoutAdminHandler);
 
 
 module.exports = router;
