@@ -1,41 +1,42 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { validateLogin } from "../../services/formValidationsServices";
 import ValidationMessage from "../ValidationMessage/validationMessage";
 import * as userRequester from '../../services/userRequester'
 
 import { useAuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { isNotLoggedIn } from "../../HOC/routesGuard";
 
 const Login = () => {
-    const [messages,setMessaage] = useState(false)
+    const [messages,setMessaages] = useState([])
     const {login} = useAuthContext();
     const navigate = useNavigate();
 
     const loginHandler = async (event) => {
         event.preventDefault();
-        setMessaage(false)
+        setMessaages([])
 
         const formdData = new FormData(event.target);
         const data = Object.fromEntries(formdData);
 
         let validationsResponse = validateLogin(data);
         if (validationsResponse.length > 0) {
-        return setMessaage(validationsResponse)
+        return setMessaages(validationsResponse)
         }
 
         try{
             const response = await userRequester.login(data);
             let json = await response.json();
             if(json.error){
-                return  setMessaage([json.error])
+                return  setMessaages([json.error])
             }
+            //if json.isAdmin navigate to admin panel
             login(json)
-            navigate('/')
+            return navigate('/')
         } catch(err){
             console.log(err);
             console.log('Server time out');
-
             // throw(err)
         }
     }
@@ -44,8 +45,8 @@ const Login = () => {
     return(
         <div className="bg-[#FAF9F6] h-80 rounded-3xl mt-16 w-full shadow-lg flex-row lg:w-full">
             <h1 className="text-[#ffe0bd] text-2xl italic uppercase font-bold w-full text-center mt-8">Login</h1>
-            {messages 
-            ? messages.map((message) => <ValidationMessage message={message}/>)
+            {messages.length > 0
+            ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
             : null
             }
             <form onSubmit={loginHandler}>
@@ -70,4 +71,4 @@ const Login = () => {
 }
 
 
-export default Login;
+export default isNotLoggedIn(Login);
