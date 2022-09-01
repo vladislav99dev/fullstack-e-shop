@@ -5,7 +5,7 @@ import { AuthProvider } from "./context/AuthContext.js";
 import NavBar from "./components/NavBar/NavBar.js";
 import Login from "./components/Login/Login.js";
 import Register from "./components/Register/Register.js";
-import Logout from "./components/Logout.js/Logout.js";
+import Logout from "./components/Logout/Logout.js";
 
 function App() {
   return (
