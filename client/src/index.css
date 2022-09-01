@@ -10,9 +10,16 @@
     label{
         @apply italic text-[#ffe0bd] font-bold text-xl  
     }
-    /* input {
-        @apply max-w-xl rounded-md w-48 
-    } */
+    .mobile-links{
+        @apply text-xl font-bold text-white drop-shadow-xl
+    }
+    .desktop-links{
+        @apply p-4 text-xl font-bold
+    }
+    .container-links{
+        @apply py-4 flex justify-center border-b-2 border-[#d9b99b]
+    }
+
 }
 
 
