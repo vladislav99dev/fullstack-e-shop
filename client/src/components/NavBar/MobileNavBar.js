@@ -7,18 +7,20 @@ import { ImMenu } from "react-icons/im";
 
 import UserLinks from "./UserLinks";
 
+import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
-const MobileProductsMenu = ({
-    toggleProductsMenu
-  }) => (
-  <>
+
+const MobileProductsMenu = () => {
+    const {toggleProductsMenu} = useNavTogglesContext();
+    return(
+      <>
   <div className="h-24 mt-4 flex">
     <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4 drop-shadow-xl">  
       Supreme
        <br />
       Fashion Shop
     </h1>
-    <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20" onClick={toggleProductsMenu} />
+    <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20 cursor-pointer" onClick={toggleProductsMenu} />
   </div>
     <div className="h-30 flex-row">
       <div className="container-links">
@@ -42,11 +44,10 @@ const MobileProductsMenu = ({
     </div>
   </>
   )
+};
 
-  export const MobileUserMenu = ({
-    toggleUserMenu,
-    toggleDesktopUserMenu
-  }) => {
+  export const MobileUserMenu = () => {
+    const {toggleUserMenu} = useNavTogglesContext();
     return(
       <>
       <div className="h-24 mt-4 flex">
@@ -58,16 +59,14 @@ const MobileProductsMenu = ({
         <IoClose size={50} color={"00df9a"} className="xxs:ml-4 xs:ml-8 mt-6 sm:ml-20 cursor-pointer" onClick={toggleUserMenu} />
       </div>
       <div className="h-30 flex-row">
-        <UserLinks toggleDesktopUserMenu={toggleDesktopUserMenu}/>
+        <UserLinks/>
       </div>
       </>
     );
   }
 
-  const MobileNavBar = ({
-    toggleUserMenu,
-    toggleProductsMenu
-  }) => {
+  const MobileNavBar = () => {
+    const {toggleUserMenu,toggleProductsMenu} = useNavTogglesContext();
     return(
       <div className="flex w-full mt-4 lg:hidden">
       <h1 className="text-3xl font-serif italic drop-shadow-xl text-[#00df9a] mt-4 w-1/2 xs:ml-4 md:ml-8 ">
@@ -88,20 +87,14 @@ const MobileProductsMenu = ({
 
 
 
-const MobileNavBarManager = ({
-    toggleUserMenu,
-    isUserMenuActive,
-    toggleProductsMenu,
-    isProductsMenuActive,
-    toggleDesktopUserMenu,
-  }) => {
-    if (isUserMenuActive) {
-        return (<MobileUserMenu toggleUserMenu={toggleUserMenu} toggleDesktopUserMenu={toggleDesktopUserMenu}/>)
-      }
-      if(isProductsMenuActive){
-        return (<MobileProductsMenu toggleProductsMenu={toggleProductsMenu}/>)
-      } 
-      return (<MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu}/>)
+const MobileNavBarManager = () => {
+    const {isUserMenuActive,isProductsMenuActive} = useNavTogglesContext();
+
+    if (isUserMenuActive)  return (<MobileUserMenu/>)
+      
+    if (isProductsMenuActive) return (<MobileProductsMenu/>)
+
+    return (<MobileNavBar/>)
 }
 
 export default MobileNavBarManager;

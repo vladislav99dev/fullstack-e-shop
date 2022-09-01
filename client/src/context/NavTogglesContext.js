@@ -16,6 +16,7 @@ export const NavTogglesProvider = ({children}) => {
     };
   
     const toggleProductsMenu = () => {
+      console.log('clicked');
       setIsProductsMenuActive(!isProductsMenuActive);
       setIsUserMenuActive(false);
     };
