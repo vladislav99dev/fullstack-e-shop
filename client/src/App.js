@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext.js";
+import { NavTogglesProvider } from "./context/NavTogglesContext.js";
 
 import NavBar from "./components/NavBar/NavBar.js";
 import Login from "./components/Login/Login.js";
@@ -11,7 +12,9 @@ function App() {
   return (
     <AuthProvider>
       <div id="container">
-        <NavBar />
+        <NavTogglesProvider>
+          <NavBar />
+        </NavTogglesProvider>
         <div id="main-content" className="mt-10 h-full w-full">
           <Routes>
             <Route path="/users/">

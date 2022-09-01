@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import {  MobileNavManager } from "./NavBarPartials";
+import MobileNavBarManager from "./MobileNavBar";
 import DesktopNavBar from "./DesktopNavBar";
 
 const NavBar = () => {
@@ -25,16 +25,14 @@ const NavBar = () => {
 
   return (
     <>
-      <MobileNavManager
+      <MobileNavBarManager
         toggleUserMenu={toggleUserMenu}
         isUserMenuActive={isUserMenuActive}
         toggleProductsMenu={toggleProductsMenu}
         isProductsMenuActive={isProductsMenuActive}
+        toggleDesktopUserMenu={toggleDesktopUserMenu}
       />
-      <DesktopNavBar 
-      toggleDesktopUserMenu={toggleDesktopUserMenu}
-      isDesktopUserMenuActive={isDesktopUserMenuActive}
-      />
+      <DesktopNavBar/>
     </>
   );
 };

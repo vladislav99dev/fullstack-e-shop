@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 
 
 import { useAuthContext } from "../../context/AuthContext"
+import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
-const UserLinks = ({toggleDesktopUserMenu}) => {
+const UserLinks = () => {
     const {user} = useAuthContext();
-
+    const {toggleDesktopUserMenu} = useNavTogglesContext();
     return(
         <>
         {!user.email

@@ -5,11 +5,11 @@ import { MdFavorite } from "react-icons/md";
 
 import UserLinks from "./UserLinks";
 
+import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
-const DesktopNavBar = ({
-    toggleDesktopUserMenu,
-    isDesktopUserMenuActive
-  }) => {
+
+const DesktopNavBar = () => {
+    const {isDesktopUserMenuActive,toggleDesktopUserMenu} = useNavTogglesContext();
     return(
     <>
         <div className="text-white hidden lg:flex justify-between items-center h-26 mx-auto px-4 xl:mx-12">
@@ -53,7 +53,7 @@ const DesktopNavBar = ({
         </div>
         {isDesktopUserMenuActive 
         ?<div className="hidden lg:block bg-[#ffe0bd]  w-[30%] fixed right-4  mt-0 border-4 border-white rounded-lg">
-            <UserLinks toggleDesktopUserMenu={toggleDesktopUserMenu}/>
+            <UserLinks/>
         </div>
         : null
         }
