@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { DesktopNavBar, MobileNavManager } from "./NavBarPartials";
+import {  MobileNavManager } from "./NavBarPartials";
+import DesktopNavBar from "./DesktopNavBar";
 
 const NavBar = () => {
   const [isUserMenuActive, setIsUserMenuActive] = useState(false);
