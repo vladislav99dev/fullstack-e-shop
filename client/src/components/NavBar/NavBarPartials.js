@@ -125,11 +125,13 @@ export const MobileNavManager = ({
 }) => {
   if (isUserMenuActive) {
     return (<MobileUserMenu toggleUserMenu={toggleUserMenu}/>)
-  } else if(isProductsMenuActive){
-    return (<MobileProductsMenu toggleProductsMenu={toggleProductsMenu}/>)
-  } else {
-    return (<MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu}/>)
   }
+  if(isProductsMenuActive){
+    return (<MobileProductsMenu toggleProductsMenu={toggleProductsMenu}/>)
+  } 
+  
+  return (<MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu}/>)
+  
 };
 
 export const DesktopNavBar = ({
