@@ -13,7 +13,7 @@ const MobileProductsMenu = () => {
   const { toggleProductsMenu } = useNavTogglesContext();
   return (
     <>
-      <div className="h-24 mt-4 flex">
+      <div className="h-24 mt-4 flex lg:hidden">
         <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4 drop-shadow-xl">
           Supreme
           <br />
@@ -26,7 +26,7 @@ const MobileProductsMenu = () => {
           onClick={toggleProductsMenu}
         />
       </div>
-      <div className="h-30 flex-row">
+      <div className="h-30 flex-row lg:hidden">
         <div className="container-links">
           <Link to={"/men"} className="mobile-links">
             Men
@@ -69,7 +69,7 @@ export const MobileUserMenu = () => {
   const { toggleUserMenu } = useNavTogglesContext();
   return (
     <>
-      <div className="h-24 mt-4 flex">
+      <div className="h-24 mt-4 flex lg:hidden">
         <h1 className="w-3/4 h-full text-3xl text-[#00df9a] font-bold ml-4">
           Supreme
           <br />
@@ -82,7 +82,7 @@ export const MobileUserMenu = () => {
           onClick={toggleUserMenu}
         />
       </div>
-      <div className="h-30 flex-row">
+      <div className="h-30 flex-row  lg:hidden">
         <UserLinks clickHandler={toggleUserMenu} />
       </div>
     </>
