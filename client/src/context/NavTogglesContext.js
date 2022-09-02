@@ -1,34 +1,65 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext,  useReducer } from "react";
 
 const NavTogglesContext = createContext();
 
+const initialMenuState = {
+  isUserMenuActive: false,
+  isProductsMenuActive: false,
+  isDesktopUserMenuActive: false,
+};
+
+const reducerMenuState = (state, action) => {
+  switch (action.type) {
+    case "setIsUserMenuActive":
+        return {
+            isUserMenuActive: !state.isUserMenuActive,
+            isProductsMenuActive: false,
+            isDesktopUserMenuActive: false,
+        };
+    case "setIsProductsMenuActive":
+        return {
+            isUserMenuActive: false,
+            isProductsMenuActive: !state.isProductsMenuActive,
+            isDesktopUserMenuActive: false,
+        };
+    case "setIsDesktopUserMenuActive":
+        return {
+            isUserMenuActive: false,
+            isProductsMenuActive: false,
+            isDesktopUserMenuActive: !state.isDesktopUserMenuActive,
+        };
+    default:
+      return{
+        isUserMenuActive: false,
+        isProductsMenuActive: false,
+        isDesktopUserMenuActive: false,
+      }
+  }
+};
+
 export const NavTogglesProvider = ({ children }) => {
-  const [isUserMenuActive, setIsUserMenuActive] = useState(false);
-  const [isProductsMenuActive, setIsProductsMenuActive] = useState(false);
-  const [isDesktopUserMenuActive, setIsDesktopUserMenuActive] = useState(false);
+  const[state,dispatch] = useReducer(reducerMenuState,initialMenuState);
 
   const toggleUserMenu = () => {
-    setIsUserMenuActive(!isUserMenuActive);
-    setIsProductsMenuActive(false);
+    dispatch({type:'setIsUserMenuActive'})
   };
 
   const toggleProductsMenu = () => {
-    setIsProductsMenuActive(!isProductsMenuActive);
-    setIsUserMenuActive(false);
+    dispatch({type:'setIsProductsMenuActive'})
   };
 
   const toggleDesktopUserMenu = () => {
-    setIsDesktopUserMenuActive(!isDesktopUserMenuActive);
+    dispatch({type:'setIsDesktopUserMenuActive'})
   };
 
   return (
     <NavTogglesContext.Provider
       value={{
-        isUserMenuActive,
+        isUserMenuActive:state.isUserMenuActive,
         toggleUserMenu,
-        isProductsMenuActive,
+        isProductsMenuActive:state.isProductsMenuActive,
         toggleProductsMenu,
-        isDesktopUserMenuActive,
+        isDesktopUserMenuActive:state.isDesktopUserMenuActive,
         toggleDesktopUserMenu,
       }}
     >
