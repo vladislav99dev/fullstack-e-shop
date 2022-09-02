@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 
 import { validateLogin } from "../../services/formValidationsServices";
 import ValidationMessage from "../ValidationMessage/validationMessage";
@@ -43,7 +43,7 @@ const Login = () => {
 
 
     return(
-        <div className="bg-[#FAF9F6] h-80 rounded-3xl mt-16 w-full shadow-lg flex-row lg:w-full">
+        <div className="bg-[#FAF9F6]  rounded-3xl mt-16 w-full shadow-lg flex-row lg:w-full">
             <h1 className="text-[#ffe0bd] text-2xl italic uppercase font-bold w-full text-center mt-8">Login</h1>
             {messages.length > 0
             ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
@@ -61,6 +61,9 @@ const Login = () => {
             <div className="flex justify-center mt-4">
                 <label htmlFor="rememberMe">Remember me?</label>
                 <input type="checkbox" name="rememberMe"/>
+            </div> 
+            <div className="flex justify-center mt-2">
+                <label>Don't have an account?<Link to={"users/register"} className="text-[#3abeff] text-lg"> Sign up</Link></label>
             </div> 
             <div className="flex justify-center mt-4 ">
                 <button type="submit" className="py-2 px-10 rounded-md text-white bg-[#d9b99b] font-bold">Submit</button>

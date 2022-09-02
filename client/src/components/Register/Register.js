@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import { validateRegister } from "../../services/formValidationsServices";
 import ValidationMessage from "../ValidationMessage/validationMessage";
@@ -36,7 +36,7 @@ const Register = () => {
 
     }
     return(
-        <div className="bg-[#FAF9F6] h-full rounded-3xl mt-6 w-full shadow-lg flex-row">
+        <div className="bg-[#FAF9F6] rounded-3xl mt-6 w-full shadow-lg flex-row">
             <h1 className="text-[#ffe0bd] text-2xl italic uppercase font-bold w-full text-center mt-8">Register</h1>
             {messages.length > 0 
             ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
@@ -75,6 +75,9 @@ const Register = () => {
                 <label htmlFor="re-password" className="">Re-Password:</label>
                 <input type="password" name="re-password" id="re-password" className="" />
             </div>
+            <div className="flex justify-center mt-2">
+                <label>Already have an account?<Link to={"users/login"} className="text-[#3abeff] text-lg"> Sign in</Link></label>
+            </div> 
             <div className="flex mt-4 justify-center">
                 <button type="submit" className="py-2 px-10 rounded-md text-white bg-[#d9b99b] font-bold">Submit</button>
             </div>
