@@ -2,16 +2,27 @@ import {url} from '../constants.js'
 
 const productsRequester = (method,data,token,id) => {
     let fetchUrl =`${url}/admin/products`;
-    if (method === 'POST') {
-        fetchUrl = `${fetchUrl}/create`
-    }
-    return fetch(fetchUrl,{
+
+    let options ={
         method:method,
         headers:{
             'content-type':'application/json',
             'Authorization': token
-        },
-        body: JSON.stringify({
+        }
+    };
+
+    if (method === "POST") {
+        fetchUrl = `${fetchUrl}/create`
+    }
+    if(method === "PUT"){
+        fetchUrl = `${url}/admin/products/${id}/edit`
+    }
+    if(method === "GET"){
+        fetchUrl = `${url}/admin/products/${id}`
+    }
+
+    if(method === "POST" || method === "PUT"){
+        options.body = JSON.stringify({
             type:data.type,
             category:data.category,
             gender:data.gender,
@@ -21,7 +32,11 @@ const productsRequester = (method,data,token,id) => {
             price:data.price,
             sizes:data.sizes
         })
-    })
+    }
+    return fetch(fetchUrl,options)
 }
 
 export const create = productsRequester.bind(null,"POST");
+export const edit = productsRequester.bind(null,"PUT");
+export const getOne = productsRequester.bind(null,"GET");
+
