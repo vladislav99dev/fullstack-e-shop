@@ -4,7 +4,7 @@ import * as userRequester from "../../services/userRequester.js"
 import { useAuthContext } from "../../context/AuthContext";
 
 import { isLoggedIn } from "../../HOC/routesGuard.js";
-import Modal from "../Modals/Modal.js";
+import AttentionModal from "../Modals/AttentionModal";
 
 
 const Logout = () => {
@@ -22,7 +22,7 @@ const Logout = () => {
     }
     
     return (
-        <Modal titleMessage={"Are you sure you want to logout?"} buttonHandler={logoutHandler} buttonName={"Logout"} />
+        <AttentionModal titleMessage={"Are you sure you want to logout?"} buttonHandler={logoutHandler} buttonName={"Logout"} />
     )
 }
 export default isLoggedIn(Logout);
