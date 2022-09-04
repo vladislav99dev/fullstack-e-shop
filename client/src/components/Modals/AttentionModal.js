@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 
-const Modal = ({
+const AttentionModal = ({
     titleMessage,
     descriptionMessage,
     buttonHandler,
@@ -8,7 +8,7 @@ const Modal = ({
 }) => {
     const navigate = useNavigate();
     const cancelHandler = () => {
-        navigate(-1)
+        navigate('/')
     }
     return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -49,4 +49,4 @@ const Modal = ({
     )
 }
 
-export default Modal
+export default AttentionModal
