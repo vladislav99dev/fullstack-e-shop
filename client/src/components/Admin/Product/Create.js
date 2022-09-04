@@ -88,7 +88,6 @@ const Create = () => {
 
         } catch(err){
             console.log(err);
-            console.log('err');
         }
     };
 
@@ -101,6 +100,7 @@ const Create = () => {
         buttonHandler={resetModals} 
         buttonName={'Try again'}/>   
         : null}
+        
         {modalState.isSuccess.value
         ? <SuccessModal 
         titleMessage={'Success'}
