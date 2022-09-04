@@ -52,6 +52,10 @@ export const NavTogglesProvider = ({ children }) => {
     dispatch({type:'setIsDesktopUserMenuActive'})
   };
 
+  // const outsideClick = () => {
+  //   dispatch();
+  // }
+
   return (
     <NavTogglesContext.Provider
       value={{
