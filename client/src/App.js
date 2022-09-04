@@ -9,6 +9,7 @@ import Register from "./components/Register/Register.js";
 import Logout from "./components/Logout/Logout.js";
 
 import Create from "./components/Admin/Product/Create.js"
+import Edit from "./components/Admin/Product/Edit.js";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             </Route>
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
+              <Route path="products/:productId/edit" element={<Edit />} />
             </Route>
           </Routes>
         </div>
