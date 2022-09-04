@@ -13,14 +13,14 @@ import SuccessModal from "../../Modals/SuccessModal"
 
 
 const Create = () => {
+    const {user} = useAuthContext();
+    const [type,setType] = useState('clothing');
+    const [messages,setMessaages] = useState([]);
+    const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalState();
 
     const shoesOptions = ['Lifestyle','Running','Football','Gym','Boxing and Wrestling'];
     const clothingOptions = ['T-shirts','Sweatshirts','Tracksuits','Shorts','Jackets'];
 
-    const {user} = useAuthContext();
-    const [type,setType] = useState('clothing');
-    const [messages,setMessaages] = useState([]);
-    const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalState()
   
     const handleSelect = (event) => {
         setType(event.target.value);
@@ -54,7 +54,6 @@ const Create = () => {
             if(response.status === 201){
                 setSuccessModal("You have successfully create new product!");
             }
-
         } catch(err){
             console.log(err);
         }
