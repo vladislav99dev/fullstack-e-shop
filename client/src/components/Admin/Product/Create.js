@@ -1,6 +1,7 @@
-import { useState,useReducer } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../../context/AuthContext";
 import { validateProductForms } from "../../../services/formValidationsServices";
+import useModalState from "../../../hooks/useModalState"
 
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 
@@ -9,27 +10,7 @@ import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal"
 
 
-const initialModalState = {isSuccess:{value:false,message:''}, isFailed:{value:false,message:''}}
 
-const reducerModalsState = (state,action) => {
-    switch(action.type){
-        case "setIsSuccess":
-            return {
-                isSuccess: {value:true,message:action.payload},
-                isFailed:{value:false,message:''}
-            };
-        case "setIsFailed":
-            return {
-                isSuccess: {value:false,message:''},
-                isFailed:{value:true,message:action.payload}
-            };
-        case "resetModals":
-            return{
-                isSuccess:{value:false,messages:''},
-                isFailed:{value:false, message:''}
-            }     
-    }
-}
 
 const Create = () => {
 
@@ -39,20 +20,8 @@ const Create = () => {
     const {user} = useAuthContext();
     const [type,setType] = useState('clothing');
     const [messages,setMessaages] = useState([]);
-    const[modalState,dispatch] = useReducer(reducerModalsState,initialModalState);
-
-
-    const setSuccessModal = (message) => {
-        dispatch({type:'setIsSuccess', payload:message})
-    };
-    const setFailedModal = (message) => {
-        dispatch({type:'setIsFailed', payload:message})
-    };
-    const resetModals = () => {
-        dispatch({type:'resetModals'})
-    };
-
-
+    const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalState()
+  
     const handleSelect = (event) => {
         setType(event.target.value);
     };

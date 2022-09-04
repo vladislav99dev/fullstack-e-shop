@@ -37,5 +37,7 @@ const useModalState = () => {
         dispatch({type:'resetModals'})
     };
 
-    return [modalState,]
+    return {modalState, setSuccessModal, setFailedModal, resetModals}
 }
+
+export default useModalState
