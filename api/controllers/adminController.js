@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const productsServices = require("../services/productsServices");
 
-const productHandler = async (req, res) => {
+const createProductHandler = async (req, res) => {
   console.log(`POST ${req.originalUrl}`);
   const { type, category, gender, brand, imageUrl, color, price, sizes } =
     req.body;
@@ -36,7 +36,7 @@ const productHandler = async (req, res) => {
       price,
       sizes
     );
-    return res.status(201).json(dbResponse);
+     res.status(201).json(dbResponse);
   } catch (err) {
     console.log(err)
     let error = err._message;
@@ -46,6 +46,42 @@ const productHandler = async (req, res) => {
   }
 };
 
-router.post("/products/create", productHandler);
+const getOneProductHandler = async(req,res) => {
+  console.log(`POST ${req.originalUrl}`);
+  
+  const params = req.params;
+  try{
+    const dbResponse = await productsServices.getOne(params.productId)
+    res.status(200).json(dbResponse);
+  }catch(err){
+    res.status(404).json({message:'Product with this id was not found!'});
+  }
+}; 
+
+
+const editHandler = async(req,res) => {
+  console.log(`POST ${req.originalUrl}`);
+
+  const data =
+  req.body;
+
+  const params = req.params;
+  try{
+    const dbResponse = await productsServices.findOneAndUpdate(data,params.productId)
+    console.log(dbResponse);
+    res.status(200).json(dbResponse);
+  }catch(err){
+    console.log(err);
+  }
+}
+
+
+
+
+router.post("/products/create", createProductHandler);
+router.put("/products/:productId/edit", editHandler);
+router.get("/products/:productId/", getOneProductHandler);
+
+
 
 module.exports = router;
