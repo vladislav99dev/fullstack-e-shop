@@ -79,11 +79,11 @@ export const validateProductForms = (data) => {
   if (data.type === "clothing") {
     let isSizesValid = false;
     if (
-      data.category !== "T-shirts" &&
-      data.category !== "Sweatshirts" &&
-      data.category !== "Tracksuits" &&
-      data.category !== "Shorts" &&
-      data.category !== "Jackets"
+      data.category !== "t-shirts" &&
+      data.category !== "sweatshirts" &&
+      data.category !== "tracksuits" &&
+      data.category !== "shorts" &&
+      data.category !== "jackets"
     ) {
       messages.push(
         "Clothing supports only T-shirts, Sweatshirts, Tracksuits, Shorts, Jackets!"
@@ -101,11 +101,11 @@ export const validateProductForms = (data) => {
   if (data.type === "shoes") {
     let isSizesValid = false;
     if (
-      data.category !== "Lifestyle" &&
-      data.category !== "Running" &&
-      data.category !== "Football" &&
-      data.category !== "Gym" &&
-      data.category !== "Boxing and Wrestling"
+      data.category !== "lifestyle" &&
+      data.category !== "running" &&
+      data.category !== "football" &&
+      data.category !== "gym" &&
+      data.category !== "boxing and wrestling"
     ) {
       messages.push(
         "Shoes supports only Lifestyle, Running, Football, Gym, Boxing and Wrestling!"
@@ -154,6 +154,9 @@ export const validateProductForms = (data) => {
   ) {
     messages.push("Color isn't valid");
   }
+  // if(!data.sizes.includes(";") || !data.sizes.includes(",")){
+  //   messages.push('Sizes should be separeted by "," and size-quantity should be separeted by ":" ')
+  // }
   return messages;
 };
 
