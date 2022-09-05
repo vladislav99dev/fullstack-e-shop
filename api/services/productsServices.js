@@ -1,8 +1,8 @@
 const Product = require('../models/Products/Product')
 
 
- const create = (type,category,gender,brand,imageUrl,color,price,sizes) => {
-    return Product.create({type,category,gender,brand,imageUrl,color,price,sizes})
+ const create = (data) => {
+    return Product.create({...data})
 }
 const getOne = (id) => {
     return Product.findById(id)
@@ -11,9 +11,14 @@ const findOneAndUpdate = (data,id) => {
     return Product.findByIdAndUpdate(id,data)
 }
 
+const deleteOne = (id) => {
+    return Product.findByIdAndDelete(id)
+}
+
 const productsServices = {
     create,
     getOne,
-    findOneAndUpdate
+    findOneAndUpdate,
+    deleteOne
 }
 module.exports = productsServices;

@@ -30,7 +30,7 @@ const productsSchema = new mongoose.Schema({
         type:Number,
     },
     sizes:{
-        // for some fuking reason mongoose lib throws error
+        
     },
     onSale:{
         type:Boolean,
