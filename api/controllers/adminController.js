@@ -25,7 +25,6 @@ const createProductHandler = async (req, res) => {
           "Type, category, brand, gender, imageUrl, color, price, sizes should be provided in order to continue!",
       });
   try {
-    console.log('trying')
     const dbResponse = await productsServices.create(
       type,
       category,
@@ -47,8 +46,7 @@ const createProductHandler = async (req, res) => {
 };
 
 const getOneProductHandler = async(req,res) => {
-  console.log(`POST ${req.originalUrl}`);
-  
+  console.log(`GET ${req.originalUrl}`);
   const params = req.params;
   try{
     const dbResponse = await productsServices.getOne(params.productId)
@@ -60,8 +58,7 @@ const getOneProductHandler = async(req,res) => {
 
 
 const editHandler = async(req,res) => {
-  console.log(`POST ${req.originalUrl}`);
-
+  console.log(`PUT ${req.originalUrl}`);
   const data =
   req.body;
 
@@ -71,6 +68,7 @@ const editHandler = async(req,res) => {
     console.log(dbResponse);
     res.status(200).json(dbResponse);
   }catch(err){
+    res.status(404).json({message:'Product with this id was not found!'});
     console.log(err);
   }
 }
