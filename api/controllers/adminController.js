@@ -4,40 +4,28 @@ const productsServices = require("../services/productsServices");
 
 const createProductHandler = async (req, res) => {
   console.log(`POST ${req.originalUrl}`);
-  const { type, category, gender, brand, imageUrl, color, price, sizes } =
+  const data =
     req.body;
-    console.log( type, category, gender, brand, imageUrl, color, price, sizes )
   if (
-    !type ||
-    !category ||
-    !gender ||
-    !brand ||
-    !imageUrl ||
-    !color ||
-    !price ||
-    !sizes
+    !data.type ||
+    !data.category ||
+    !data.gender ||
+    !data.brand ||
+    !data.imageUrl ||
+    !data.color ||
+    !data.price ||
+    !data.sizes
   )
-    return res
-      .status(400)
-      .json({
-        creationFailed:true,
-        message:
-          "Type, category, brand, gender, imageUrl, color, price, sizes should be provided in order to continue!",
-      });
+    return res.status(400).json({
+      creationFailed: true,
+      message:
+        "Type, category, brand, gender, imageUrl, color, price, sizes should be provided in order to continue!",
+    });
   try {
-    const dbResponse = await productsServices.create(
-      type,
-      category,
-      gender,
-      brand,
-      imageUrl,
-      color,
-      price,
-      sizes
-    );
-     res.status(201).json(dbResponse);
+    const dbResponse = await productsServices.create(data);
+    res.status(201).json(dbResponse);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     let error = err._message;
     let errors = Object.values(err.errors);
     let specifficError = errors[0].properties.message;
@@ -45,41 +33,66 @@ const createProductHandler = async (req, res) => {
   }
 };
 
-const getOneProductHandler = async(req,res) => {
+const getOneProductHandler = async (req, res) => {
   console.log(`GET ${req.originalUrl}`);
   const params = req.params;
-  try{
-    const dbResponse = await productsServices.getOne(params.productId)
+  try {
+    const dbResponse = await productsServices.getOne(params.productId);
     res.status(200).json(dbResponse);
-  }catch(err){
-    res.status(404).json({message:'Product with this id was not found!'});
+  } catch (err) {
+    res.status(404).json({ message: "Product with this id was not found!" });
   }
-}; 
+};
 
-
-const editHandler = async(req,res) => {
+const editProductHandler = async (req, res) => {
   console.log(`PUT ${req.originalUrl}`);
-  const data =
-  req.body;
-
+  const data = req.body;
   const params = req.params;
-  try{
-    const dbResponse = await productsServices.findOneAndUpdate(data,params.productId)
-    console.log(dbResponse);
+
+  if (
+    !data.type ||
+    !data.category ||
+    !data.gender ||
+    !data.brand ||
+    !data.imageUrl ||
+    !data.color ||
+    !data.price ||
+    !data.sizes
+  )
+    return res.status(400).json({
+      creationFailed: true,
+      message:
+        "Type, category, brand, gender, imageUrl, color, price, sizes should be provided in order to continue!",
+    });
+
+  try {
+    const dbResponse = await productsServices.findOneAndUpdate(
+      data,
+      params.productId
+    );
     res.status(200).json(dbResponse);
-  }catch(err){
-    res.status(404).json({message:'Product with this id was not found!'});
+  } catch (err) {
+    res.status(404).json({ message: "Product with this id was not found!" });
     console.log(err);
+  }
+};
+
+
+const deleteProductHandler = async(req,res) => {
+  const params = req.params;
+  try {
+    const dbResponse = await productsServices.deleteOne(params.productId)
+    if(dbResponse === null) res.status(404).json({message:'Product with this id was not found!'})
+    res.status(200).json({message:"You successfully delete this product!"})
+  }catch(err){
+    res.status(404).json({message:'Product with this id was not found!'})
   }
 }
 
-
-
-
 router.post("/products/create", createProductHandler);
-router.put("/products/:productId/edit", editHandler);
-router.get("/products/:productId/", getOneProductHandler);
-
+router.put("/products/:productId/edit", editProductHandler);
+router.get("/products/:productId", getOneProductHandler);
+router.delete("/products/:productId/delete", deleteProductHandler);
 
 
 module.exports = router;
