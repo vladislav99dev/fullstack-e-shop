@@ -5,37 +5,87 @@ import { useParams,useNavigate } from "react-router-dom";
 import * as productsRequester from "../../../services/productsRequester"
 import useModalState from "../../../hooks/useModalState";
 import { validateProductForms } from "../../../services/formValidationsServices";
+import { extractAndFormatData } from "../../../services/dataServices";
 
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal";
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 
 
+
 const Edit = () => {
     const {user} = useAuthContext();
-    const [type,setType] = useState('clothing');
+    const [type,setType] = useState('');
     const [messages,setMessaages] = useState([]);
     const [product,setProduct] = useState({});
     const {productId} = useParams();
+    const {modalState,setFailedModal,setSuccessModal,resetModals} = useModalState();
     const navigate = useNavigate();
-    const {modalState,setFailedModal,setSuccessModal,resetModals} = useModalState()
+
+    let shoesOptions = ['lifestyle','running','football','gym','boxing and wrestling'];
+    let clothingOptions = ['t-shirts','sweatshirts','tracksuits','shorts','jackets'];
+    let types = ['clothing','shoes'];
+    let genders = ['women','men','boys', 'girls'];
+    let brands = ['nike','jordan', 'adidas'];
 
 
-    const initialRequest = async(user,productId) => {
-        const response = await productsRequester.getOne(null,user.accessToken,productId);
+    useEffect(()=> {
+         initialRequest(user.accessToken,productId)
+         .then(({response,jsonResponse}) => {
+            if(response.status !== 200) setFailedModal(jsonResponse.message);
+            if(response.status === 200) {
+                const result = stringifySizes(jsonResponse)
+                setProduct(result);
+                setType(jsonResponse.type);
+            }
+         })
+         .catch(err => setFailedModal("Server time out."))
+
+         
+    },[])
+
+    const initialRequest = async(accessToken,productId) => {
+        const response = await productsRequester.getOne(null,accessToken,productId);
         const jsonResponse = await response.json();
         return {response,jsonResponse}
     }
 
-    useEffect(()=> {
-         initialRequest(user,productId)
-         .then(({response,jsonResponse}) => {
-            if(response.status !== 200) setFailedModal(jsonResponse.message);
-            if(response.status === 200) setProduct(jsonResponse);
-         })
-    },[])
+    const stringifySizes = (product) => {
+        for (const key in product.sizes) {
+            product.sizes = `${key}:${product.sizes[key]}`    
+        }
+        return product;
+    }
 
-    const attentionModalButtonHandler = () => {
+
+    const sortedGenders = genders.sort((a,b) => {
+        if(a === product.gender){
+            return -1
+        }
+    })
+    const sortedBrands = brands.sort((a,b) => {
+        if(a === product.brand){
+            return -1
+        }
+    })
+    const sortedTypes = types.sort((a,b) => {
+        if(a === product.type){
+            return -1
+        }
+    })
+    const sortedClothingOptions = clothingOptions.sort((a,b) => {
+        if(a === product.category){
+            return -1
+        }
+    })
+    const sortedShoeOptions = shoesOptions.sort((a,b) => {
+        if(a === product.category){
+            return -1
+        }
+    })
+ 
+
+    const modalButtonHandler = () => {
         resetModals()
         navigate('/')
     }
@@ -44,26 +94,14 @@ const Edit = () => {
         setType(event.target.value);
     };
 
-    const dataFormater = (data) => {
-        data.sizes = data.sizes.split(',');
-        data.sizes = data.sizes.map(x => x.split(':')) ;
-        data.sizes = Object.fromEntries(data.sizes);
-        data.price = Number(data.price);
-        for (const key in data.sizes) {
-           data.sizes[key] = Number(data.sizes[key]);
-        };
-        return data;
-    };
-
     const submitHandler = async(event) => {
         event.preventDefault();
-        const formData = new FormData(event.target) ;
-        const data = Object.fromEntries(formData);
-        const formatedData = dataFormater(data);
-        //if data has ho coma or semicolons return error message
+        const formatedData = extractAndFormatData(event.target);
+
         let validationsResponse = validateProductForms(formatedData);
         if(validationsResponse.length > 0) return setMessaages(validationsResponse);
         if(!validationsResponse.length)  setMessaages([]);
+
         try{
             const response = await productsRequester.edit(formatedData,user.accessToken,product._id);
             const jsonResponse = await response.json();
@@ -78,8 +116,7 @@ const Edit = () => {
         }
     }
 
-    const shoesOptions = ['Lifestyle','Running','Football','Gym','Boxing and Wrestling'];
-    const clothingOptions = ['T-shirts','Sweatshirts','Tracksuits','Shorts','Jackets'];
+
 
     return (
     <>
@@ -87,7 +124,7 @@ const Edit = () => {
         ? <AttentionModal 
         titleMessage={'Operation failed!'} 
         descriptionMessage={modalState.isFailed.message} 
-        buttonHandler={attentionModalButtonHandler} 
+        buttonHandler={modalButtonHandler} 
         buttonName={'Try again'}/>  
         : null}
 
@@ -95,7 +132,7 @@ const Edit = () => {
         ? <SuccessModal 
         titleMessage={'Success'}
         descriptionMessage={modalState.isSuccess.message}
-        buttonHandler={attentionModalButtonHandler}
+        buttonHandler={modalButtonHandler}
         buttonName={'Continue'}/> 
         : null}
 
@@ -112,39 +149,35 @@ const Edit = () => {
         <form onSubmit={submitHandler}>
         <div className="flex mt-4 justify-center">
             <label htmlFor="type" className="w-[60px] mr-12">Type:</label>
-            <select type="input" name="type" id="type" onChange={handleSelect} className="w-[190px]">
-                <option value="clothing">Clothing</option>
-                <option value="shoes">Shoes</option>
+            <select type="input" name="type" id="type" onChange={handleSelect}  className="w-[190px] capitalize">
+                {sortedTypes.map((type) => <option defaultValue={type}>{type}</option>)}
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="category" className="w-[60px] mr-12">Category:</label>
-            <select type="input" name="category" id="category" className="w-[190px] ">
+            <select type="input" name="category" id="category" defaultValue={product.category} className="w-[190px] capitalize">
                 {type === 'clothing' 
-                ? clothingOptions.map((option) => <option key={option} value={option}>{option}</option>)
-                : shoesOptions.map((option) => <option key={option} value={option}>{option}</option>)
+                ? sortedClothingOptions.map((option) => <option key={option} defaultValue={option}>{option}</option>)
+                : sortedShoeOptions.map((option) => <option key={option} defaultValue={option}>{option}</option>)
             }
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="gender" className="w-[60px] mr-12">Gender:</label>
-            <select type="input" name="gender" id="gender" className="w-[190px] ">
-                <option value="men">Men</option>
-                <option value="women">Women</option>
+            <select type="input" name="gender" id="gender" defaultValue={product.gender} className="w-[190px] capitalize">
+            {sortedGenders.map(gender => <option defaultValue={gender}>{gender}</option>)} 
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="brand" className="w-[60px] mr-12">Brand:</label>
-            <select type="input" name="brand" id="brand" className="w-[190px] ">
-                <option value="nike">Nike</option>
-                <option value="jordan">Jordan</option>
-                <option value="adidas">Adidas</option>
+            <select type="input" name="brand" id="brand" className="w-[190px] capitalize">
+            {sortedBrands.map(gender => <option defaultValue={gender}>{gender}</option>)}
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="sizes" className="w-[60px] mr-12">Sizes and Quantities:</label>
             <textarea 
-            type="input" name="sizes" 
+            type="input" name="sizes" defaultValue={product.sizes}
             placeholder={type=== 'clothing' 
             ? 'ex: XL : 5, M : 15,  S : 13 You should add comma as shown in example' 
             : 'ex: 43 : 10, 46 : 15, 42 : 13 You should add comma as shown in example'} 
@@ -153,15 +186,15 @@ const Edit = () => {
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="imageUrl" className="w-[60px] mr-12">ImageUrl:</label>
-            <input type="input" name="imageUrl" id="imageUrl" className="w-[190px]" />
+            <input type="input" name="imageUrl" id="imageUrl" className="w-[190px]" defaultValue={product.imageUrl} />
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="color"  className="w-[60px] mr-12">Color:</label>
-            <input type="input" name="color" id="color" className="w-[190px]" />
+            <input type="input" name="color" id="color" className="w-[190px] capitalize" defaultValue={product.color} />
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="price"  className="w-[60px] mr-12">Price:</label>
-            <input type="number" name="price" id="price" className="w-[190px]" />
+            <input type="number" name="price" id="price" className="w-[190px]" defaultValue={product.price}/>
         </div>
         <div className="flex mt-4 justify-center">
             <button type="submit" className="py-2 px-10 mb-2 rounded-md text-white bg-[#d9b99b] font-bold">Submit</button>
@@ -172,3 +205,6 @@ const Edit = () => {
 )
 }
 export default Edit;
+
+
+
