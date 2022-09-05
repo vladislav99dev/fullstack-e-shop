@@ -82,8 +82,8 @@ const deleteProductHandler = async(req,res) => {
   const params = req.params;
   try {
     const dbResponse = await productsServices.deleteOne(params.productId)
-    if(dbResponse === null) res.status(404).json({message:'Product with this id was not found!'})
-    res.status(200).json({message:"You successfully delete this product!"})
+    if(dbResponse === null) return res.status(404).json({message:'Product with this id was not found!'})
+    res.status(200).json({message:"You successfully deleteted this product!"})
   }catch(err){
     res.status(404).json({message:'Product with this id was not found!'})
   }
