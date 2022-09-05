@@ -18,8 +18,23 @@ const Create = () => {
     const [messages,setMessaages] = useState([]);
     const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalState();
 
-    const shoesOptions = ['Lifestyle','Running','Football','Gym','Boxing and Wrestling'];
-    const clothingOptions = ['T-shirts','Sweatshirts','Tracksuits','Shorts','Jackets'];
+    let shoesOptions = [
+        "lifestyle",
+        "running",
+        "football",
+        "gym",
+        "boxing and wrestling",
+      ];
+      let clothingOptions = [
+        "t-shirts",
+        "sweatshirts",
+        "tracksuits",
+        "shorts",
+        "jackets",
+      ];
+      let types = ["clothing", "shoes"];
+      let genders = ["women", "men", "boys", "girls"];
+      let brands = ["nike", "jordan", "adidas"];
 
   
     const handleSelect = (event) => {
@@ -90,14 +105,13 @@ const Create = () => {
         <form onSubmit={submitHandler}>
         <div className="flex mt-4 justify-center">
             <label htmlFor="type" className="w-[60px] mr-12">Type:</label>
-            <select type="input" name="type" id="type" onChange={handleSelect} className="w-[190px]">
-                <option value="clothing">Clothing</option>
-                <option value="shoes">Shoes</option>
+            <select type="input" name="type" id="type" onChange={handleSelect} className="w-[190px] capitalize">
+            {types.map(type => <option key={type} value={type}>{type}</option>)}
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="category" className="w-[60px] mr-12">Category:</label>
-            <select type="input" name="category" id="category" className="w-[190px] ">
+            <select type="input" name="category" id="category" className="w-[190px] capitalize">
                 {type === 'clothing' 
                 ? clothingOptions.map((option) => <option key={option} value={option}>{option}</option>)
                 : shoesOptions.map((option) => <option key={option} value={option}>{option}</option>)
@@ -106,17 +120,15 @@ const Create = () => {
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="gender" className="w-[60px] mr-12">Gender:</label>
-            <select type="input" name="gender" id="gender" className="w-[190px] ">
-                <option value="men">Men</option>
-                <option value="women">Women</option>
+            <select type="input" name="gender" id="gender" className="w-[190px] capitalize">
+                {genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="brand" className="w-[60px] mr-12">Brand:</label>
-            <select type="input" name="brand" id="brand" className="w-[190px] ">
-                <option value="nike">Nike</option>
-                <option value="jordan">Jordan</option>
-                <option value="adidas">Adidas</option>
+            <select type="input" name="brand" id="brand" className="w-[190px] capitalize">
+            {brands.map(brand => <option key={brand} value={brand}>{brand}</option>)}
+
             </select>
         </div>
         <div className="flex mt-4 justify-center">
