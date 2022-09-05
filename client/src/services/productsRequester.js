@@ -20,6 +20,9 @@ const productsRequester = (method,data,token,id) => {
     if(method === "GET"){
         fetchUrl = `${url}/admin/products/${id}`
     }
+    if(method === "DELETE") {
+        fetchUrl = `${url}/admin/products/${id}/delete`
+    }
 
     if(method === "POST" || method === "PUT"){
         options.body = JSON.stringify({
@@ -39,4 +42,6 @@ const productsRequester = (method,data,token,id) => {
 export const create = productsRequester.bind(null,"POST");
 export const edit = productsRequester.bind(null,"PUT");
 export const getOne = productsRequester.bind(null,"GET");
+export const deleteOne = productsRequester.bind(null,"DELETE");
+
 
