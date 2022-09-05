@@ -6,6 +6,7 @@ import useModalState from "../../../hooks/useModalState"
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 
 import * as productsRequester from '../../../services/productsRequester'
+import { extractAndFormatData } from "../../../services/dataServices";
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal"
 
@@ -41,22 +42,9 @@ const Create = () => {
         setType(event.target.value);
     };
 
-    const dataFormater = (data) => {
-        data.sizes = data.sizes.split(',');
-        data.sizes = data.sizes.map(x => x.split(':')) ;
-        data.sizes = Object.fromEntries(data.sizes);
-        data.price = Number(data.price);
-        for (const key in data.sizes) {
-           data.sizes[key] = Number(data.sizes[key]);
-        };
-        return data;
-    };
-
     const submitHandler = async(event) => {
         event.preventDefault();
-        const formData = new FormData(event.target) ;
-        const data = Object.fromEntries(formData);
-        const formatedData = dataFormater(data);
+        const formatedData = extractAndFormatData(event.target)
         let validationsResponse = validateProductForms(formatedData);
         if(validationsResponse.length > 0) return setMessaages(validationsResponse);
         if(!validationsResponse.length)  setMessaages([]);
