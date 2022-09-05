@@ -10,7 +10,7 @@ import Logout from "./components/Logout/Logout.js";
 
 import Create from "./components/Admin/Product/Create.js"
 import Edit from "./components/Admin/Product/Edit.js";
-
+import Delete from "./components/Admin/Product/Delete.js"
 
 function App() {
   return (
@@ -29,6 +29,7 @@ function App() {
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
               <Route path="products/:productId/edit" element={<Edit />} />
+              <Route path="products/:productId/delete" element={<Delete />} />
             </Route>
           </Routes>
         </div>
