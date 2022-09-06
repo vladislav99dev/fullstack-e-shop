@@ -2,35 +2,21 @@ const router = require("express").Router();
 
 const productsServices = require("../services/productsServices");
 
+const dataValidationServices = require("../services/dataValidationServices")
+
+
 const createProductHandler = async (req, res) => {
   console.log(`POST ${req.originalUrl}`);
   const data =
     req.body;
-  if (
-    !data.type ||
-    !data.category ||
-    !data.gender ||
-    !data.brand ||
-    !data.imageUrl ||
-    !data.color ||
-    !data.price ||
-    !data.sizes
-  )
-    return res.status(400).json({
-      creationFailed: true,
-      message:
-        "Type, category, brand, gender, imageUrl, color, price, sizes should be provided in order to continue!",
-    });
-  try {
-    const dbResponse = await productsServices.create(data);
-    res.status(201).json(dbResponse);
-  } catch (err) {
-    console.log(err);
-    let error = err._message;
-    let errors = Object.values(err.errors);
-    let specifficError = errors[0].properties.message;
-    res.status(400).json({ error, specifficError });
-  }
+    try{
+      dataValidationServices.validateAllData(data)
+      const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
+      const dbResponse = await productsServices.create(validatedAndFormatedData);
+      res.status(201).json(dbResponse);
+    }catch(err){
+      res.status(err.status).json({message: err.message})
+    }
 };
 
 const getOneProductHandler = async (req, res) => {
@@ -49,31 +35,17 @@ const editProductHandler = async (req, res) => {
   const data = req.body;
   const params = req.params;
 
-  if (
-    !data.type ||
-    !data.category ||
-    !data.gender ||
-    !data.brand ||
-    !data.imageUrl ||
-    !data.color ||
-    !data.price ||
-    !data.sizes
-  )
-    return res.status(400).json({
-      creationFailed: true,
-      message:
-        "Type, category, brand, gender, imageUrl, color, price, sizes should be provided in order to continue!",
-    });
-
   try {
+    dataValidationServices.validateAllData(data)
+    const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
     const dbResponse = await productsServices.findOneAndUpdate(
-      data,
+      validatedAndFormatedData,
       params.productId
     );
     res.status(200).json(dbResponse);
   } catch (err) {
-    res.status(404).json({ message: "Product with this id was not found!" });
-    console.log(err);
+    if(err.path === '_id') return res.status(404).json({message:"Product with this id does not exist!"})
+    res.status(err.status).json({ message:err.message});
   }
 };
 
