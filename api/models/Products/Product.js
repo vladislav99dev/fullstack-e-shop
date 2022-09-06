@@ -6,7 +6,7 @@ const productsSchema = new mongoose.Schema({
         type: String
     },
     category:{
-        required:[true,'Type is required'],
+        required:[true,'Category is required'],
         type:String,
     },
     gender:{
@@ -14,7 +14,7 @@ const productsSchema = new mongoose.Schema({
         type:String, 
     },
     brand:{
-        required:[true,'Shoe brand is required'],
+        required:[true,'Brand is required'],
         type:String,
     },
     imageUrl:{
@@ -22,11 +22,11 @@ const productsSchema = new mongoose.Schema({
         type:String,
     },
     color:{
-        required:[true,'Shoe color is required'],
+        required:[true,'Color is required'],
         type:String,
     },
     price:{
-        required:[true,'Shoe price is required'],
+        required:[true,'Price is required'],
         type:Number,
     },
     sizes:{
