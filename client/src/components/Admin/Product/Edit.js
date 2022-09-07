@@ -1,6 +1,6 @@
 import { useEffect, useState, useReducer } from "react";
-import { useAuthContext } from "../../../context/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../../context/AuthContext";
 
 import * as productsRequester from "../../../services/productsRequester";
 import useModalState from "../../../hooks/useModalState";
@@ -21,13 +21,13 @@ const initialSelectStates = { type: "", category: "", gender: "", brand: "" };
 const reducerSelectStates = (state, action) => {
   switch (action.type) {
     case "type":
-      return { type: action.payload };
+      return { type:action.payload, category:state.category, gender:state.gender, brand: state.brand };
     case "category":
-      return { category: action.payload };
+      return { type:state.type, category:action.payload, gender:state.gender, brand: state.brand };
     case "gender":
-      return { gender: action.payload };
+      return { type:state.type, category:state.category, gender:action.payload, brand: state.brand };
     case "brand":
-      return { brand: action.payload };
+      return {type:state.type, category:state.category, gender:state.gender, brand: action.payload };
   }
 };
 
@@ -45,9 +45,7 @@ const Edit = () => {
     useModalState();
   const navigate = useNavigate();
 
-  const setSelectStates = (state, data) => {
-    dispatch({ type: state, payload: data });
-  };
+
 
   useEffect(() => {
     initialRequest(user.accessToken, productId)
@@ -67,6 +65,9 @@ const Edit = () => {
         setFailedModal("Server time out.");
       });
   }, []);
+  const setSelectStates = (state, data) => {
+    dispatch({ type: state, payload: data });
+  };
   const initialRequest = async (accessToken, productId) => {
     const response = await productsRequester.getOne(
       null,
@@ -193,6 +194,7 @@ const Edit = () => {
               name="category"
               id="category"
               className="w-[190px] capitalize"
+              onChange={handleSelect.bind(null, "category")}
               value={selectStates.category}
             >
               {selectStates.type === "clothing"
