@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useAuthContext } from "../../../context/AuthContext";
-import { validateProductForms } from "../../../services/formValidationsServices";
+// import { validateProductForms } from "../../../services/formValidationsServices";
 import useModalState from "../../../hooks/useModalState"
 
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 
 import * as productsRequester from '../../../services/productsRequester'
-import { extractAndFormatData } from "../../../services/dataServices";
+import {formDataExtracter, dataSizeFormater } from "../../../services/dataServices";
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal"
+
+import productsValidations from "../../../services/formValidations/productsValidations";
 
 
 
@@ -44,8 +46,10 @@ const Create = () => {
 
     const submitHandler = async(event) => {
         event.preventDefault();
-        const formatedData = extractAndFormatData(event.target)
-        let validationsResponse = validateProductForms(formatedData);
+        const data  = formDataExtracter(event.target)
+        console.log(data);
+        const formatedData = dataSizeFormater(data)
+        let validationsResponse = productsValidations.validateAllData(formatedData)
         if(validationsResponse.length > 0) return setMessaages(validationsResponse);
         if(!validationsResponse.length)  setMessaages([]);
         try{
