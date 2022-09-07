@@ -100,7 +100,7 @@ const validateDataImageUrl = (data) => {
 };
 
 const validateDataColor = (data) => {
-  if (!colors.includes(data.color)) {
+  if (!colors.includes(data.color.toLowerCase())) {
     throw { status: 400, message: "Color is not valid!" };
   }
 };
