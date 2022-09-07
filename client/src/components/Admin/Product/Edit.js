@@ -5,7 +5,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import * as productsRequester from "../../../services/productsRequester";
 import useModalState from "../../../hooks/useModalState";
 import productsValidations from "../../../services/formValidations/productsValidations";
-import { dataSizeFormater, formDataExtracter } from "../../../services/dataServices";
+import {
+  dataSizeFormater,
+  formDataExtracter,
+} from "../../../services/dataServices";
 
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal";
@@ -13,12 +16,28 @@ import ValidationMessage from "../../ValidationMessage/validationMessage";
 
 import formData from "../../../utils/formData";
 
+const initialSelectStates = { type: "", category: "", gender: "", brand: "" };
 
-
+const reducerSelectStates = (state, action) => {
+  switch (action.type) {
+    case "type":
+      return { type: action.payload };
+    case "category":
+      return { category: action.payload };
+    case "gender":
+      return { gender: action.payload };
+    case "brand":
+      return { brand: action.payload };
+  }
+};
 
 const Edit = () => {
   const { user } = useAuthContext();
   const [type, setType] = useState("");
+  const [selectStates, dispatch] = useReducer(
+    reducerSelectStates,
+    initialSelectStates
+  );
   const [messages, setMessaages] = useState([]);
   const [product, setProduct] = useState({});
   const { productId } = useParams();
@@ -26,8 +45,9 @@ const Edit = () => {
     useModalState();
   const navigate = useNavigate();
 
-
-
+  const setSelectStates = (state, data) => {
+    dispatch({ type: state, payload: data });
+  };
 
   useEffect(() => {
     initialRequest(user.accessToken, productId)
@@ -36,12 +56,16 @@ const Edit = () => {
         if (response.status === 200) {
           const result = stringifySizes(jsonResponse);
           setProduct(result);
-          setType(jsonResponse.type); 
+          setSelectStates("type", result.type);
+          setSelectStates("category", result.category);
+          setSelectStates("gender", result.gender);
+          setSelectStates("brand", result.brand);
         }
       })
       .catch((err) => {
         console.log(err);
-        setFailedModal("Server time out.")});
+        setFailedModal("Server time out.");
+      });
   }, []);
   const initialRequest = async (accessToken, productId) => {
     const response = await productsRequester.getOne(
@@ -53,49 +77,40 @@ const Edit = () => {
     return { response, jsonResponse };
   };
   const stringifySizes = (product) => {
-        product.sizes = JSON.stringify(product.sizes)
-        product.sizes = product.sizes.replaceAll('"','')
-        product.sizes = product.sizes.replace("{",'')
-        product.sizes = product.sizes.replace("}",'')
-        return product  
+    product.sizes = JSON.stringify(product.sizes);
+    product.sizes = product.sizes.replaceAll('"', "");
+    product.sizes = product.sizes.replace("{", "");
+    product.sizes = product.sizes.replace("}", "");
+    return product;
   };
 
-
-
-  let filteredBrands = formData.brands.filter(brand => brand !== product.brand )
-  let filteredGenders = formData.genders.filter(gender => gender !== product.gender )
-  let filteredClothingOptions = formData.clothingOptions.filter(option => option !== product.category )
-  let filteredShoeOptions = formData.shoeOptions.filter(option => option !== product.category )
-  let fitleredTypes = formData.types.filter(type => type !== product.type )
-
-  let sortedBrands = formData.brands.sort(a => a === product.brand ? -1 : 1)
-  let sortedGenders = formData.genders.sort(a => a === product.gender ? -1 : 1)
-  let sortedClothingOptions = formData.clothingOptions.sort(a => a === product.category ? -1 : 1)
-  let sortedShoeOptions = formData.shoeOptions.sort(a => a === product.category ? -1 : 1)
-  let sortedTypes = formData.types.sort(a => a === product.type ? -1 : 1);
-
-
-
-
-
-
-
+  let sortedBrands = formData.brands.sort((a) =>
+    a === product.brand ? -1 : 1
+  );
+  let sortedGenders = formData.genders.sort((a) =>
+    a === product.gender ? -1 : 1
+  );
+  let sortedClothingOptions = formData.clothingOptions.sort((a) =>
+    a === product.category ? -1 : 1
+  );
+  let sortedShoeOptions = formData.shoeOptions.sort((a) =>
+    a === product.category ? -1 : 1
+  );
+  let sortedTypes = formData.types.sort((a) => (a === product.type ? -1 : 1));
 
   const modalButtonHandler = () => {
     resetModals();
     navigate("/");
   };
-  const handleSelect = (event) => {
-    setType(event.target.value);
+  const handleSelect = (state, event) => {
+    setSelectStates(state, event.target.value);
   };
-
-
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    const data = formDataExtracter(event.target)
-    const formatedData = dataSizeFormater(data)
-    let validationsResponse = productsValidations.validateAllData(formatedData)
+    const data = formDataExtracter(event.target);
+    const formatedData = dataSizeFormater(data);
+    let validationsResponse = productsValidations.validateAllData(formatedData);
     if (validationsResponse.length > 0)
       return setMessaages(validationsResponse);
     if (!validationsResponse.length) setMessaages([]);
@@ -158,13 +173,14 @@ const Edit = () => {
               type="input"
               name="type"
               id="type"
-              onChange={handleSelect}
+              onChange={handleSelect.bind(null, "type")}
               className="w-[190px] capitalize"
-              value={product.type}
+              value={selectStates.type}
             >
-               {/* <option key={product.category} value={product.category} >{product.type}</option> */}
               {sortedTypes.map((type) => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>
+                  {type}
+                </option>
               ))}
             </select>
           </div>
@@ -177,10 +193,9 @@ const Edit = () => {
               name="category"
               id="category"
               className="w-[190px] capitalize"
-              value={product.category}
-            > 
-            {/* <option key={product.category} value={product.category}>{product.category}</option> */}
-              {type === "clothing"
+              value={selectStates.category}
+            >
+              {selectStates.type === "clothing"
                 ? sortedClothingOptions.map((option) => (
                     <option key={option} value={option}>
                       {option}
@@ -191,7 +206,6 @@ const Edit = () => {
                       {option}
                     </option>
                   ))}
-                  
             </select>
           </div>
           <div className="flex mt-4 justify-center">
@@ -203,11 +217,13 @@ const Edit = () => {
               name="gender"
               id="gender"
               className="w-[190px] capitalize"
-              value={product.gender}
-            >   
-            {/* <option key={product.gender} value={product.gender} >{product.gender}</option> */}
-                 {sortedGenders.map((gender) => (
-                <option key={gender} value={gender}>{gender}</option>
+              onChange={handleSelect.bind(null, "gender")}
+              value={selectStates.gender}
+            >
+              {sortedGenders.map((gender) => (
+                <option key={gender} value={gender}>
+                  {gender}
+                </option>
               ))}
             </select>
           </div>
@@ -219,12 +235,14 @@ const Edit = () => {
               type="input"
               name="brand"
               id="brand"
-              value={product.brand}
+              value={selectStates.brand}
+              onChange={handleSelect.bind(null, "brand")}
               className="w-[190px] capitalize"
             >
-              {/* <option key={product.brand} value={product.brand} >{product.brand}</option> */}
               {sortedBrands.map((brand) => (
-                <option key={brand} value={brand}>{brand}</option>
+                <option key={brand} value={brand}>
+                  {brand}
+                </option>
               ))}
             </select>
           </div>
@@ -244,7 +262,7 @@ const Edit = () => {
               id="sizes"
               className="w-[190px]"
             ></textarea>
-          </div> 
+          </div>
           <div className="flex mt-4 justify-center">
             <label htmlFor="imageUrl" className="w-[60px] mr-12">
               ImageUrl:
