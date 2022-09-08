@@ -10,11 +10,12 @@ const createProductHandler = async (req, res) => {
   const data =
     req.body;
     try{
-      dataValidationServices.validateAllData(data)
-      const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
-      const dbResponse = await productsServices.create(validatedAndFormatedData);
+      let validatedData = dataValidationServices.validateAllData(data)
+      // const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
+      const dbResponse = await productsServices.create(validatedData);
       res.status(201).json(dbResponse);
     }catch(err){
+      console.log(err);
       res.status(err.status).json({message: err.message})
     }
 };
@@ -36,10 +37,10 @@ const editProductHandler = async (req, res) => {
   const params = req.params;
 
   try {
-    dataValidationServices.validateAllData(data)
-    const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
+    const validatedData = dataValidationServices.validateAllData(data)
+    // const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
     const dbResponse = await productsServices.findOneAndUpdate(
-      validatedAndFormatedData,
+      validatedData,
       params.productId
     );
     res.status(200).json(dbResponse);
