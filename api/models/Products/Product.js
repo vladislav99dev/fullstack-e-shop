@@ -9,6 +9,10 @@ const productsSchema = new mongoose.Schema({
         required:[true,'Category is required'],
         type:String,
     },
+    name:{
+        required:[true,'Name is required'],
+        type:String
+    },
     gender:{
         required:[true, 'Gender is required'],
         type:String, 
