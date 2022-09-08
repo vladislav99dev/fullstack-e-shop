@@ -211,6 +211,10 @@ const Edit = () => {
             </select>
           </div>
           <div className="flex mt-4 justify-center">
+            <label htmlFor="name" className="w-[60px] mr-12">Name:</label>
+            <input type="input" name="name" id="name" className="w-[190px] capitalize" defaultValue={product.name}></input>
+        </div>
+          <div className="flex mt-4 justify-center">
             <label htmlFor="gender" className="w-[60px] mr-12">
               Gender:
             </label>

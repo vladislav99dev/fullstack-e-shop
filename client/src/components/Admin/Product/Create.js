@@ -11,6 +11,7 @@ import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal"
 
 import productsValidations from "../../../services/formValidations/productsValidations";
+import formData from "../../../utils/formData";
 
 
 
@@ -21,25 +22,6 @@ const Create = () => {
     const [messages,setMessaages] = useState([]);
     const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalState();
 
-    let shoesOptions = [
-        "lifestyle",
-        "running",
-        "football",
-        "gym",
-        "boxing and wrestling",
-      ];
-      let clothingOptions = [
-        "t-shirts",
-        "sweatshirts",
-        "tracksuits",
-        "shorts",
-        "jackets",
-      ];
-      let types = ["clothing", "shoes"];
-      let genders = ["women", "men", "boys", "girls"];
-      let brands = ["nike", "jordan", "adidas"];
-
-  
     const handleSelect = (event) => {
         setType(event.target.value);
     };
@@ -98,28 +80,32 @@ const Create = () => {
         <div className="flex mt-4 justify-center">
             <label htmlFor="type" className="w-[60px] mr-12">Type:</label>
             <select type="input" name="type" id="type" onChange={handleSelect} className="w-[190px] capitalize">
-            {types.map(type => <option key={type} value={type}>{type}</option>)}
+            {formData.types.map(type => <option key={type} value={type}>{type}</option>)}
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="category" className="w-[60px] mr-12">Category:</label>
             <select type="input" name="category" id="category" className="w-[190px] capitalize">
                 {type === 'clothing' 
-                ? clothingOptions.map((option) => <option key={option} value={option}>{option}</option>)
-                : shoesOptions.map((option) => <option key={option} value={option}>{option}</option>)
+                ? formData.clothingOptions.map((option) => <option key={option} value={option}>{option}</option>)
+                : formData.shoeOptions.map((option) => <option key={option} value={option}>{option}</option>)
             }
             </select>
         </div>
         <div className="flex mt-4 justify-center">
+            <label htmlFor="name" className="w-[60px] mr-12">Name:</label>
+            <input type="input" name="name" id="name" className="w-[190px] capitalize"></input>
+        </div>
+        <div className="flex mt-4 justify-center">
             <label htmlFor="gender" className="w-[60px] mr-12">Gender:</label>
             <select type="input" name="gender" id="gender" className="w-[190px] capitalize">
-                {genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
+                {formData.genders.map(gender => <option key={gender} value={gender}>{gender}</option>)}
             </select>
         </div>
         <div className="flex mt-4 justify-center">
             <label htmlFor="brand" className="w-[60px] mr-12">Brand:</label>
             <select type="input" name="brand" id="brand" className="w-[190px] capitalize">
-            {brands.map(brand => <option key={brand} value={brand}>{brand}</option>)}
+            {formData.brands.map(brand => <option key={brand} value={brand}>{brand}</option>)}
 
             </select>
         </div>

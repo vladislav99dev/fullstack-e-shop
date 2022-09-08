@@ -28,6 +28,7 @@ const productsRequester = (method,data,token,id) => {
         options.body = JSON.stringify({
             type:data.type,
             category:data.category,
+            name:data.name,
             gender:data.gender,
             brand:data.brand,
             imageUrl:data.imageUrl,

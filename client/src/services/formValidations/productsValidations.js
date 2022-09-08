@@ -31,6 +31,11 @@ const validateIsAllDataSend = (data,messages) => {
       }
     }
   };
+  const validateName = (data,messages) => {
+    if(!/^[a-z]*\s*[a-z]*\s*[0-9]*$/i.test(data.name)){
+      messages.push("Name is not in valid format.")
+    }
+  }
   
   const validateDataGender = (data,messages) => {
     if (!formData.genders.includes(data.gender)) {
@@ -101,6 +106,7 @@ const validateIsAllDataSend = (data,messages) => {
     validateIsAllDataSend(data,messages);
     validateDataType(data,messages);
     validateDataCategory(data,messages);
+    validateName(data,messages);
     validateDataGender(data,messages);
     validateDataBrand(data,messages);
     validateDataImageUrl(data,messages);
