@@ -38,6 +38,7 @@ const validateIsAllDataSend = (data) => {
   if (
     !data.type ||
     !data.category ||
+    !data.name ||
     !data.gender ||
     !data.brand ||
     !data.imageUrl ||
@@ -77,6 +78,12 @@ const validateDataCategory = (data) => {
   }
 };
 
+const validateName = (data,messages) => {
+  if(!/^[a-z]*\s*[a-z]*\s*[0-9]*$/i.test(data.name)){
+    throw {status:400, message:"Name is not in valid format."}
+  }
+}
+
 const validateDataGender = (data) => {
   if (!genders.includes(data.gender)) {
     throw { status: 400, message: `Genders does not support${data.gender}!` };
@@ -110,6 +117,36 @@ const validateDataPrice = (data) => {
     throw { status: 400, message: "Price should be a number!" };
   }
 };
+
+
+const validateDataSizesValues = (data) => {
+  for (const key in data.sizes) {
+      if(isNaN(data.sizes[key])){
+        throw {status:400, message: "Size value is not valid!"}
+      }
+  }
+};
+
+
+const validateDataSizes = (data) => {
+  let comparisionArray =[];
+  if(data.type === 'clothing') comparisionArray = clothingSizes;
+  if(data.type === 'shoes') comparisionArray = shoeSizes;
+
+  for (const key in data.sizes) {
+      if(!comparisionArray.includes(key)) throw{status:400, message:`${data.type} does not support size ${key}!`}
+  }
+  
+  comparisionArray.forEach(size => {
+    if(!data.sizes.hasOwnProperty(size)){
+      data.sizes[size] = 0
+    }
+  })
+  return data;
+}
+
+
+
 
 const validateAndFormatDataSizes = (data) => {
   if (data.type === "clothing") {
@@ -164,12 +201,16 @@ const validateAllData = (data) => {
   validateIsAllDataSend(data);
   validateDataType(data);
   validateDataCategory(data);
+  validateName(data)
   validateDataGender(data);
   validateDataBrand(data);
   validateDataImageUrl(data);
   validateDataColor(data);
   validateDataImageUrl(data);
   validateDataPrice(data);
+  validateDataSizesValues(data)
+  const validatedData = validateDataSizes(data);
+  return validatedData
 };
 
 const dataValidationServices = {
