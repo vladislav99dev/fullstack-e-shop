@@ -17,8 +17,13 @@ const productsRequester = (method,data,token,id) => {
     if(method === "PUT"){
         fetchUrl = `${url}/admin/products/${id}/edit`
     }
+
     if(method === "GET"){
-        fetchUrl = `${url}/admin/products/${id}`
+        fetchUrl = `${url}/products/${id}`
+    }
+    if(method === "GET" && data === "men" || data === "women" || data === "boys" || data === "girls"){
+        fetchUrl = `${url}/products/${data}`
+        console.log(fetchUrl);
     }
     if(method === "DELETE") {
         fetchUrl = `${url}/admin/products/${id}/delete`
@@ -37,12 +42,16 @@ const productsRequester = (method,data,token,id) => {
             sizes:data.sizes
         })
     }
-    return fetch(fetchUrl,options)
+    
+    if(method === "GET") return fetch(fetchUrl);
+    return fetch(fetchUrl,options);
 }
 
 export const create = productsRequester.bind(null,"POST");
 export const edit = productsRequester.bind(null,"PUT");
 export const getOne = productsRequester.bind(null,"GET");
 export const deleteOne = productsRequester.bind(null,"DELETE");
+export const getMany = productsRequester.bind(null,"GET");
+
 
 
