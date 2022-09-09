@@ -32,7 +32,7 @@ const genders = ["men", "women", "boys", "girls"];
 
 const brands = ["nike", "jordan", "adidas"];
 
-const colors = ["black", "white", "yellow", "green", "red", "blue"];
+const colors = ["black", "white", "yellow", "green", "red", "blue","grey","navy","orange"];
 
 const validateIsAllDataSend = (data) => {
   if (
@@ -78,8 +78,8 @@ const validateDataCategory = (data) => {
   }
 };
 
-const validateName = (data,messages) => {
-  if(!/^[a-z]*\s*[a-z]*\s*[0-9]*$/i.test(data.name)){
+const validateName = (data) => {
+  if(!/[\w\s-]+/ig.test(data.name)){
     throw {status:400, message:"Name is not in valid format."}
   }
 }
