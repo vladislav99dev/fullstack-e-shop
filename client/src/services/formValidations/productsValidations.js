@@ -32,7 +32,7 @@ const validateIsAllDataSend = (data,messages) => {
     }
   };
   const validateName = (data,messages) => {
-    if(!/^[a-z]*\s*[a-z]*\s*[0-9]*$/i.test(data.name)){
+    if(!/[\w\s-]+/ig.test(data.name)){
       messages.push("Name is not in valid format.")
     }
   }
