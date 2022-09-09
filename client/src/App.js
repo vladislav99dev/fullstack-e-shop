@@ -12,6 +12,8 @@ import Create from "./components/Admin/Product/Create.js"
 import Edit from "./components/Admin/Product/Edit.js";
 import Delete from "./components/Admin/Product/Delete.js"
 
+import ProductsLayout from "./components/Products/ProductsLayout.js";
+
 function App() {
   return (
     <AuthProvider>
@@ -26,11 +28,16 @@ function App() {
               <Route path='register' element={<Register />}/>
               <Route path='logout' element={<Logout />}/>
             </Route>
+            <Route path="/products/">
+              <Route path=":gender" element={<ProductsLayout />} />
+              {/* <Route path=":productId" element={<ProductsLayout />} /> */}
+            </Route>
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
               <Route path="products/:productId/edit" element={<Edit />} />
               <Route path="products/:productId/delete" element={<Delete />} />
             </Route>
+            <Route path="*"  element={<h1>Error Page</h1>}/>
           </Routes>
         </div>
       </div>
