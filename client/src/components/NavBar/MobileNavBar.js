@@ -28,28 +28,28 @@ const MobileProductsMenu = () => {
       </div>
       <div className="h-30 flex-row lg:hidden">
         <div className="container-links">
-          <Link to={"/men"} className="mobile-links">
+          <Link to={"products/all"} className="mobile-links">
+            All
+          </Link>
+        </div>
+        <div className="container-links">
+          <Link to={"products/men"} className="mobile-links">
             Men
           </Link>
         </div>
         <div className="container-links">
-          <Link to={"/women"} className="mobile-links">
+          <Link to={"products/women"} className="mobile-links">
             Women
           </Link>
         </div>
         <div className="container-links">
-          <Link to={"/kids"} className="mobile-links">
+          <Link to={"products/kids"} className="mobile-links">
             Kids
           </Link>
         </div>
         <div className="container-links">
-          <Link to={"/new"} className="mobile-links">
-            New
-          </Link>
-        </div>
-        <div className="container-links">
           <Link
-            to={"/sale"}
+            to={"products/sale"}
             className="text-2xl font-extrabold text-[#00df9a] uppercase"
           >
             Sale
