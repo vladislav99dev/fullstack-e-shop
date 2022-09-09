@@ -15,10 +15,15 @@ const deleteOne = (id) => {
     return Product.findByIdAndDelete(id)
 }
 
+const findByGender = (gender) => {
+    return Product.find({gender:gender}).exec()
+}
+
 const productsServices = {
     create,
     getOne,
     findOneAndUpdate,
-    deleteOne
+    deleteOne,
+    findByGender
 }
 module.exports = productsServices;
