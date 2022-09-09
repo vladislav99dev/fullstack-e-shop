@@ -32,7 +32,7 @@ const genders = ["men", "women", "boys", "girls"];
 
 const brands = ["nike", "jordan", "adidas"];
 
-const colors = ["black", "white", "yellow", "green", "red", "blue"];
+const colors = ["black", "white", "yellow", "green", "red", "blue","grey", "navy","orange"];
 
 const formData = {
   clothingSizes,

@@ -10,26 +10,24 @@ const createProductHandler = async (req, res) => {
   const data =
     req.body;
     try{
-      let validatedData = dataValidationServices.validateAllData(data)
-      // const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
+      const validatedData = dataValidationServices.validateAllData(data)
       const dbResponse = await productsServices.create(validatedData);
       res.status(201).json(dbResponse);
     }catch(err){
-      console.log(err);
       res.status(err.status).json({message: err.message})
     }
 };
 
-const getOneProductHandler = async (req, res) => {
-  console.log(`GET ${req.originalUrl}`);
-  const params = req.params;
-  try {
-    const dbResponse = await productsServices.getOne(params.productId);
-    res.status(200).json(dbResponse);
-  } catch (err) {
-    res.status(404).json({ message: "Product with this id was not found!" });
-  }
-};
+// const getOneProductHandler = async (req, res) => {
+//   console.log(`GET ${req.originalUrl}`);
+//   const params = req.params;
+//   try {
+//     const dbResponse = await productsServices.getOne(params.productId);
+//     res.status(200).json(dbResponse);
+//   } catch (err) {
+//     res.status(404).json({ message: "Product with this id was not found!" });
+//   }
+// };
 
 const editProductHandler = async (req, res) => {
   console.log(`PUT ${req.originalUrl}`);
@@ -52,6 +50,8 @@ const editProductHandler = async (req, res) => {
 
 
 const deleteProductHandler = async(req,res) => {
+  console.log(`DELETE ${req.originalUrl}`);
+
   const params = req.params;
   try {
     const dbResponse = await productsServices.deleteOne(params.productId)
@@ -64,7 +64,7 @@ const deleteProductHandler = async(req,res) => {
 
 router.post("/products/create", createProductHandler);
 router.put("/products/:productId/edit", editProductHandler);
-router.get("/products/:productId", getOneProductHandler);
+// router.get("/products/:productId", getOneProductHandler);
 router.delete("/products/:productId/delete", deleteProductHandler);
 
 

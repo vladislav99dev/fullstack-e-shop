@@ -19,22 +19,22 @@ const DesktopNavBar = () => {
           Fashion Shop
         </h1>
         <div className="hidden lg:flex">
-          <Link to="/men" className="desktop-links">
+          <Link to={"/all"} className="desktop-links">
+            All
+          </Link>
+          <Link to="products/men" className="desktop-links">
             Men
           </Link>
-          <Link to={"/women"} className="desktop-links">
+          <Link to={"products/women"} className="desktop-links">
             Women
           </Link>
-          <Link to={"/kids"} className="desktop-links">
+          <Link to={"products/kids"} className="desktop-links">
             Kids
           </Link>
-          <Link to={"/new"} className="desktop-links">
-            New
-          </Link>
-          <Link to={"/sale"} className="desktop-links text-[#00df9a]">
+          <Link to={"products/sale"} className="desktop-links text-[#00df9a]">
             SALE
           </Link>
-          <Link to={"/brands"} className="desktop-links">
+          <Link to={"products/brands"} className="desktop-links">
             Brands
           </Link>
 
