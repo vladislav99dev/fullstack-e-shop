@@ -13,11 +13,11 @@ const ProductsLayout = () => {
 
   useEffect(()=> {
     if(gender !== 'men' && gender !== 'women' && gender !== 'boys' && gender !== 'girls') navigate('/users/logout');
+    console.log(gender);
     initialRequest(gender).then(({response,jsonResponse}) => {
       if (response.status !== 200) setFailedModal(jsonResponse.message);
       if (response.status === 200) setProducts(jsonResponse)
     }).catch((err) => {
-      console.log(err);
       setFailedModal("Server time out.");
     })
 
@@ -30,6 +30,7 @@ const ProductsLayout = () => {
   }
 
   return (
+    //should isplay attention modal
 
     <div className="bg-white">
       <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-[100rem] lg:px-8">
