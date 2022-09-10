@@ -5,6 +5,7 @@ const productsServices = require('../services/productsServices')
 
 const getManyHandler = async(req,res) => {
     console.log(`GET ${req.originalUrl}`);
+    console.log('something');
     const gender = req.path.split('/')[1];
     try{
         if(gender !== 'men' && gender !== 'women' && gender !=='boys' && gender !== 'girls'){
@@ -32,7 +33,7 @@ const getOneHandler = async(req,res) => {
 
 
 
-router.get(["/men","/women","/kids","/boys"], getManyHandler)
+router.get(["/men","/women","/girls","/boys"], getManyHandler)
 router.get("/:productId", getOneHandler)
 
 module.exports = router; 
