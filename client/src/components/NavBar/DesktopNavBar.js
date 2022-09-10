@@ -28,8 +28,11 @@ const DesktopNavBar = () => {
           <Link to={"products/women"} className="desktop-links">
             Women
           </Link>
-          <Link to={"products/kids"} className="desktop-links">
-            Kids
+          <Link to={"products/boys"} className="desktop-links">
+            Boys
+          </Link>
+          <Link to={"products/girls"} className="desktop-links">
+            Girls
           </Link>
           <Link to={"products/sale"} className="desktop-links text-[#00df9a]">
             SALE
