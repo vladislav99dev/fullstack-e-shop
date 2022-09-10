@@ -13,6 +13,7 @@ import Edit from "./components/Admin/Product/Edit.js";
 import Delete from "./components/Admin/Product/Delete.js"
 
 import ProductsLayout from "./components/Products/ProductsLayout.js";
+import ProductDetails from "./components/Products/ProductDetails.js";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
             </Route>
             <Route path="/products/">
               <Route path=":gender" element={<ProductsLayout />} />
-              {/* <Route path=":productId" element={<ProductsLayout />} /> */}
+              <Route path="details/:productId" element={<ProductDetails />} />
             </Route>
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
