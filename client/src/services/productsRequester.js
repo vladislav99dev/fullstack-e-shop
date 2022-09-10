@@ -23,7 +23,7 @@ const productsRequester = (method,data,token,id) => {
     }
     if(method === "GET" && data === "men" || data === "women" || data === "boys" || data === "girls"){
         fetchUrl = `${url}/products/${data}`
-        console.log(fetchUrl);
+
     }
     if(method === "DELETE") {
         fetchUrl = `${url}/admin/products/${id}/delete`
@@ -42,7 +42,7 @@ const productsRequester = (method,data,token,id) => {
             sizes:data.sizes
         })
     }
-    
+    console.log(fetchUrl);
     if(method === "GET") return fetch(fetchUrl);
     return fetch(fetchUrl,options);
 }
