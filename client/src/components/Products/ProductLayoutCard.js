@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom";
 
 const ProductLayoutCard = ({product}) => (
 
@@ -9,10 +9,10 @@ const ProductLayoutCard = ({product}) => (
     <div className="mt-4 flex justify-between">
       <div>
         <h3 className="text-sm text-gray-700">
-          <a href="#">
+          <Link to={`product/${product._id}`}>
             <span id="name" aria-hidden="true" className="absolute inset-0"></span>
             {product.name}
-          </a>
+          </Link>
         </h3>
         <p id="color" className="mt-1 text-sm text-gray-500 capitalize">{product.color}</p>
       </div>
