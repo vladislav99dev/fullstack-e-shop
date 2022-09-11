@@ -11,6 +11,11 @@ const findByEmail = (email) => {
 const findById = (id) => {
     return User.findById(id)
 }
+
+const findByIdPopulated = (id) => {
+    return User.findById(id).populate("favourites")
+}
+
 const findByIdAndUpdate = (data,id) => {
     return User.findByIdAndUpdate(id,data)
 }
@@ -19,7 +24,8 @@ const userServices = {
     create,
     findByEmail,
     findById,
-    findByIdAndUpdate
+    findByIdAndUpdate,
+    findByIdPopulated
 }
 
 module.exports = userServices;
