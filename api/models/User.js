@@ -42,6 +42,13 @@ const userSchema = new mongoose.Schema({
     required: [true, "Street is required"],
     validate: [/^[a-z -'0-9]+$/i, "Street is not in valid format"],
   },
+  favourites: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Product'
+    }
+      
+  ]
 });
 
 userSchema.pre("save", function (next) {
