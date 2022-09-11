@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const userServices = require("../services/userServices");
 const tokenServices = require("../services/tokenServices");
 
+const userProductsController = require("../controllers/userProductsController")
+
 const registerHandler = async(req,res)=> {
   console.log(`POST ${req.originalUrl}`);
   const { firstName, lastName, password, email, country, city, street } = req.body;
@@ -11,7 +13,7 @@ const registerHandler = async(req,res)=> {
   return res.status(400)
   .json({error:'FisrtName, LastName, Password, Email, Country, City and Street need to be provided in order to continue!'});
       try {
-          const user = await userServices.findOne(email);
+          const user = await userServices.findByEmail(email);
           const isUserFound = Boolean(user);
           if(isUserFound) return res.status(409).json({error:'User with this email already exist!'});
 
@@ -39,7 +41,7 @@ const loginHandler = async(req,res) => {
   if(!email || !password) return res.status(400).json({error:'Email and Password are required in order to continue'});
 
     try {
-        const user = await userServices.findOne(email);
+        const user = await userServices.findByEmail(email);
 
         const isUserFound = Boolean(user);
         if(!isUserFound) return res.status(404).json({error:'Incorrect email or password'});
@@ -80,10 +82,16 @@ const logoutHandler = (req,res) => {
 }
 
 
+
+
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
 router.post("/logout", logoutHandler);
-router.post("/logout-admin", logoutAdminHandler);
+router.use("/products", userProductsController);
+// router.post("/logout-admin", logoutAdminHandler);
+// router.post("/add-product/cart", logoutAdminHandler);
+
+
 
 
 module.exports = router;
