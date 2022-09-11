@@ -4,14 +4,22 @@ const create = (firstName,lastName,password,email,country,city,street) => {
     return User.create({firstName,lastName,password,email,country,city,street})
 }
 
-const findOne = (email) => {
+const findByEmail = (email) => {
     return User.findOne({email:email}).lean()
 } 
 
-
-const userService = {
-    create,
-    findOne
+const findById = (id) => {
+    return User.findById(id)
+}
+const findByIdAndUpdate = (data,id) => {
+    return User.findByIdAndUpdate(id,data)
 }
 
-module.exports = userService;
+const userServices = {
+    create,
+    findByEmail,
+    findById,
+    findByIdAndUpdate
+}
+
+module.exports = userServices;
