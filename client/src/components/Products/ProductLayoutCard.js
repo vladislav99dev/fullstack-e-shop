@@ -9,7 +9,7 @@ const ProductLayoutCard = ({product}) => (
     <div className="mt-4 flex justify-between">
       <div>
         <h3 className="text-sm text-gray-700">
-          <Link to={`product/${product._id}`}>
+          <Link to={`details/${product._id}`}>
             <span id="name" aria-hidden="true" className="absolute inset-0"></span>
             {product.name}
           </Link>
