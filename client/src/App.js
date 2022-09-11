@@ -31,7 +31,7 @@ function App() {
             </Route>
             <Route path="/products/">
               <Route path=":gender" element={<ProductsLayout />} />
-              <Route path="details/:productId" element={<ProductDetails />} />
+              <Route path=":gender/details/:productId" element={<ProductDetails />} />
             </Route>
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
