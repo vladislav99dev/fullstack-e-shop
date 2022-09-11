@@ -48,6 +48,12 @@ const userSchema = new mongoose.Schema({
       ref: 'Product'
     }
       
+  ],
+  cart: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Product'
+    }  
   ]
 });
 

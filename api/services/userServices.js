@@ -12,8 +12,8 @@ const findById = (id) => {
     return User.findById(id)
 }
 
-const findByIdPopulated = (id) => {
-    return User.findById(id).populate("favourites")
+const findByIdPopulated = (id,service) => {
+    return User.findById(id).populate(service)
 }
 
 const findByIdAndUpdate = (data,id) => {
