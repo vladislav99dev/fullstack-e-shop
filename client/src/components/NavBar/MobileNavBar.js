@@ -43,8 +43,13 @@ const MobileProductsMenu = () => {
           </Link>
         </div>
         <div className="container-links">
-          <Link to={"products/kids"} className="mobile-links">
-            Kids
+          <Link to={"products/boys"} className="mobile-links">
+            Boys
+          </Link>
+        </div>
+        <div className="container-links">
+          <Link to={"products/girls"} className="mobile-links">
+            Girls
           </Link>
         </div>
         <div className="container-links">
