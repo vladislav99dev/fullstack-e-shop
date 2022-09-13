@@ -12,8 +12,15 @@ const findById = (id) => {
     return User.findById(id)
 }
 
-const findByIdPopulated = (id,service) => {
-    return User.findById(id).populate(service)
+const findByIdPopulated = (id) => {
+    return User.findById(id).populate({
+        path:'cart',
+        populate:{
+            path: '_id',
+            model:'Product'
+        },
+        // path:'favourites'
+    })
 }
 
 const findByIdAndUpdate = (data,id) => {
