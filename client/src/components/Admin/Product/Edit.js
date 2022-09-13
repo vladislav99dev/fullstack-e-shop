@@ -155,7 +155,7 @@ const Edit = () => {
       ) : null}
 
       <div className="bg-[#FAF9F6] rounded-3xl mt-6 w-full shadow-lg flex-row py-4">
-        <h1 className="text-[#ffe0bd] text-2xl italic  font-bold w-full text-center mt-2">
+        <h1 className="text-[#00df9a] text-2xl italic  font-bold w-full text-center mt-2">
           Hello, {user.firstName}
           <br />
           what we will edit today?
@@ -308,7 +308,7 @@ const Edit = () => {
           <div className="flex mt-4 justify-center">
             <button
               type="submit"
-              className="py-2 px-10 mb-2 rounded-md text-white bg-[#d9b99b] font-bold"
+              className="py-2 px-10 mb-2 rounded-md text-white bg-[#00df9a] font-bold"
             >
               Submit
             </button>

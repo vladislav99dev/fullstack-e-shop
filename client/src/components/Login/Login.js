@@ -43,8 +43,8 @@ const Login = () => {
 
 
     return(
-        <div className="bg-[#FAF9F6]  rounded-3xl mt-16 w-full shadow-lg flex-row lg:w-full">
-            <h1 className="text-[#ffe0bd] text-2xl italic uppercase font-bold w-full text-center mt-8">Login</h1>
+        <div className="bg-[#FAF9F6]  rounded-3xl lg:mt-16 w-full shadow-lg flex-row lg:w-full">
+            <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center mt-8">Login</h1>
             {messages.length > 0
             ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
             : null
@@ -58,15 +58,15 @@ const Login = () => {
                 <label htmlFor="password">Password:</label>
                 <input type="password" name="password" id="password"  />
             </div>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-10">
                 <label htmlFor="rememberMe">Remember me?</label>
-                <input type="checkbox" name="rememberMe"/>
+                <input className="ml-1" type="checkbox" name="rememberMe"/>
             </div> 
             <div className="flex justify-center mt-2">
                 <label>Don't have an account?<Link to={"users/register"} className="text-[#3abeff] text-lg"> Sign up</Link></label>
             </div> 
-            <div className="flex justify-center mt-4 ">
-                <button type="submit" className="py-2 px-10 rounded-md text-white bg-[#d9b99b] font-bold">Submit</button>
+            <div className="flex justify-center mt-6 ">
+                <button type="submit" className="py-2 mb-10 px-10 rounded-md text-white bg-[#DDDDDD] font-bold">Submit</button>
             </div>
             </form>
         </div>

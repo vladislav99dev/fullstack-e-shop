@@ -12,7 +12,7 @@ const DesktopNavBar = () => {
     useNavTogglesContext();
   return (
     <>
-      <div className="text-white hidden lg:flex justify-between items-center h-26 mx-auto px-4 xl:mx-12">
+      <div className="text-white hidden lg:flex mt-6 justify-between items-center h-26 mx-auto px-4 xl:mx-12">
         <h1 className="w-full text-3xl font-bold text-[#00df9a] drop-shadow-xl">
           Supreme
           <br />
@@ -41,10 +41,10 @@ const DesktopNavBar = () => {
             Brands
           </Link>
 
-          <Link to={"/favorites"}>
-            <MdFavorite size={25} color={"#00df9a"} className="mt-4 ml-12" />
+          <Link to={"products/favorites"}>
+            <MdFavorite size={25} color={"#00df9a"} className="mt-4 ml-12"/>
           </Link>
-          <Link to={"/cart"}>
+          <Link to={"produts/cart"}>
             <RiShoppingCart2Fill
               size={25}
               color={"#00df9a"}
@@ -60,7 +60,7 @@ const DesktopNavBar = () => {
         </div>
       </div>
       {isDesktopUserMenuActive ? (
-        <div className="hidden lg:block bg-[#ffe0bd]  w-[30%] fixed right-4  mt-0 border-4 border-white rounded-lg">
+        <div className="hidden lg:block bg-[#DDDDDD]  w-[30%] fixed right-4  border-4 border-white rounded-lg">
           <UserLinks clickHandler={toggleDesktopUserMenu} />
         </div>
       ) : null}
