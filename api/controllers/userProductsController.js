@@ -3,19 +3,53 @@ const router = require('express').Router();
 const productsServices = require('../services/productsServices');
 const userServices = require('../services/userServices')
 
+const isLoggedIn = require('../middlewares/isLoggedIn');
 
 const addHandler = async(service,req,res) => {
     console.log(`POST ${req.originalUrl}`);
-    const {profileId, productId} = req.body;
+    const {profileId, productId, size, quantity} = req.body;
+    if(!productId) return res.status(400).json({message:"Product id was not provieded!"})
     try {
         const user = await userServices.findById(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
+
         const product = await productsServices.getOne(productId);
         if(!product) return res.status(400).json({message: "There is no product with this id!"});
-        if(user[service].includes(productId)) return res.status(409).json({message:`This product is already added to ${service}!`});
-        if(!user[service].includes(productId)) user[service].push(productId);
+
+        if(service === 'favourites') {
+            if(user[service].includes(productId)) return res.status(409).json({message:`This product is already added to ${service}!`});
+            if(!user[service].includes(productId)) user[service].push(productId);
+        }
+
+        if(service === 'cart') {
+            let newCartProduct = {};
+            let isAlreadyAdded = false
+
+            if(!product.sizes.hasOwnProperty(size)) return res.status(400).json({message: "You have entered invalid size!"});
+             
+
+            for (const orderDetails of user[service]) {
+                if(String(orderDetails._id).includes(productId) && orderDetails.size === size) {
+                    Object.assign(newCartProduct, {size:orderDetails.size, quantity: orderDetails.quantity + quantity,_id:orderDetails._id})
+                    isAlreadyAdded = true;
+                    const foundElementIndex = user[service].indexOf(orderDetails);
+                    user[service].splice(foundElementIndex,1);
+                    break;
+                }
+            }
+            
+            if(product.sizes[size] < newCartProduct.quantity  || product.sizes[size] < quantity )
+            return res.status(400).json({message: `There are only ${product.sizes[size]} left from size ${size}!`})
+            
+            if(isAlreadyAdded) user[service].push((newCartProduct))
+            if(!isAlreadyAdded) user[service].push({_id:productId,size:size,quantity:quantity})
+        }
         const dbResponse = await userServices.findByIdAndUpdate(user,profileId);
-        res.status(200).json({message:`Successfully added this product to ${service}.`});
+        const updatedUser = await userServices.findByIdPopulated(profileId);
+        console.log(updatedUser);
+        updatedUser.password = null
+        if(!updatedUser) return res.status(400).json({message: "There is no user with this id!"});
+        res.status(200).json({message:`Successfully added this product to ${service}.`, user:updatedUser});
     } catch (err) {
         console.log(err);
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
@@ -23,8 +57,9 @@ const addHandler = async(service,req,res) => {
 }
 
 const removeHandler = async(service,req,res) => {
-    console.log(`POST ${req.originalUrl}`);
+    console.log(`DELETE ${req.originalUrl}`);
     const {profileId, productId} = req.body;
+
     try {
         const user = await userServices.findById(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
@@ -41,11 +76,11 @@ const removeHandler = async(service,req,res) => {
     }
 };
 
-const getHandler = async(service,req,res) => {
+const getHandler = async(req,res) => {
     console.log(`POST ${req.originalUrl}`);
     const {profileId} = req.body;
     try {
-        const user = await userServices.findByIdPopulated(profileId,service);
+        const user = await userServices.findByIdPopulated(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
         res.status(200).json(user)
     }catch(err) {
@@ -58,22 +93,19 @@ const getHandler = async(service,req,res) => {
 const addFavouriteHandler = addHandler.bind(null,"favourites");
 const addCartHandler = addHandler.bind(null,"cart");
 
-const removeFavouriteHandler = removeHandler.bind(null,"favourite")
+const removeFavouriteHandler = removeHandler.bind(null,"favourites")
 const removeCartHandler = removeHandler.bind(null,"cart")
 
 
-const getFavouriteHandler = getHandler.bind(null,'favourites')
-const getCartHandler = getHandler.bind(null,'cart')
 
 
+router.get('/favourites-get', getHandler)
+router.post('/favourites-add', isLoggedIn, addFavouriteHandler)
+router.delete('/favourites-remove', isLoggedIn, removeFavouriteHandler)
 
-router.get('/favourites-get', getFavouriteHandler)
-router.post('/favourites-add', addFavouriteHandler)
-router.post('/favourites-remove', removeFavouriteHandler)
-
-router.get('/cart-get', getCartHandler)
-router.post('/cart-add', addCartHandler)
-router.post('/cart-remove', removeCartHandler)
+router.get('/cart-get', getHandler)
+router.post('/cart-add', isLoggedIn, addCartHandler)
+router.delete('/cart-remove', isLoggedIn, removeCartHandler)
 
 
 
