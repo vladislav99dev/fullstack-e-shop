@@ -5,10 +5,10 @@
 
 @layer base {
     body{
-       @apply bg-[#ffe0bd];
+       @apply bg-[#DDDDDD];
     }
     label{
-        @apply italic text-[#ffe0bd] font-bold text-xl  
+        @apply italic text-[#00df9a] font-bold text-xl  
     }
     .mobile-links{
         @apply text-xl font-bold text-white drop-shadow-xl
@@ -17,7 +17,7 @@
         @apply p-4 text-xl font-bold
     }
     .container-links{
-        @apply py-4 flex justify-center border-b-2 border-[#d9b99b]
+        @apply py-4 flex justify-center border-b-2 border-white
     }
 
 }
