@@ -8,7 +8,7 @@ import UserLinks from "./UserLinks";
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
 const DesktopNavBar = () => {
-  const { isDesktopUserLinksActive, toggleDesktopUserMenu } =
+  const { isDesktopUserLinksActive, toggleDesktopUserMenu, toggleCartMenu } =
     useNavTogglesContext();
   return (
     <>
@@ -40,17 +40,13 @@ const DesktopNavBar = () => {
           <Link to={"products/brands"} className="desktop-links hover:bg-gray-300">
             Brands
           </Link>
-
-          <Link to={"products/favorites"}>
             <MdFavorite size={25} color={"#00df9a"} className="mt-4 ml-12"/>
-          </Link>
-          <Link to={"products/cart"}>
             <RiShoppingCart2Fill
               size={25}
               color={"#00df9a"}
               className="mt-4 ml-4 mr-4"
+              onClick={toggleCartMenu}
             />
-          </Link>
           <RiUserAddFill
             size={25}
             color={"#00df9a"}

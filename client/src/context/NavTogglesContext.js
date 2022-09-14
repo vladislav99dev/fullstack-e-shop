@@ -6,6 +6,7 @@ const initialMenuState = {
   isUserMobileLinksActive: false,
   isProductsMobileLinksActive: false,
   isDesktopUserLinksActive: false,
+  isCartMenuActive:false
 };
 
 const reducerMenuState = (state, action) => {
@@ -15,24 +16,35 @@ const reducerMenuState = (state, action) => {
             isUserMobileLinksActive: !state.isUserMobileLinksActive,
             isProductsMobileLinksActive: false,
             isDesktopUserLinksActive: false,
+            isCartMenuActive:false
         };
     case "setProductsMobileLinks":
         return {
             isUserMobileLinksActive: false,
             isProductsMobileLinksActive: !state.isProductsMobileLinksActive,
             isDesktopUserLinksActive: false,
+            isCartMenuActive:false
         };
     case "setDesktopUserLinks":
         return {
             isUserMobileLinksActive: false,
             isProductsMobileLinksActive: false,
             isDesktopUserLinksActive: !state.isDesktopUserLinksActive,
+            isCartMenuActive:false
         };
+    case "setCartMenu": 
+        return {
+          isUserMobileLinksActive: false,
+          isProductsMobileLinksActive: false,
+          isDesktopUserLinksActive: false,
+          isCartMenuActive: !state.isCartMenuActive
+        }    
     default:
       return{
         isUserMobileLinksActive: false,
         isProductsMobileLinksActive: false,
         isDesktopUserLinksActive: false,
+        isCartMenuActive:false
       }
   }
 };
@@ -52,6 +64,10 @@ export const NavTogglesProvider = ({ children }) => {
   const toggleDesktopUserMenu = () => {
     dispatch({type:'setDesktopUserLinks'})
   };
+  
+  const toggleCartMenu = () => {
+    dispatch({type:'setCartMenu'})
+  }
 
   // const outsideClick = () => {
   //   dispatch();
@@ -66,6 +82,8 @@ export const NavTogglesProvider = ({ children }) => {
         toggleProductsMenu,
         isDesktopUserLinksActive:state.isDesktopUserLinksActive,
         toggleDesktopUserMenu,
+        isCartMenuActive:state.isCartMenuActive,
+        toggleCartMenu
       }}
     >
       {children}

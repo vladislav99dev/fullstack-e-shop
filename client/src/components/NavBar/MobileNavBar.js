@@ -95,7 +95,7 @@ export const MobileUserLinks = () => {
 };
 
 const MobileNavBar = () => {
-  const { toggleUserMenu, toggleProductsMenu } = useNavTogglesContext();
+  const { toggleUserMenu, toggleProductsMenu,toggleCartMenu } = useNavTogglesContext();
   return (
     <div className="flex w-full mt-4 lg:hidden">
       <h1 className="text-3xl font-serif italic drop-shadow-xl text-[#00df9a] mt-4 w-1/2 xs:ml-4 md:ml-8 ">
@@ -108,7 +108,7 @@ const MobileNavBar = () => {
           <MdFavorite size={35} color={"#00df9a"} className="mt-4" />
         </Link>
         <Link className="px-2" to="/favorite">
-          <RiShoppingCart2Fill size={35} color={"#00df9a"} className="mt-4" />
+          <RiShoppingCart2Fill size={35} color={"#00df9a"} className="mt-4" onClick={toggleCartMenu} />
         </Link>
         <RiUserAddFill
           size={35}
