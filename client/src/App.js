@@ -12,8 +12,9 @@ import Create from "./components/Admin/Product/Create.js"
 import Edit from "./components/Admin/Product/Edit.js";
 import Delete from "./components/Admin/Product/Delete.js"
 
-import ProductsLayout from "./components/Products/ProductsLayout.js";
+import ProductsLayout from "./components/Products/Layout/ProductsLayout.js";
 import ProductDetails from "./components/Products/ProductDetails.js";
+import ProductsCart from "./components/Products/Cart/LayoutCart.js"
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
             <Route path="/products/">
               <Route path=":gender" element={<ProductsLayout />} />
               <Route path=":gender/details/:productId" element={<ProductDetails />} />
+              <Route path="cart" element={<ProductsCart />} />
+
             </Route>
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
