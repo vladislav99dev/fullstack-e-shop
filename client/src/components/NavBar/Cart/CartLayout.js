@@ -2,9 +2,11 @@ import CartCard from "./CartCard";
 import CartFooter from "./CartFooter";
 import CartHeader from "./CartHeader";
 import { useAuthContext } from "../../../context/AuthContext";
+import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 
 const ProductsCard = () => {
   const { user } = useAuthContext();
+  const {toggleCartMenu} = useNavTogglesContext(); 
   let totalPrice = 0;
   user.cart.map((product) => totalPrice += product._id.price);
   return (
@@ -42,7 +44,7 @@ const ProductsCard = () => {
             <div className="pointer-events-auto w-screen max-w-md">
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
-                  <CartHeader />
+                  <CartHeader toggleCartMenu={toggleCartMenu} />
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul
