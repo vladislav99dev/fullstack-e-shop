@@ -19,32 +19,32 @@ const DesktopNavBar = () => {
           Fashion Shop
         </h1>
         <div className="hidden lg:flex">
-          <Link to={"/all"} className="desktop-links">
+          <Link to={"/all"} className="desktop-links hover:bg-gray-300 rounded-md">
             All
           </Link>
-          <Link to="products/men" className="desktop-links">
+          <Link to="products/men" className="desktop-links hover:bg-gray-300">
             Men
           </Link>
-          <Link to={"products/women"} className="desktop-links">
+          <Link to={"products/women"} className="desktop-links hover:bg-gray-300">
             Women
           </Link>
-          <Link to={"products/boys"} className="desktop-links">
+          <Link to={"products/boys"} className="desktop-links hover:bg-gray-300">
             Boys
           </Link>
-          <Link to={"products/girls"} className="desktop-links">
+          <Link to={"products/girls"} className="desktop-links hover:bg-gray-300">
             Girls
           </Link>
           <Link to={"products/sale"} className="desktop-links text-[#00df9a]">
             SALE
           </Link>
-          <Link to={"products/brands"} className="desktop-links">
+          <Link to={"products/brands"} className="desktop-links hover:bg-gray-300">
             Brands
           </Link>
 
           <Link to={"products/favorites"}>
             <MdFavorite size={25} color={"#00df9a"} className="mt-4 ml-12"/>
           </Link>
-          <Link to={"produts/cart"}>
+          <Link to={"products/cart"}>
             <RiShoppingCart2Fill
               size={25}
               color={"#00df9a"}
