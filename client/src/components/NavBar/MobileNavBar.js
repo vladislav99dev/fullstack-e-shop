@@ -9,7 +9,7 @@ import UserLinks from "./UserLinks";
 
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
-const MobileProductsMenu = () => {
+const MobileProductsLinks = () => {
   const { toggleProductsMenu } = useNavTogglesContext();
   return (
     <>
@@ -70,7 +70,7 @@ const MobileProductsMenu = () => {
   );
 };
 
-export const MobileUserMenu = () => {
+export const MobileUserLinks = () => {
   const { toggleUserMenu } = useNavTogglesContext();
   return (
     <>
@@ -128,11 +128,11 @@ const MobileNavBar = () => {
 };
 
 const MobileNavBarManager = () => {
-  const { isUserMenuActive, isProductsMenuActive } = useNavTogglesContext();
+  const { isUserMobileLinksActive, isProductsMobileLinksActive } = useNavTogglesContext();
 
-  if (isUserMenuActive) return <MobileUserMenu />;
+  if (isUserMobileLinksActive) return <MobileUserLinks />;
 
-  if (isProductsMenuActive) return <MobileProductsMenu />;
+  if (isProductsMobileLinksActive) return <MobileProductsLinks />;
 
   return <MobileNavBar />;
 };

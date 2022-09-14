@@ -8,7 +8,7 @@ import UserLinks from "./UserLinks";
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
 const DesktopNavBar = () => {
-  const { isDesktopUserMenuActive, toggleDesktopUserMenu } =
+  const { isDesktopUserLinksActive, toggleDesktopUserMenu } =
     useNavTogglesContext();
   return (
     <>
@@ -59,7 +59,7 @@ const DesktopNavBar = () => {
           />
         </div>
       </div>
-      {isDesktopUserMenuActive ? (
+      {isDesktopUserLinksActive ? (
         <div className="hidden lg:block bg-[#DDDDDD]  w-[30%] fixed right-4  border-4 border-white rounded-lg">
           <UserLinks clickHandler={toggleDesktopUserMenu} />
         </div>

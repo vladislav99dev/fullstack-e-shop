@@ -3,36 +3,36 @@ import { createContext, useContext,  useReducer } from "react";
 const NavTogglesContext = createContext();
 
 const initialMenuState = {
-  isUserMenuActive: false,
-  isProductsMenuActive: false,
-  isDesktopUserMenuActive: false,
+  isUserMobileLinksActive: false,
+  isProductsMobileLinksActive: false,
+  isDesktopUserLinksActive: false,
 };
 
 const reducerMenuState = (state, action) => {
   switch (action.type) {
-    case "setIsUserMenuActive":
+    case "setUserMobileLinks":
         return {
-            isUserMenuActive: !state.isUserMenuActive,
-            isProductsMenuActive: false,
-            isDesktopUserMenuActive: false,
+            isUserMobileLinksActive: !state.isUserMobileLinksActive,
+            isProductsMobileLinksActive: false,
+            isDesktopUserLinksActive: false,
         };
-    case "setIsProductsMenuActive":
+    case "setProductsMobileLinks":
         return {
-            isUserMenuActive: false,
-            isProductsMenuActive: !state.isProductsMenuActive,
-            isDesktopUserMenuActive: false,
+            isUserMobileLinksActive: false,
+            isProductsMobileLinksActive: !state.isProductsMobileLinksActive,
+            isDesktopUserLinksActive: false,
         };
-    case "setIsDesktopUserMenuActive":
+    case "setDesktopUserLinks":
         return {
-            isUserMenuActive: false,
-            isProductsMenuActive: false,
-            isDesktopUserMenuActive: !state.isDesktopUserMenuActive,
+            isUserMobileLinksActive: false,
+            isProductsMobileLinksActive: false,
+            isDesktopUserLinksActive: !state.isDesktopUserLinksActive,
         };
     default:
       return{
-        isUserMenuActive: false,
-        isProductsMenuActive: false,
-        isDesktopUserMenuActive: false,
+        isUserMobileLinksActive: false,
+        isProductsMobileLinksActive: false,
+        isDesktopUserLinksActive: false,
       }
   }
 };
@@ -41,15 +41,16 @@ export const NavTogglesProvider = ({ children }) => {
   const[state,dispatch] = useReducer(reducerMenuState,initialMenuState);
 
   const toggleUserMenu = () => {
-    dispatch({type:'setIsUserMenuActive'})
+    console.log('clicking');
+    dispatch({type:'setUserMobileLinks'})
   };
 
   const toggleProductsMenu = () => {
-    dispatch({type:'setIsProductsMenuActive'})
+    dispatch({type:'setProductsMobileLinks'})
   };
 
   const toggleDesktopUserMenu = () => {
-    dispatch({type:'setIsDesktopUserMenuActive'})
+    dispatch({type:'setDesktopUserLinks'})
   };
 
   // const outsideClick = () => {
@@ -59,11 +60,11 @@ export const NavTogglesProvider = ({ children }) => {
   return (
     <NavTogglesContext.Provider
       value={{
-        isUserMenuActive:state.isUserMenuActive,
+        isUserMobileLinksActive:state.isUserMobileLinksActive,
         toggleUserMenu,
-        isProductsMenuActive:state.isProductsMenuActive,
+        isProductsMobileLinksActive:state.isProductsMobileLinksActive,
         toggleProductsMenu,
-        isDesktopUserMenuActive:state.isDesktopUserMenuActive,
+        isDesktopUserLinksActive:state.isDesktopUserLinksActive,
         toggleDesktopUserMenu,
       }}
     >
