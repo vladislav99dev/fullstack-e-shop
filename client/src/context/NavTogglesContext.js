@@ -6,7 +6,8 @@ const initialMenuState = {
   isUserMobileLinksActive: false,
   isProductsMobileLinksActive: false,
   isDesktopUserLinksActive: false,
-  isCartMenuActive:false
+  isCartMenuActive:false,
+  isFavouritesMenuActive:false
 };
 
 const reducerMenuState = (state, action) => {
@@ -16,35 +17,48 @@ const reducerMenuState = (state, action) => {
             isUserMobileLinksActive: !state.isUserMobileLinksActive,
             isProductsMobileLinksActive: false,
             isDesktopUserLinksActive: false,
-            isCartMenuActive:false
+            isCartMenuActive:false,
+            isFavourinuActive: false
         };
     case "setProductsMobileLinks":
         return {
             isUserMobileLinksActive: false,
             isProductsMobileLinksActive: !state.isProductsMobileLinksActive,
             isDesktopUserLinksActive: false,
-            isCartMenuActive:false
+            isCartMenuActive:false,
+            isFavouritesMenuActive: false
         };
     case "setDesktopUserLinks":
         return {
             isUserMobileLinksActive: false,
             isProductsMobileLinksActive: false,
             isDesktopUserLinksActive: !state.isDesktopUserLinksActive,
-            isCartMenuActive:false
+            isCartMenuActive:false,
+            isFavouritesMenuActive: false
         };
     case "setCartMenu": 
         return {
           isUserMobileLinksActive: false,
           isProductsMobileLinksActive: false,
           isDesktopUserLinksActive: false,
-          isCartMenuActive: !state.isCartMenuActive
-        }    
+          isCartMenuActive: !state.isCartMenuActive,
+          isFavouritesMenuActive: false
+        }
+    case "setFavouriteMenu": 
+        return {
+          isUserMobileLinksActive: false,
+          isProductsMobileLinksActive: false,
+          isDesktopUserLinksActive: false,
+          isCartMenuActive: false,
+          isFavouritesMenuActive: !state.isFavouritesMenuActive
+        }     
     default:
       return{
         isUserMobileLinksActive: false,
         isProductsMobileLinksActive: false,
         isDesktopUserLinksActive: false,
-        isCartMenuActive:false
+        isCartMenuActive:false,
+        isFavouritesMenuActive: false
       }
   }
 };
@@ -68,6 +82,9 @@ export const NavTogglesProvider = ({ children }) => {
   const toggleCartMenu = () => {
     dispatch({type:'setCartMenu'})
   }
+  const toggleFavouritesMenu = () => {
+    dispatch({type:'setFavouriteMenu'})
+  }
 
   // const outsideClick = () => {
   //   dispatch();
@@ -83,7 +100,9 @@ export const NavTogglesProvider = ({ children }) => {
         isDesktopUserLinksActive:state.isDesktopUserLinksActive,
         toggleDesktopUserMenu,
         isCartMenuActive:state.isCartMenuActive,
-        toggleCartMenu
+        toggleCartMenu,
+        isFavouritesMenuActive:state.isFavouritesMenuActive,
+        toggleFavouritesMenu
       }}
     >
       {children}
