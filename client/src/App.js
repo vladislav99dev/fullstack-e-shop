@@ -17,6 +17,7 @@ import ProductDetails from "./components/Products/ProductDetails.js";
 
 import ErrorPage from "./components/ErrorPage.js";
 
+
 function App() {
   return (
     <AuthProvider>
