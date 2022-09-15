@@ -49,7 +49,6 @@ const CartCard = ({
         <div className="h-36 w-36 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
           <img src={product.imageUrl} alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." className="h-full w-full object-cover object-center"/>
         </div>
-
         <div className="ml-4 flex flex-1 flex-col">
           <div>
             <div className="flex justify-between text-base font-medium text-gray-900">
