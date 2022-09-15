@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const ProductLayoutCard = ({product}) => (
 
     <div className="group relative">
-    <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none sm:h-[25rem] lg:h-[30rem]">
+    <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 ease-in-out duration-500 lg:aspect-none sm:h-[25rem] lg:h-[30rem]">
       <img src={product.imageUrl} alt="Front of men&#039;s Basic Tee in black." className="h-full w-full object-cover object-center lg:h-full lg:w-full"></img>
     </div>
     <div className="mt-4 flex justify-between">
