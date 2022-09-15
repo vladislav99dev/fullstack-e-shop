@@ -15,13 +15,14 @@ import Delete from "./components/Admin/Product/Delete.js"
 import ProductsLayout from "./components/Products/Layout/ProductsLayout.js";
 import ProductDetails from "./components/Products/ProductDetails.js";
 
+import ErrorPage from "./components/ErrorPage.js";
+
 function App() {
   return (
     <AuthProvider>
       <div id="container">
         <NavTogglesProvider>
           <NavBar />
-        </NavTogglesProvider>
         <div id="main-content" className="mt-10 h-full w-full">
           <Routes>
             <Route path="/users/">
@@ -38,9 +39,10 @@ function App() {
               <Route path="products/:productId/edit" element={<Edit />} />
               <Route path="products/:productId/delete" element={<Delete />} />
             </Route>
-            <Route path="*"  element={<h1>Error Page</h1>}/>
+            <Route path="*"  element={<ErrorPage/>} />
           </Routes>
         </div>
+        </NavTogglesProvider>
       </div>
     </AuthProvider>
   );
