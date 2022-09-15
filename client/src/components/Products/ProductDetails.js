@@ -117,8 +117,8 @@ const ProductDetails = () => {
             <div className="lg:w-[60%] lg:ml-[15%]">
               <p className="text-2xl pt-4 ml-6 font-semibold hover:cursor-default text-[#00df9a]">{product.name}</p>
               <p className="text-xl ml-6 capitalize text-[grey] hover:cursor-default hover:text-[#00df9a] ease-in-out duration-500">{`${product.gender}'s ${product.type}`}</p>
-              <p className="text-xl py-4 ml-6 font-medium text-[grey] hover:cursor-default hover:text-[#00df9a] ease-in-out duration-500">{`USD $${product.price}`}</p>
-              <p className="ml-6 text-md font-semibold text-gray-800 hover:cursor-default hover:text-[#00df9a] ease-in-out duration-500">
+              <p className="text-xl py-4 ml-6 font-medium text-gray-800 hover:cursor-default hover:text-[#00df9a] ease-in-out duration-500">{`USD $${product.price}`}</p>
+              <p className="ml-6 text-md font-semibold text-[grey] hover:cursor-default hover:text-[#00df9a] ease-in-out duration-500">
                 {product.type === "clothing" ? clothingText : shoeText}
               </p>
             </div>
