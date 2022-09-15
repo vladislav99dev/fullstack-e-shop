@@ -7,11 +7,13 @@ import * as userRequester from '../../services/userRequester'
 
 import { useAuthContext } from "../../context/AuthContext";
 import { isNotLoggedIn } from "../../HOC/routesGuard";
+import Spinner from "../Spinner/Spinner"
 
 const Login = () => {
     const [messages,setMessaages] = useState([])
     const {login} = useAuthContext();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false)
 
     const loginHandler = async (event) => {
         event.preventDefault();
@@ -26,15 +28,19 @@ const Login = () => {
         }
 
         try{
+            setIsLoading(true)
             const response = await userRequester.login(data);
             let json = await response.json();
             if(json.error){
+                setIsLoading(false)
                 return  setMessaages([json.error])
             }
             //if json.isAdmin navigate to admin panel
+            setIsLoading(false)
             login(json)
             return navigate('/')
         } catch(err){
+            setIsLoading(false)
             console.log(err);
             console.log('Server time out');
             // throw(err)
@@ -44,7 +50,9 @@ const Login = () => {
 
     return(
         <div className="bg-[#FAF9F6]  rounded-3xl lg:mt-16 w-full shadow-lg flex-row lg:w-full">
-            <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center mt-8">Login</h1>
+            {isLoading 
+            ?<Spinner/>
+            :<><h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center mt-8">Login</h1>
             {messages.length > 0
             ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
             : null
@@ -69,6 +77,9 @@ const Login = () => {
                 <button type="submit" className="py-2 mb-10 px-10 rounded-md text-white bg-[#DDDDDD] font-bold">Submit</button>
             </div>
             </form>
+            </>
+            }
+            
         </div>
     )
 }
