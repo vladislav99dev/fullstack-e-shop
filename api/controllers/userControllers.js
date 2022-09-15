@@ -48,14 +48,16 @@ const loginHandler = async(req,res) => {
         
         const isValid = await bcrypt.compare(password,user.password);
         if(!isValid) return res.status(404).json({error:'Incorrect email or password'});
+
+        const populatedUser = await userServices.findByIdPopulated(user._id)
         
         delete user.password
         if(user.isAdmin){
           const accessToken = tokenServices.generate(user);
           user.accessToken = accessToken
-          return res.status(200).json(user);
+          return res.status(200).json(populatedUser);
         } else {
-          return res.status(200).json(user);
+          return res.status(200).json(populatedUser);
         }
 
     } catch(err){
