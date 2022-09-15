@@ -57,7 +57,8 @@ const ProductsCard = () => {
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
                   <CartHeader toggleCartMenu={toggleCartMenu}/>
-                  <div className="mt-8">
+                  <p className="mt-2 text-sm font-semibold text-[#00df9a]">Note: It's not enough to add a product to your cart in order to save it!</p>
+                  <div className="mt-4">
                     <div className="flow-root">
                       <ul
                         role="list"
@@ -76,7 +77,7 @@ const ProductsCard = () => {
                               manageIsLoading={manageIsLoading}
                             />
                           ))
-                        : <p className="text-md font-bold text-green-300">No products added to cart!</p>
+                        : <p className="text-md font-bold text-[#00df9a] mt-4">No products added to cart!</p>
                       }
                       </ul>
                     </div>
