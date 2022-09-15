@@ -7,7 +7,8 @@ const isLoggedIn = require('../middlewares/isLoggedIn');
 
 const addHandler = async(service,req,res) => {
     console.log(`POST ${req.originalUrl}`);
-    const {profileId, productId, size, quantity} = req.body;
+    const {profileId, size, quantity} = req.body;
+    const {productId} = req.params;
     if(!productId) return res.status(400).json({message:"Product id was not provieded!"})
     try {
         const user = await userServices.findById(profileId);
@@ -46,7 +47,6 @@ const addHandler = async(service,req,res) => {
         }
         const dbResponse = await userServices.findByIdAndUpdate(user,profileId);
         const updatedUser = await userServices.findByIdPopulated(profileId);
-        console.log(updatedUser);
         updatedUser.password = null
         if(!updatedUser) return res.status(400).json({message: "There is no user with this id!"});
         res.status(200).json({message:`Successfully added this product to ${service}.`, user:updatedUser});
@@ -58,18 +58,37 @@ const addHandler = async(service,req,res) => {
 
 const removeHandler = async(service,req,res) => {
     console.log(`DELETE ${req.originalUrl}`);
-    const {profileId, productId} = req.body;
+
+    const {profileId, size} = req.body;
+    const {productId} = req.params;
 
     try {
         const user = await userServices.findById(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
-        if(!user[service].includes(productId)) return res.status(404).json({message:"This user does not have favourite product with this id!"});
-        if(user[service].includes(productId)) {
-        const index = user[service].indexOf(productId);
-        user[service].splice(index,1);
+
+        if(service === 'favourites') {
+            if(!user[service].includes(productId)) return res.status(404).json({message:`This user does not have ${service} product with this id!`});
+            if(user[service].includes(productId)) {
+            const index = user[service].indexOf(productId);
+            user[service].splice(index,1);
+            }
         }
+
+        if(service === 'cart'){
+            for(const orderDetails of user[service]){
+                if(String(orderDetails._id).includes(productId) && orderDetails.size === size){
+                    const foundElementIndex = user[service].indexOf(orderDetails);
+                    user[service].splice(foundElementIndex,1)
+                }
+            }
+        }
+
         const dbResponse = await userServices.findByIdAndUpdate(user,profileId);
-        res.status(200).json({message:`Successfully removed this product from ${service}.`});
+        const updatedUser = await userServices.findByIdPopulated(profileId);
+        updatedUser.password = null
+        if(!updatedUser) return res.status(400).json({message: "There is no user with this id!"});
+
+        res.status(200).json({message:`Successfully removed this product to ${service}.`, user:updatedUser});
     } catch(err){
         console.log(err);
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
@@ -79,6 +98,7 @@ const removeHandler = async(service,req,res) => {
 const getHandler = async(req,res) => {
     console.log(`POST ${req.originalUrl}`);
     const {profileId} = req.body;
+
     try {
         const user = await userServices.findByIdPopulated(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
@@ -100,12 +120,12 @@ const removeCartHandler = removeHandler.bind(null,"cart")
 
 
 router.get('/favourites-get', getHandler)
-router.post('/favourites-add', isLoggedIn, addFavouriteHandler)
-router.delete('/favourites-remove', isLoggedIn, removeFavouriteHandler)
+router.post('/:productId/favourites-add', isLoggedIn, addFavouriteHandler)
+router.delete('/:productId/favourites-remove', isLoggedIn, removeFavouriteHandler)
 
 router.get('/cart-get', getHandler)
-router.post('/cart-add', isLoggedIn, addCartHandler)
-router.delete('/cart-remove', isLoggedIn, removeCartHandler)
+router.post('/:productId/cart-add', isLoggedIn, addCartHandler)
+router.delete('/:productId/cart-remove', isLoggedIn, removeCartHandler)
 
 
 
