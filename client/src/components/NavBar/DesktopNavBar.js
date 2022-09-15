@@ -2,22 +2,30 @@ import { Link } from "react-router-dom";
 
 import { RiShoppingCart2Fill, RiUserAddFill } from "react-icons/ri";
 import { MdFavorite } from "react-icons/md";
-
+import {GiTigerHead} from "react-icons/gi"
 import UserLinks from "./UserLinks";
 
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
 const DesktopNavBar = () => {
-  const { isDesktopUserLinksActive, toggleDesktopUserMenu, toggleCartMenu } =
+  const { isDesktopUserLinksActive, toggleDesktopUserMenu, toggleCartMenu,toggleFavouritesMenu } =
     useNavTogglesContext();
   return (
     <>
       <div className="text-white hidden lg:flex mt-6 justify-between items-center h-26 mx-auto px-4 xl:mx-12">
-        <h1 className="w-full text-3xl font-bold text-[#00df9a] drop-shadow-xl">
+        <div className="flex">
+        <GiTigerHead size={100}/>
+        <Link to={'products/all'} className="w-full text-3xl font-bold italic text-[#00df9a] drop-shadow-xl mt-2 ml-4">
+          Supreme
+          <br/>
+           Fashion Shop
+        </Link>
+        </div>
+        {/* <h1 className="w-full text-3xl font-bold text-[#00df9a] drop-shadow-xl">
           Supreme
           <br />
           Fashion Shop
-        </h1>
+        </h1> */}
         <div className="hidden lg:flex">
           <Link to={"products/all"} className="desktop-links">
             All
@@ -40,7 +48,7 @@ const DesktopNavBar = () => {
           <Link to={"products/brands"} className="desktop-links">
             Brands
           </Link>
-            <MdFavorite  size={25} color={"#00df9a"} className="mt-4 ml-12 hover:cursor-pointer"/>
+            <MdFavorite onClick={toggleFavouritesMenu} size={25} color={"#00df9a"} className="mt-4 ml-12 hover:cursor-pointer"/>
             <RiShoppingCart2Fill
               size={25}
               color={"#00df9a"}
