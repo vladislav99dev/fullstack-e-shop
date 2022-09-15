@@ -1,7 +1,8 @@
 import { url } from "../constants";
 
 const requester = (service,method,profileId,productId,size,quantity) => {
-    let fetchUrl = `${url}/users/products/${service}`;
+    let fetchUrl = `${url}/users/products/${productId}/${service}`;
+
     let options = {
         method:method,
         headers: {
@@ -9,7 +10,6 @@ const requester = (service,method,profileId,productId,size,quantity) => {
         },
         body: JSON.stringify({
             profileId:profileId,
-            productId:productId,
             size:size,
             quantity:quantity
         })
@@ -18,7 +18,6 @@ const requester = (service,method,profileId,productId,size,quantity) => {
     if(method === "POST") fetchUrl = `${fetchUrl}-add`;
     if(method === "DELETE") fetchUrl = `${fetchUrl}-remove`;
     if(method === "GET") fetchUrl = `${fetchUrl}-get`;
-
     return fetch(fetchUrl,options)
 }
 
