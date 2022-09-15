@@ -19,32 +19,32 @@ const DesktopNavBar = () => {
           Fashion Shop
         </h1>
         <div className="hidden lg:flex">
-          <Link to={"/all"} className="desktop-links hover:bg-gray-300 rounded-md">
+          <Link to={"products/all"} className="desktop-links">
             All
           </Link>
-          <Link to="products/men" className="desktop-links hover:bg-gray-300">
+          <Link to="products/men" className="desktop-links">
             Men
           </Link>
-          <Link to={"products/women"} className="desktop-links hover:bg-gray-300">
+          <Link to={"products/women"} className="desktop-links">
             Women
           </Link>
-          <Link to={"products/boys"} className="desktop-links hover:bg-gray-300">
+          <Link to={"products/boys"} className="desktop-links">
             Boys
           </Link>
-          <Link to={"products/girls"} className="desktop-links hover:bg-gray-300">
+          <Link to={"products/girls"} className="desktop-links">
             Girls
           </Link>
-          <Link to={"products/sale"} className="desktop-links text-[#00df9a]">
+          <Link to={"products/sale"} className="desktop-links text-[#00df9a] hover:bg-gray-200">
             SALE
           </Link>
-          <Link to={"products/brands"} className="desktop-links hover:bg-gray-300">
+          <Link to={"products/brands"} className="desktop-links">
             Brands
           </Link>
-            <MdFavorite size={25} color={"#00df9a"} className="mt-4 ml-12"/>
+            <MdFavorite  size={25} color={"#00df9a"} className="mt-4 ml-12 hover:cursor-pointer"/>
             <RiShoppingCart2Fill
               size={25}
               color={"#00df9a"}
-              className="mt-4 ml-4 mr-4"
+              className="mt-4 ml-4 mr-4 hover:cursor-pointer"
               onClick={toggleCartMenu}
             />
           <RiUserAddFill
