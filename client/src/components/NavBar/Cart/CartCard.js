@@ -24,10 +24,8 @@ const CartCard = ({
     try{
       const response = await removeFromCart(profileId,product._id,size)
       const jsonResponse = await response.json();
-      if(response.status !== 200) setFailedModal(jsonResponse.message)
-      if(response.status === 200){
-        login(jsonResponse.user)
-      }
+      if(response.status !== 200) setFailedModal(jsonResponse.message);
+      if(response.status === 200) login(jsonResponse.user);
       manageIsLoading(false)
     }catch(err){
       console.log(err);
