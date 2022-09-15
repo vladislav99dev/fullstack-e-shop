@@ -21,7 +21,7 @@ const productsRequester = (method,data,token,id) => {
     if(method === "GET"){
         fetchUrl = `${url}/products/${id}`
     }
-    if(method === "GET" && data === "men" || data === "women" || data === "boys" || data === "girls"){
+    if(method === "GET" && data === "men" || data === "women" || data === "boys" || data === "girls" || data === 'all'){
         fetchUrl = `${url}/products/${data}`
 
     }
@@ -42,7 +42,6 @@ const productsRequester = (method,data,token,id) => {
             sizes:data.sizes
         })
     }
-    console.log(fetchUrl);
     if(method === "GET") return fetch(fetchUrl);
     return fetch(fetchUrl,options);
 }
