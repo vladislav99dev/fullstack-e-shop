@@ -64,7 +64,7 @@ const ProductsCard = () => {
                         className="-my-6 divide-y divide-gray-200"
                       >{isLoading 
                         ? <Spinner/>
-                        : user.cart
+                        : user.cart.length 
                         ? user.cart.map((product) => (
                             <CartCard
                               key={`${product._id._id}${product.size}`}
@@ -76,7 +76,7 @@ const ProductsCard = () => {
                               manageIsLoading={manageIsLoading}
                             />
                           ))
-                        : null
+                        : <p className="text-md font-bold text-green-300">No products added to cart!</p>
                       }
                       </ul>
                     </div>
