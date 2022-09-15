@@ -14,6 +14,9 @@ const findOneAndUpdate = (data,id) => {
 const deleteOne = (id) => {
     return Product.findByIdAndDelete(id)
 }
+const findAll = () => {
+    return Product.find();
+}
 
 const findByGender = (gender) => {
     return Product.find({gender:gender}).exec()
@@ -24,6 +27,7 @@ const productsServices = {
     getOne,
     findOneAndUpdate,
     deleteOne,
-    findByGender
+    findByGender,
+    findAll
 }
 module.exports = productsServices;
