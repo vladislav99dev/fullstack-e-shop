@@ -1,14 +1,26 @@
+import { useState } from "react";
 import CartCard from "./CartCard";
 import CartFooter from "./CartFooter";
 import CartHeader from "./CartHeader";
+import Spinner from "../../Spinner/Spinner";
 import { useAuthContext } from "../../../context/AuthContext";
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 
+
+
 const ProductsCard = () => {
+
+  const [isLoading,setIsLoading] = useState(false);
+  const {toggleCartMenu} = useNavTogglesContext();
   const { user } = useAuthContext();
-  const {toggleCartMenu} = useNavTogglesContext(); 
   let totalPrice = 0;
-  user.cart.map((product) => totalPrice += product._id.price);
+  user.cart.map((product) => totalPrice += product._id.price * product.quantity);
+
+  const manageIsLoading = (value) => {
+    setIsLoading(value)
+  }
+
+
   return (
     <div
       className="relative z-10"
@@ -44,28 +56,33 @@ const ProductsCard = () => {
             <div className="pointer-events-auto w-screen max-w-md">
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
-                  <CartHeader toggleCartMenu={toggleCartMenu} />
+                  <CartHeader toggleCartMenu={toggleCartMenu}/>
                   <div className="mt-8">
                     <div className="flow-root">
                       <ul
                         role="list"
                         className="-my-6 divide-y divide-gray-200"
-                      >
-                        {user.cart
-                          ? user.cart.map((product) => (
-                              <CartCard
-                                key={product._id._id}
-                                product={product._id}
-                                quantity={product.quantity}
-                                size={product.size}
-                              />
-                            ))
-                          : null}
+                      >{isLoading 
+                        ? <Spinner/>
+                        : user.cart
+                        ? user.cart.map((product) => (
+                            <CartCard
+                              key={`${product._id._id}${product.size}`}
+                              product={product._id}
+                              quantity={product.quantity}
+                              size={product.size}
+                              toggleCartMenu={toggleCartMenu}
+                              profileId={user._id}
+                              manageIsLoading={manageIsLoading}
+                            />
+                          ))
+                        : null
+                      }
                       </ul>
                     </div>
                   </div>
                 </div>
-                <CartFooter totalPrice={totalPrice}/>
+                <CartFooter totalPrice={totalPrice} toggleCartMenu={toggleCartMenu}/>
               </div>
             </div>
           </div>
