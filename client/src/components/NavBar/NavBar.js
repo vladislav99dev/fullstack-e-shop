@@ -1,12 +1,13 @@
 import MobileNavBarManager from "./MobileNavBar";
 import DesktopNavBar from "./DesktopNavBar";
 import CartLayout from "./Cart/CartLayout"
+import FavouritesLayout from "./Favourites/FavouritesLayout";
 
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
 
 const NavBar = () => {
-  const {isCartMenuActive} = useNavTogglesContext(); 
+  const {isCartMenuActive,isFavouritesMenuActive} = useNavTogglesContext(); 
   return (
     <>
       <MobileNavBarManager />
@@ -14,6 +15,10 @@ const NavBar = () => {
       {isCartMenuActive 
         ? <CartLayout/>
         : null
+      }
+      {isFavouritesMenuActive 
+      ? <FavouritesLayout/>
+      : null
       }
     </>
   );
