@@ -20,7 +20,7 @@ const findByIdPopulated = (id) => {
             model:'Product'
         },
         // path:'favourites'
-    })
+    }).populate('favourites')
 }
 
 const findByIdAndUpdate = (data,id) => {
