@@ -18,7 +18,7 @@ const ProductDetails = () => {
   const { modalState, setSuccessModal, setFailedModal, resetModals } =
     useModalState();
   const { user, login } = useAuthContext();
-  const { toggleCartMenu } = useNavTogglesContext();
+  const { toggleCartMenu,toggleFavouritesMenu } = useNavTogglesContext();
 
   useEffect(() => {
     setIsLoading(true);
@@ -78,6 +78,7 @@ const ProductDetails = () => {
     if (response.status === 200) {
       login(jsonResponse.user);
       setIsLoading(false)
+      toggleFavouritesMenu();
     }
   };
 
