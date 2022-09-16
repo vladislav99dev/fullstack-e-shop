@@ -25,29 +25,29 @@ const Checkout = () => {
     }
 
     return (
-        <div className="bg-white py-10 flex-column lg:grid lg:grid-cols-2">
+        <div className=" bg-white py-10 flex-column lg:grid lg:grid-cols-2">
             <form onSubmit={checkoutHandler} className="py-6 lg:py-10">
               <div className="flex justify-between">
                 <p className="uppercase text-2xl  ml-5 lg:ml-10 mb-2 font-bold text-gray-600">Shipping address</p>
                 { user.email 
-                ? <button onClick={fillFormWithUserInfo} className="text-sm mr-5 lg:mr-10 mt-2 italic">Do you want to use profile information?</button>
+                ? <button onClick={fillFormWithUserInfo} className="text-sm mr-5 lg:mr-10 mt-2 italic font-bold text-white rounded-md mb-2 bg-[#00df9a] sm:py-2">Do you want to use profile information?</button>
                 : null
               }
               </div>
-              <div className="w-[92%] h-[0.1rem]  bg-gray-600 mb-6 ml-10 lg:ml-10 lg:w-[93%]" ></div>
+              <div className=" md:w-[92%] h-[0.1rem]  bg-gray-600 mb-6 sm:ml-10 lg:ml-10 lg:w-[93%]" ></div>
                 <div className="mb-6 flex 2xl:w-[97.5%] mr-[4%] lg:mr-0 ">
                     <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="firstName" id="firstName" placeholder="First Name *" defaultValue={useProfileInfo ? `${user.firstName}` : ''}/>
                     <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="lastName" id="lastName" placeholder="Last Name *" defaultValue={useProfileInfo ? `${user.lastName}` : ''}/>
                 </div>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="street" id="street" placeholder="Street Address *" defaultValue={useProfileInfo ? `${user.street}` : ''}/>
-                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="unitNumber" id="unitNumber" placeholder="Apartment/House Number# *"/>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="unitNumber" id="unitNumber" placeholder="Apartment/House Number# *" defaultValue={useProfileInfo ? `${user.unitNumber}` : ''}/>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="country" id="country" placeholder="Country *" defaultValue={useProfileInfo ? `${user.country}` : ''}/>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="city" id="city" placeholder="City *" defaultValue={useProfileInfo ? `${user.city}` : ''}/>
                 <div className="flex 2xl:w-[97.5%] mr-[4%] lg:mr-0">
-                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="state" id="state" placeholder="State *"/>
-                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="zipCode" id="zipCode" placeholder="Zip Code *" />
+                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="state" id="state" placeholder="State *" defaultValue={useProfileInfo ? `${user.state}` : ''}/>
+                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="zipCode" id="zipCode" placeholder="Zip Code *"defaultValue={useProfileInfo ? `${user.zipCode}` : ''} />
                 </div>
-                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone: ex.0988902378 *"/>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone: ex.0988902378 *" defaultValue={useProfileInfo ? `${user.phoneNumber}` : ''}/>
                 <button className=" ml-5 lg:ml-10 py-2 w-[50%] border-2 border-[#00df9a] rounded-lg mb-4 bg-[#00df9a] text-white font-bold italic" type="submit">Submit</button>
             </form>
             <div className="order-first lg:order-last">
@@ -64,10 +64,10 @@ const Checkout = () => {
                     )) }
                     <div className="flex justify-between py-4">
                         <p className="ml-5 text-lg font-bold text-gray-500">Total:</p>
-                        <p className="mr-10 text-xl font-bold text-gray-800">{`$${totalPrice}`}</p>
+                        <p className="mr-10 text-xl font-bold text-gray-800">{`$${totalPrice.toFixed(2)}`}</p>
                     </div>
                 </div>
-                <div className=" flex justify-between border-2 border-[#00df9a] h-[30%] mt-10 ml-10 mr-10 rounded-md">
+                <div className=" flex justify-around border-2 border-[#00df9a] h-[30%] mt-10 ml-10 mr-10 rounded-md">
                         <GiTigerHead className="ml-4 mt-10 2xl:ml-32" size={100} color={'#00df9a'}/>
                         <div className="ml-4 mt-10 2xl:mr-32">
                             <p className="italic text-gray-500 lg:text-center">We are glad you choose us!</p>
