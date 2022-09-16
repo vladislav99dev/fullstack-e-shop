@@ -10,6 +10,7 @@ import { isNotLoggedIn } from "../../HOC/routesGuard";
 const Register = () => {
     const[messages,setMessaages] = useState([]);
     const navigate = useNavigate();
+
     const registerHandler = async(event) => {
         event.preventDefault();
         setMessaages([]);
@@ -20,6 +21,7 @@ const Register = () => {
         if(validationsResponse.length > 0){
             return setMessaages(validationsResponse);
         }
+        console.log(data);
         try{
             const response = await userRequester.register(data);
             let json = await response.json();
@@ -38,7 +40,10 @@ const Register = () => {
     return(
         <div className="bg-white rounded-3xl mt-6 w-full shadow-lg">
             <h1 className="text-[#00df9a] py-4 text-3xl italic uppercase font-bold w-full text-center mt-8">Register</h1>
- 
+             {messages.length > 0 
+            ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
+            : null
+            }
             <form onSubmit={registerHandler} className=" " >
                 <div className="flex justify-around">
                     <input className="border-2 border-green-300 hover:border-green-100 py-2 w-[25%] ml-[20%] rounded-lg " type="text" name="firstName" id="firstName" placeholder="First Name *" />
@@ -57,8 +62,8 @@ const Register = () => {
                 </div>
                 <input className="mt-2 border-2 border-green-300 hover:border-green-100 rounded-lg py-2 w-[55%] ml-[22.5%] mr-[22.5%]" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone: ex.0988902378 *" />
                 <div className="flex justify-around mt-2">
-                    <input className="border-2 border-green-300 hover:border-green-100 py-2 w-[25%] ml-[20%] rounded-lg " type="text" name="password" id="password" placeholder="Password *" />
-                    <input className="border-2 border-green-300 hover:border-green-100 py-2 w-[25%] mr-[20%] rounded-lg" type="text" name="re-password" id="re-password" placeholder="Repeat Password *" /> 
+                    <input className="border-2 border-green-300 hover:border-green-100 py-2 w-[25%] ml-[20%] rounded-lg " type="password" name="password" id="password" placeholder="Password *" />
+                    <input className="border-2 border-green-300 hover:border-green-100 py-2 w-[25%] mr-[20%] rounded-lg" type="password" name="re-password" id="re-password" placeholder="Repeat Password *" /> 
                 </div>
                 <div className="flex justify-center">
                 <button className="mt-8 mb-10 py-2 px-16 rounded-lg bg-[#00df9a] text-white italic font-bold text-xl hover:bg-green-300 ease-in-out duration-500" >Submit</button>
@@ -74,10 +79,7 @@ export default isNotLoggedIn(Register);
 
 
 
-// {messages.length > 0 
-//     ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
-//     : null
-//     }
+
 
 
 
