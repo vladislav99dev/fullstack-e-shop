@@ -26,10 +26,14 @@ const requester = (service,data) => {
                 firstName:data.firstName,
                 lastName:data.lastName,
                 email: data.email,
-                password: data.password,
                 country:data.country,
+                state:data.state,
                 city:data.city,
-                street:data.street
+                zipCode:data.zipCode,
+                street:data.street,
+                unitNumber:data.unitNumber,
+                phoneNumber:data.phoneNumber,
+                password: data.password,
             })
         })
     }
