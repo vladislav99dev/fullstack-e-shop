@@ -16,6 +16,7 @@ import ProductsLayout from "./components/Products/Layout/ProductsLayout.js";
 import ProductDetails from "./components/Products/ProductDetails.js";
 
 import ErrorPage from "./components/ErrorPage.js";
+import Checkout from "./components/Checkout.js";
 
 
 function App() {
@@ -26,20 +27,30 @@ function App() {
           <NavBar />
         <div id="main-content" className="mt-10 h-full w-full">
           <Routes>
+
             <Route path="/users/">
               <Route path="login" element={<Login />} />
               <Route path='register' element={<Register />}/>
               <Route path='logout' element={<Logout />}/>
             </Route>
+
             <Route path="/products/">
               <Route path=":gender" element={<ProductsLayout />} />
               <Route path=":gender/details/:productId" element={<ProductDetails />} />
             </Route>
+
+            <Route path="/order/">
+              <Route path="checkout" element={<Checkout />} />
+              {/* <Route path="products/:productId/edit" element={<Edit />} />
+              <Route path="products/:productId/delete" element={<Delete />} /> */}
+            </Route>
+
             <Route path="/admin/">
               <Route path="products/create" element={<Create />} />
               <Route path="products/:productId/edit" element={<Edit />} />
               <Route path="products/:productId/delete" element={<Delete />} />
             </Route>
+
             <Route path="*"  element={<ErrorPage/>} />
           </Routes>
         </div>
