@@ -42,6 +42,27 @@ const userSchema = new mongoose.Schema({
     required: [true, "Street is required"],
     validate: [/^[a-z -'0-9]+$/i, "Street is not in valid format"],
   },
+  state: {
+    type: String,
+    required: [true, "State is required"],
+    validate: [/[A-Za-z]+$/i, "Street is not in valid format"],
+  },
+  zipCode: {
+    type: String,
+    required: [true, "Zip Code is required"],
+    validate: [/^[A-Z0-9]+$/g, "Zip Code is not in valid format"],
+  },
+  unitNumber: {
+    type: String,
+    required: [true, "Unit number is required"],
+    validate: [/[0-9]+$/gm, "Unit number is not in valid format"],
+  },
+  phoneNumber: {
+    type: String,
+    required: [true, "Phone number is required"],
+    validate: [/[0-9]+$/i, "Phone number is not in valid format"],
+  },
+
   favourites: [
     {
       type: mongoose.Types.ObjectId,
