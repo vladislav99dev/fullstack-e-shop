@@ -51,11 +51,11 @@ const loginHandler = async(req,res) => {
 
         const populatedUser = await userServices.findByIdPopulated(user._id)
         
-        delete user.password
-        if(user.isAdmin){
+        populatedUser.password = null
+        user.password = null
+        if(populatedUser.isAdmin){
           const accessToken = tokenServices.generate(user);
-          user.accessToken = accessToken
-          return res.status(200).json(populatedUser);
+          return res.status(200).json({...populatedUser,accessToken});
         } else {
           return res.status(200).json(populatedUser);
         }

@@ -56,7 +56,11 @@ const userSchema = new mongoose.Schema({
       size: String,
       quantity:Number
     }  
-  ]
+  ],
+  isAdmin: {
+    type:Boolean,
+    default:false
+  }
 });
 
 userSchema.pre("save", function (next) {
