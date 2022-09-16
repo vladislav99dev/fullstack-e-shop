@@ -38,9 +38,24 @@ const validateUserForms = (service, data) => {
     if (!/^[a-z -'0-9]+$/i.test(data.street)) {
       messages.push("Street address is not in valid format!");
     }
+    if(!/[A-Za-z]+$/i.test(data.state)){
+      messages.push("State is not in valid format!")
+    }
+    if(!/[0-9]+$/i.test(data.phoneNumber)){
+      messages.push("Phone number is not in valid format")
+    }
+    if(!/^[A-Z0-9]+$/g.test(data.zipCode)){
+      messages.push("Zip Code is not in valid format!")
+    }
+    if(!/[0-9]+$/gm.test(data.unitNumber)){
+      messages.push("Unit Number is not in valid format!")
+    }
+
+
   }
   return messages;
 };
 
 export const validateRegister = validateUserForms.bind(null, "register");
 export const validateLogin = validateUserForms.bind(null, "login");
+//unit
