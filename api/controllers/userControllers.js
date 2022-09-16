@@ -8,8 +8,8 @@ const userProductsController = require("../controllers/userProductsController")
 
 const registerHandler = async(req,res)=> {
   console.log(`POST ${req.originalUrl}`);
-  const { firstName, lastName, password, email, country, city, street } = req.body;
-  if(!firstName || !lastName || !password || !email || !country || !city || !street) 
+  const { firstName, lastName,  email, country,state, city, zipCode, street, unitNumber, phoneNumber, password } = req.body;
+  if(!firstName || !lastName || !password || !email || !country || !city || !street || !state || !zipCode || !unitNumber || !phoneNumber) 
   return res.status(400)
   .json({error:'FisrtName, LastName, Password, Email, Country, City and Street need to be provided in order to continue!'});
       try {
@@ -24,14 +24,19 @@ const registerHandler = async(req,res)=> {
               email,
               country,
               city,
-              street
+              street,
+              state,
+              zipCode,
+              unitNumber,
+              phoneNumber
           );
           return res.status(201).json(dbResponse);
       } catch(err){
-          let error = err._message;
-          let errors = Object.values(err.errors);
-          let specifficError = errors[0].properties.message;
-          res.status(400).json({ error, specifficError });
+        console.log(err);
+          // let error = err._message;
+          // let errors = Object.values(err.errors);
+          // let specifficError = errors[0].properties.message;
+          // res.status(400).json({ error, specifficError });
       }
 }
 
