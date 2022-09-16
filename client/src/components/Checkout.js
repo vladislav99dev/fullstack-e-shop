@@ -1,33 +1,60 @@
 import { useAuthContext } from "../context/AuthContext";
 import {GiTigerHead} from "react-icons/gi"
+import { useState } from "react";
+
 const Checkout = () => {
     const {user} = useAuthContext();
+    const [useProfileInfo, setUseProfileInfo] = useState(false);
     let totalPrice = 0;
     user.cart.map((product) => totalPrice += product._id.price * product.quantity);
+
+
+    const fillFormWithUserInfo = (event) => {
+      event.preventDefault();
+      setUseProfileInfo(!useProfileInfo)
+
+    }
+
+    const checkoutHandler = (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData);
+
+      console.log(data)
+
+    }
+
     return (
         <div className="bg-white py-10 flex-column lg:grid lg:grid-cols-2">
-            <form className="py-6 lg:py-10">
-                <p className="uppercase text-2xl  ml-5 lg:ml-10 mb-10 font-bold text-gray-600  border-b-2">Shipping address</p>
+            <form onSubmit={checkoutHandler} className="py-6 lg:py-10">
+              <div className="flex justify-between">
+                <p className="uppercase text-2xl  ml-5 lg:ml-10 mb-2 font-bold text-gray-600">Shipping address</p>
+                { user.email 
+                ? <button onClick={fillFormWithUserInfo} className="text-sm mr-5 lg:mr-10 mt-2 italic">Do you want to use profile information?</button>
+                : null
+              }
+              </div>
+              <div className="w-[92%] h-[0.1rem]  bg-gray-600 mb-6 ml-10 lg:ml-10 lg:w-[93%]" ></div>
                 <div className="mb-6 flex 2xl:w-[97.5%] mr-[4%] lg:mr-0 ">
-                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="firstName" id="firstName" placeholder="First Name *"/>
-                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="lastName" id="lastName" placeholder="Last Name *"/>
+                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="firstName" id="firstName" placeholder="First Name *" defaultValue={useProfileInfo ? `${user.firstName}` : ''}/>
+                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="lastName" id="lastName" placeholder="Last Name *" defaultValue={useProfileInfo ? `${user.lastName}` : ''}/>
                 </div>
-                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="street" id="street" placeholder="Street Address *"/>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="street" id="street" placeholder="Street Address *" defaultValue={useProfileInfo ? `${user.street}` : ''}/>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="unitNumber" id="unitNumber" placeholder="Apartment/House Number# *"/>
-                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="country" id="country" placeholder="Country *"/>
-                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="city" id="city" placeholder="City *"/>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="country" id="country" placeholder="Country *" defaultValue={useProfileInfo ? `${user.country}` : ''}/>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="city" id="city" placeholder="City *" defaultValue={useProfileInfo ? `${user.city}` : ''}/>
                 <div className="flex 2xl:w-[97.5%] mr-[4%] lg:mr-0">
                     <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="state" id="state" placeholder="State *"/>
-                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="zipCode" id="zipCode" placeholder="Zip Code *"/>
+                    <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="zipCode" id="zipCode" placeholder="Zip Code *" />
                 </div>
-                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="city" id="city" placeholder="Phone: ex.0988902378 *"/>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="phoneNumber" id="phoneNumber" placeholder="Phone: ex.0988902378 *"/>
                 <button className=" ml-5 lg:ml-10 py-2 w-[50%] border-2 border-[#00df9a] rounded-lg mb-4 bg-[#00df9a] text-white font-bold italic" type="submit">Submit</button>
             </form>
             <div className="order-first lg:order-last">
                 <div className="mt-20 ml-10 mr-10  bg-gray-100 rounded-lg">
                     <p className="uppercase text-xl font-bold  mt-10 text-center py-4 text-gray-600 border-b-2 border-gray-400">Order Summary</p>
                     {user.cart.map(product => (
-                        <div className="flex justify-between py-2 border-b-2 border-gray-300">
+                        <div key={product._id._id} className="flex justify-between py-2 border-b-2 border-gray-300">
                             <p className="ml-5 text-md font-bold  text-gray-400">{product._id.name}</p>
                             <div>
                             <p className="mr-5 text-md  italic text-gray-400">{`Quantity: ${product.quantity}`}</p>
