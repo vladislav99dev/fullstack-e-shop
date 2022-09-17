@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext.js";
+import { LocalProductsProvider } from "./context/LocalProductsContext.js";
 import { NavTogglesProvider } from "./context/NavTogglesContext.js";
 
 import NavBar from "./components/NavBar/NavBar.js";
@@ -22,40 +23,41 @@ import Checkout from "./components/Checkout.js";
 function App() {
   return (
     <AuthProvider>
-      <div id="container">
         <NavTogglesProvider>
-          <NavBar />
-        <div id="main-content" className="mt-10 h-full w-full">
-          <Routes>
+          <LocalProductsProvider>
+            <div id="container">
+                <NavBar />
+              <div id="main-content" className="mt-10 h-full w-full">
+                <Routes>
+                  <Route path="/users/">
+                    <Route path="login" element={<Login />} />
+                    <Route path='register' element={<Register />}/>
+                    <Route path='logout' element={<Logout />}/>
+                  </Route>
 
-            <Route path="/users/">
-              <Route path="login" element={<Login />} />
-              <Route path='register' element={<Register />}/>
-              <Route path='logout' element={<Logout />}/>
-            </Route>
+                  <Route path="/products/">
+                    <Route path=":gender" element={<ProductsLayout />} />
+                    <Route path=":gender/details/:productId" element={<ProductDetails />} />
+                  </Route>
 
-            <Route path="/products/">
-              <Route path=":gender" element={<ProductsLayout />} />
-              <Route path=":gender/details/:productId" element={<ProductDetails />} />
-            </Route>
+                  <Route path="/order/">
+                    <Route path="checkout" element={<Checkout />} />
+                    {/* <Route path="products/:productId/edit" element={<Edit />} />
+                    <Route path="products/:productId/delete" element={<Delete />} /> */}
+                  </Route>
 
-            <Route path="/order/">
-              <Route path="checkout" element={<Checkout />} />
-              {/* <Route path="products/:productId/edit" element={<Edit />} />
-              <Route path="products/:productId/delete" element={<Delete />} /> */}
-            </Route>
+                  <Route path="/admin/">
+                    <Route path="products/create" element={<Create />} />
+                    <Route path="products/:productId/edit" element={<Edit />} />
+                    <Route path="products/:productId/delete" element={<Delete />} />
+                  </Route>
 
-            <Route path="/admin/">
-              <Route path="products/create" element={<Create />} />
-              <Route path="products/:productId/edit" element={<Edit />} />
-              <Route path="products/:productId/delete" element={<Delete />} />
-            </Route>
-
-            <Route path="*"  element={<ErrorPage/>} />
-          </Routes>
-        </div>
+                  <Route path="*"  element={<ErrorPage/>} />
+                </Routes>
+              </div>
+            </div>
+          </LocalProductsProvider>
         </NavTogglesProvider>
-      </div>
     </AuthProvider>
   );
 }
