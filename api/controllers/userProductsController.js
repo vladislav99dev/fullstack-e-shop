@@ -66,6 +66,9 @@ const removeHandler = async(service,req,res) => {
         const user = await userServices.findById(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
 
+        const product = await productsServices.getOne(productId);
+        if(!product)  return res.status(400).json({message:"There is no product with this id!"})
+
         if(service === 'favourites') {
             if(!user[service].includes(productId)) return res.status(404).json({message:`This user does not have ${service} product with this id!`});
             if(user[service].includes(productId)) {
