@@ -6,6 +6,7 @@ import ValidationMessage from "../ValidationMessage/validationMessage";
 import * as userRequester from '../../services/userRequester'
 
 import { useAuthContext } from "../../context/AuthContext";
+import { useLocalProductsContext } from "../../context/LocalProductsContext";
 import { isNotLoggedIn } from "../../HOC/routesGuard";
 import Spinner from "../Spinner/Spinner"
 
@@ -14,6 +15,7 @@ const Login = () => {
     const {login} = useAuthContext();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
+    const {clearStorage} = useLocalProductsContext();
 
     const loginHandler = async (event) => {
         event.preventDefault();
@@ -38,6 +40,7 @@ const Login = () => {
             //if json.isAdmin navigate to admin panel
             setIsLoading(false)
             login(json)
+            clearStorage()
             return navigate('/')
         } catch(err){
             setIsLoading(false)
