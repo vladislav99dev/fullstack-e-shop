@@ -31,8 +31,15 @@ export const LocalProductsProvider = ({children}) => {
         setProducts(initialValue)
     }
 
+    const removeProduct = (product,size) => {
+        let foundProduct = products.find((x) => x.product._id === product._id && x.size === size)
+        let foundProductIndex = products.indexOf(foundProduct)
+        products.splice(foundProductIndex,1)
+        setProducts([...products])
+    }
+
     return (
-        <LocalProductsContext.Provider value={{ products, clearStorage, addProduct,  }}>
+        <LocalProductsContext.Provider value={{ products, clearStorage, addProduct, removeProduct  }}>
         {children}
       </LocalProductsContext.Provider>
     )
