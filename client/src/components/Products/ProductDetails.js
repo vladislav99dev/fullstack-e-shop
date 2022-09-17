@@ -5,20 +5,24 @@ import * as favouritesAndCartServices from "../../services/favouritesAndCartServ
 import useModalState from "../../hooks/useModalState";
 import { useAuthContext } from "../../context/AuthContext";
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
+import { useLocalProductsContext } from "../../context/LocalProductsContext";
 import AttentionModal from "../Modals/AttentionModal";
 import Spinner from "../Spinner/Spinner"
+
 
 const ProductDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [size, setSize] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
 
   const { modalState, setSuccessModal, setFailedModal, resetModals } =
     useModalState();
   const { user, login } = useAuthContext();
   const { toggleCartMenu,toggleFavouritesMenu } = useNavTogglesContext();
+  const {products,addProduct}= useLocalProductsContext();
 
   useEffect(() => {
     setIsLoading(true);
@@ -47,7 +51,7 @@ const ProductDetails = () => {
     "At home on Italian runways and local neighbourhood streets, the Nike Air Max Plus 3 features a design that's ahead of its time.";
 
 
-  const addToCartHandler = async (event) => {
+  const addToUserCartHandler = async (event) => {
     event.preventDefault();
     setIsLoading(true)
     const response = await favouritesAndCartServices.addToCart(
@@ -65,6 +69,18 @@ const ProductDetails = () => {
       setIsLoading(false)
     }
   };
+
+
+  const addToLocalStorage = async(event) => {
+    event.preventDefault();
+    try{
+      const response = await productsRequester.getOne(null,null,productId);
+      const jsonResponse = await response.json();
+      addProduct(jsonResponse,size,quantity)
+    } catch(err){
+      console.log(err)
+    }
+  }
 
   const addToFavouriteHandler = async (event) => {
     event.preventDefault();
@@ -131,7 +147,7 @@ const ProductDetails = () => {
             />
 
             <form
-              onSubmit={addToCartHandler}
+              onSubmit={user.email ? addToUserCartHandler : addToLocalStorage}
               id="sizesAndButtons"
               className="w-[60%] ml-[15%]"
             >
