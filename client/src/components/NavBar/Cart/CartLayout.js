@@ -7,7 +7,7 @@ import { removeFromCart } from "../../../services/favouritesAndCartServices";
 import { useAuthContext } from "../../../context/AuthContext";
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../../context/LocalProductsContext";
-import useModalState from "../../../hooks/useModalState";
+import { useModalsContext } from "../../../context/ModalsContext";
 import AttentionModal from "../../Modals/AttentionModal";
 
 
@@ -18,7 +18,7 @@ const ProductsCard = () => {
   const {toggleCartMenu} = useNavTogglesContext();
   const { user,login } = useAuthContext();
   const { products, removeProduct} = useLocalProductsContext();
-  const {modalState,setFailedModal,resetModals} = useModalState();
+  const {modalState,setFailedModal,resetModals} = useModalsContext();
 
   let totalPrice = 0;
   // user.cart.map((product) => totalPrice += product._id.price * product.quantity);
