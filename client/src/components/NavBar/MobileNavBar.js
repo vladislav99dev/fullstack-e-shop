@@ -8,7 +8,6 @@ import {GiTigerHead} from "react-icons/gi"
 
 import UserLinks from "./UserLinks";
 
-import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
 const MobileProductsLinks = ({
   toggleProductsMenu
@@ -100,11 +99,6 @@ const MobileNavBar = ({
     <div className="flex justify-around w-full mt-4 lg:hidden">
       <div className="flex">
       <GiTigerHead className="mt-4 ml-6" size={80} color={'white'}/>
-      {/* <h1 className="text-3xl font-serif italic drop-shadow-xl text-[#00df9a] mt-4 w-1/2 xs:ml-4 md:ml-8 ">
-        Supreme
-        <br />
-        Fashion Shop
-      </h1> */}
       </div>
       <div className="flex ml-4 h-16 mt-8 xs:ml-32 sm:ml-20 mr-2 md:ml-52">
         <Link className="px-2" to="/favorite">
