@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.js";
 import { LocalProductsProvider } from "./context/LocalProductsContext.js";
 import { NavTogglesProvider } from "./context/NavTogglesContext.js";
+import { ModalProvider } from "./context/ModalsContext.js";
 
 import NavBar from "./components/NavBar/NavBar.js";
 import Login from "./components/Login/Login.js";
@@ -19,10 +20,10 @@ import ProductDetails from "./components/Products/ProductDetails.js";
 import ErrorPage from "./components/ErrorPage.js";
 import Checkout from "./components/Checkout.js";
 
-
 function App() {
   return (
     <AuthProvider>
+      <ModalProvider>
         <NavTogglesProvider>
           <LocalProductsProvider>
             <div id="container">
@@ -58,6 +59,7 @@ function App() {
             </div>
           </LocalProductsProvider>
         </NavTogglesProvider>
+      </ModalProvider>
     </AuthProvider>
   );
 }
