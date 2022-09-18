@@ -42,6 +42,7 @@ const NavBar = () => {
       isProductsMobileLinksActive={isProductsMobileLinksActive}
       toggleProductsMenu={toggleProductsMenu}
       toggleCartMenu={toggleCartMenu}
+      toggleFavouritesMenu={manageFavouritesAccess}
       />
       <DesktopNavBar
         isDesktopUserLinksActive={isDesktopUserLinksActive}
