@@ -4,8 +4,14 @@ import CartLayout from "./Cart/CartLayout";
 import FavouritesLayout from "./Favourites/FavouritesLayout";
 
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
+import { useModalsContext} from "../../context/ModalsContext";
+import { useAuthContext } from "../../context/AuthContext";
+
 
 const NavBar = () => {
+  const {setFailedModal,resetModals} = useModalsContext();
+  const {user} = useAuthContext()
+
   const {
     isDesktopUserLinksActive,
     toggleDesktopUserMenu,
@@ -18,6 +24,16 @@ const NavBar = () => {
     isProductsMobileLinksActive,
     toggleProductsMenu
   } = useNavTogglesContext();
+
+
+
+  const manageFavouritesAccess = () => {
+    if(user.email) {
+      resetModals();
+      return toggleFavouritesMenu();
+    }
+    if(!user.email) return setFailedModal("You should be logged in to use this feature!")
+  }
   return (
     <>
       <MobileNavBarManager
@@ -31,7 +47,7 @@ const NavBar = () => {
         isDesktopUserLinksActive={isDesktopUserLinksActive}
         toggleDesktopUserMenu={toggleDesktopUserMenu}
         toggleCartMenu={toggleCartMenu}
-        toggleFavouritesMenu={toggleFavouritesMenu}
+        toggleFavouritesMenu={manageFavouritesAccess}
       />
       {isCartMenuActive ? <CartLayout /> : null}
       {isFavouritesMenuActive ? <FavouritesLayout /> : null}
