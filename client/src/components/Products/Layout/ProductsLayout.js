@@ -2,7 +2,7 @@ import ProductLayoutCard from "./ProductLayoutCard";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect,useState } from "react";
 import * as productsRequester from "../../../services/productsRequester"
-import useModalState from "../../../hooks/useModalState";
+import { useModalsContext } from "../../../context/ModalsContext";
 import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
@@ -11,7 +11,7 @@ const ProductsLayout = () => {
   const navigate = useNavigate();
   const [products,setProducts] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
-  const {modalState,setSuccessModal,setFailedModal,resetModals} = useModalState()
+  const {modalState,setSuccessModal,setFailedModal,resetModals} = useModalsContext()
 
 
   useEffect(()=> {
