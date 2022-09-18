@@ -1,5 +1,6 @@
 import { removeFromFavourties } from "../../../services/favouritesAndCartServices";
-import useModalState from "../../../hooks/useModalState";
+// import useModalState from "../../../hooks/useModalState";
+import { useModalsContext } from "../../../context/ModalsContext";
 import { useAuthContext } from "../../../context/AuthContext";
 import AttentionModal from "../../Modals/AttentionModal";
 import { Link } from "react-router-dom";
@@ -10,7 +11,7 @@ const FavouritesCard = ({
   manageIsLoading,
   toggleFavouritesMenu
 }) => {
-    const {modalState,setFailedModal,resetModals} = useModalState();
+    const {modalState,setFailedModal,resetModals} = useModalsContext();
     const {login} = useAuthContext();
     
     const removeHandler = async(event) => {
