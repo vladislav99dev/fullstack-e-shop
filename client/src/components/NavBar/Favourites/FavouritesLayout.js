@@ -1,19 +1,18 @@
 import { useState } from "react";
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useAuthContext } from "../../../context/AuthContext";
-import useModalState from "../../../hooks/useModalState";
 
 import FavouritesCard from "./FavouritesCard";
 import FavouritesFooter from "./FavouritesFooter";
 import FavouritesHeader from "./FavouritesHeader";
 import Spinner from "../../Spinner/Spinner";
-import AttentionModal from "../../Modals/AttentionModal";
+
 
 const FavouritesLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toggleFavouritesMenu } = useNavTogglesContext();
   const { user } = useAuthContext();
-  const {resetModals} = useModalState(); 
+
 
   const manageIsLoading = (value) => {
     setIsLoading(value);
@@ -22,14 +21,7 @@ const FavouritesLayout = () => {
   return (
     <div>
       {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
-      {!user.email 
-      ? <AttentionModal
-      titleMessage={"Something went wrong"}
-      descriptionMessage={"You should be logged in to have access to favourites!"}
-      buttonHandler={resetModals}
-      buttonName={"Try again"}
-      />  
-      :<div
+<div
       className="relative z-10"
       aria-labelledby="slide-over-title"
       role="dialog"
@@ -94,8 +86,6 @@ const FavouritesLayout = () => {
         </div>
       </div>
     </div>
-    }
-      
     </div>
   );
 };
