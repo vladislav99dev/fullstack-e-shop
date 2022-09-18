@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../../../context/AuthContext";
-// import { validateProductForms } from "../../../services/formValidationsServices";
-import useModalState from "../../../hooks/useModalState"
+
+import  {useModalsContext} from "../../../context/ModalsContext"
 
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 
@@ -20,7 +20,7 @@ const Create = () => {
     const {user} = useAuthContext();
     const [type,setType] = useState('clothing');
     const [messages,setMessaages] = useState([]);
-    const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalState();
+    const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalsContext();
 
     const handleSelect = (event) => {
         setType(event.target.value);
