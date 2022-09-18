@@ -10,8 +10,9 @@ import UserLinks from "./UserLinks";
 
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 
-const MobileProductsLinks = () => {
-  const { toggleProductsMenu } = useNavTogglesContext();
+const MobileProductsLinks = ({
+  toggleProductsMenu
+}) => {
   return (
     <>
       <div className="h-24 mt-4 flex justify-around lg:hidden">
@@ -69,8 +70,9 @@ const MobileProductsLinks = () => {
   );
 };
 
-export const MobileUserLinks = () => {
-  const { toggleUserMenu } = useNavTogglesContext();
+export const MobileUserLinks = ({
+  toggleUserMenu
+}) => {
   return (
     <>
       <div className="h-24 mt-4 flex justify-around lg:hidden">
@@ -89,8 +91,11 @@ export const MobileUserLinks = () => {
   );
 };
 
-const MobileNavBar = () => {
-  const { toggleUserMenu, toggleProductsMenu,toggleCartMenu } = useNavTogglesContext();
+const MobileNavBar = ({
+  toggleUserMenu,
+  toggleProductsMenu,
+  toggleCartMenu
+}) => {
   return (
     <div className="flex justify-around w-full mt-4 lg:hidden">
       <div className="flex">
@@ -125,14 +130,19 @@ const MobileNavBar = () => {
   );
 };
 
-const MobileNavBarManager = () => {
-  const { isUserMobileLinksActive, isProductsMobileLinksActive } = useNavTogglesContext();
+const MobileNavBarManager = ({
+  isUserMobileLinksActive,
+  toggleUserMenu,
+  isProductsMobileLinksActive,
+  toggleProductsMenu,
+  toggleCartMenu
+}) => {
 
-  if (isUserMobileLinksActive) return <MobileUserLinks />;
+  if (isUserMobileLinksActive) return <MobileUserLinks toggleUserMenu={toggleUserMenu} />;
 
-  if (isProductsMobileLinksActive) return <MobileProductsLinks />;
+  if (isProductsMobileLinksActive) return <MobileProductsLinks toggleProductsMenu={toggleProductsMenu} />;
 
-  return <MobileNavBar />;
+  return <MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu} toggleCartMenu={toggleCartMenu} />;
 };
 
 export default MobileNavBarManager;
