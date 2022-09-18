@@ -1,14 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import * as productsRequester from "../../../services/productsRequester";
 import AttentionModal from "../../Modals/AttentionModal";
-import useModalState from "../../../hooks/useModalState";
+// import useModalState from "../../../hooks/useModalState";
+import { useModalsContext } from "../../../context/ModalsContext";
 import SuccessModal from "../../Modals/SuccessModal";
 import { useAuthContext } from "../../../context/AuthContext";
 
 const Delete = () => {
   const { productId } = useParams();
   const { modalState, setSuccessModal, setFailedModal, resetModals } =
-    useModalState();
+  useModalsContext();
   const { user } = useAuthContext();
   const navigate = useNavigate();
 
