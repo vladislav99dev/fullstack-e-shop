@@ -93,7 +93,8 @@ export const MobileUserLinks = ({
 const MobileNavBar = ({
   toggleUserMenu,
   toggleProductsMenu,
-  toggleCartMenu
+  toggleCartMenu,
+  toggleFavouritesMenu
 }) => {
   return (
     <div className="flex justify-around w-full mt-4 lg:hidden">
@@ -101,12 +102,10 @@ const MobileNavBar = ({
       <GiTigerHead className="mt-4 ml-6" size={80} color={'white'}/>
       </div>
       <div className="flex ml-4 h-16 mt-8 xs:ml-32 sm:ml-20 mr-2 md:ml-52">
-        <Link className="px-2" to="/favorite">
-          <MdFavorite size={35} color={"#00df9a"} className="mt-4" />
-        </Link>
-        <Link className="px-2" to="/favorite">
-          <RiShoppingCart2Fill size={35} color={"#00df9a"} className="mt-4" onClick={toggleCartMenu} />
-        </Link>
+
+          <MdFavorite onClick={toggleFavouritesMenu} size={35} color={"#00df9a"} className="mt-4 mr-4 hover:cursor-pointer" />
+
+          <RiShoppingCart2Fill size={35} color={"#00df9a"} className="mt-4 hover:cursor-pointer" onClick={toggleCartMenu} />
         <RiUserAddFill
           size={35}
           color={"#00df9a"}
@@ -129,14 +128,15 @@ const MobileNavBarManager = ({
   toggleUserMenu,
   isProductsMobileLinksActive,
   toggleProductsMenu,
-  toggleCartMenu
+  toggleCartMenu,
+  toggleFavouritesMenu
 }) => {
 
   if (isUserMobileLinksActive) return <MobileUserLinks toggleUserMenu={toggleUserMenu} />;
 
   if (isProductsMobileLinksActive) return <MobileProductsLinks toggleProductsMenu={toggleProductsMenu} />;
 
-  return <MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu} toggleCartMenu={toggleCartMenu} />;
+  return <MobileNavBar toggleUserMenu={toggleUserMenu} toggleProductsMenu={toggleProductsMenu} toggleCartMenu={toggleCartMenu} toggleFavouritesMenu={toggleFavouritesMenu}/>;
 };
 
 export default MobileNavBarManager;
