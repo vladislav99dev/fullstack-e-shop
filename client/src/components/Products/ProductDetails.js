@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as productsRequester from "../../services/productsRequester";
 import * as favouritesAndCartServices from "../../services/favouritesAndCartServices";
-import useModalState from "../../hooks/useModalState";
+// import useModalState from "../../hooks/useModalState";
+import {useModalsContext} from "../../context/ModalsContext"
 import { useAuthContext } from "../../context/AuthContext";
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../context/LocalProductsContext";
@@ -19,7 +20,7 @@ const ProductDetails = () => {
 
 
   const { modalState, setSuccessModal, setFailedModal, resetModals } =
-    useModalState();
+  useModalsContext();
   const { user, login } = useAuthContext();
   const { toggleCartMenu,toggleFavouritesMenu } = useNavTogglesContext();
   const {products,addProduct}= useLocalProductsContext();
