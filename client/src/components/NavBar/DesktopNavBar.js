@@ -5,12 +5,14 @@ import { MdFavorite } from "react-icons/md";
 import {GiTigerHead} from "react-icons/gi"
 import UserLinks from "./UserLinks";
 
+
 const DesktopNavBar = ({
   isDesktopUserLinksActive,
   toggleDesktopUserMenu,
   toggleCartMenu,
   toggleFavouritesMenu
 }) => {
+
   return (
     <>
       <div className="text-white hidden lg:flex mt-6 justify-between items-center h-26 mx-auto px-4 xl:mx-12">
