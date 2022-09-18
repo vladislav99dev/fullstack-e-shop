@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../context/AuthContext";
 
 import * as productsRequester from "../../../services/productsRequester";
-import useModalState from "../../../hooks/useModalState";
+import {useModalsContext} from "../../../context/ModalsContext"
 import productsValidations from "../../../services/formValidations/productsValidations";
 import {
   dataSizeFormater,
@@ -42,7 +42,7 @@ const Edit = () => {
   const [product, setProduct] = useState({});
   const { productId } = useParams();
   const { modalState, setFailedModal, setSuccessModal, resetModals } =
-    useModalState();
+    useModalsContext();
   const navigate = useNavigate();
 
 
