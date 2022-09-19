@@ -48,6 +48,7 @@ const ProductsCard = () => {
     }
 
   }
+  console.log(products);
   return (
     <>
     <div
@@ -105,7 +106,7 @@ const ProductsCard = () => {
                         {products.length > 0 
                         ? products.map(({product,quantity,size}) => (
                           <CartCard 
-                          key={`${product._id}${product.size}`}
+                          key={`${product._id}${size}`}
                           product={product}
                           quantity={quantity}
                           size={size}
