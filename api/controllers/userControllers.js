@@ -7,45 +7,24 @@ const tokenServices = require("../services/tokenServices");
 const userProductsController = require("../controllers/userProductsController")
 const userDataValidation = require("../services/validations/userDataValidation")
 
+
 const registerHandler = async(req,res)=> {
-  console.log(`POST ${req.originalUrl}`);
-  const { firstName, lastName,  email, country,state, city, zipCode, street, unitNumber, phoneNumber, password } = req.body;
-  if(!firstName || !lastName || !password || !email || !country || !city || !street || !state || !zipCode || !unitNumber || !phoneNumber) 
-  return res.status(400)
-  .json({error:'FisrtName, LastName, Password, Email, Country, City and Street need to be provided in order to continue!'});
-
-
-
-
-
-
+    console.log(`POST ${req.originalUrl}`);
+    const data = req.body;
       try {
-          const user = await userServices.findByEmail(email);
-          const isUserFound = Boolean(user);
-          if(isUserFound) return res.status(409).json({error:'User with this email already exist!'});
+          userDataValidation.validateAllData(data)
 
-          const dbResponse = await userServices.create(
-              firstName,
-              lastName,
-              password,
-              email,
-              country,
-              city,
-              street,
-              state,
-              zipCode,
-              unitNumber,
-              phoneNumber
-          );
-          return res.status(201).json(dbResponse);
+          const user = await userServices.findByEmail(data.email);
+          if(user) throw {type:'conflict', message:'User with this email already exist!'};
+
+          await userServices.create(data);
+          return res.status(201).json({message:"You successfully created new user profile!"});
       } catch(err){
-        console.log(err);
-          // let error = err._message;
-          // let errors = Object.values(err.errors);
-          // let specifficError = errors[0].properties.message;
-          // res.status(400).json({ error, specifficError });
+          if(err.type === 'validation') return res.status(400).json({message:err.message});
+          if(err.type === 'conflict') return res.status(409).json({message:err.message});
       }
 }
+
 
 const loginHandler = async(req,res) => {
   console.log(`POST ${req.originalUrl}`);
