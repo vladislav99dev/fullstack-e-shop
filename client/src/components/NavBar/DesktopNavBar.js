@@ -62,7 +62,7 @@ const DesktopNavBar = ({
         </div>
       </div>
       {isDesktopUserLinksActive ? (
-        <div className="hidden lg:block bg-[#DDDDDD]  w-[30%] fixed right-4  border-4 border-[#00df9a] rounded-lg">
+        <div className="hidden lg:block bg-[#DDDDDD]  w-[30%] fixed right-4  border-4 border-[#00df9a] rounded-lg z-10">
           <UserLinks clickHandler={toggleDesktopUserMenu} />
         </div>
       ) : null}
