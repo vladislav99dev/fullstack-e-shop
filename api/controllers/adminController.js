@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const productsServices = require("../services/productsServices");
 
-const dataValidationServices = require("../services/dataValidationServices")
+const productDataValidation = require("../services/validations/productDataValidation")
 
 
 const createProductHandler = async (req, res) => {
@@ -10,7 +10,7 @@ const createProductHandler = async (req, res) => {
   const data =
     req.body;
     try{
-      const validatedData = dataValidationServices.validateAllData(data)
+      const validatedData = productDataValidation.validateAllData(data)
       const dbResponse = await productsServices.create(validatedData);
       res.status(201).json(dbResponse);
     }catch(err){
@@ -35,8 +35,8 @@ const editProductHandler = async (req, res) => {
   const params = req.params;
 
   try {
-    const validatedData = dataValidationServices.validateAllData(data)
-    // const validatedAndFormatedData = dataValidationServices.validateAndFormatDataSizes(data);
+    const validatedData = productDataValidation.validateAllData(data)
+    // const validatedAndFormatedData = productDataValidation.validateAndFormatDataSizes(data);
     const dbResponse = await productsServices.findOneAndUpdate(
       validatedData,
       params.productId
