@@ -5,6 +5,7 @@ const userServices = require("../services/userServices");
 const tokenServices = require("../services/tokenServices");
 
 const userProductsController = require("../controllers/userProductsController")
+const userDataValidation = require("../services/validations/userDataValidation")
 
 const registerHandler = async(req,res)=> {
   console.log(`POST ${req.originalUrl}`);
@@ -12,6 +13,12 @@ const registerHandler = async(req,res)=> {
   if(!firstName || !lastName || !password || !email || !country || !city || !street || !state || !zipCode || !unitNumber || !phoneNumber) 
   return res.status(400)
   .json({error:'FisrtName, LastName, Password, Email, Country, City and Street need to be provided in order to continue!'});
+
+
+
+
+
+
       try {
           const user = await userServices.findByEmail(email);
           const isUserFound = Boolean(user);
