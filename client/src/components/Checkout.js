@@ -31,7 +31,7 @@ const Checkout = () => {
     }
 
     return (
-        <div className=" bg-white py-10 flex-column lg:grid lg:grid-cols-2">
+        <div className=" bg-white py-10 flex-column lg:grid lg:grid-cols-2 h-full">
             <form onSubmit={checkoutHandler} className="py-6 lg:py-10">
               <div className="flex justify-between">
                 <p className="uppercase text-2xl  ml-5 lg:ml-10 mb-2 font-bold text-gray-600">Shipping address</p>
