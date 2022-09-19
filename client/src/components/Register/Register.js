@@ -1,44 +1,78 @@
 import { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
+
+import ValidationMessage from "../ValidationMessage/validationMessage";
+import AttentionModal from "../Modals/AttentionModal"
+import SuccessModal from "../Modals/SuccessModal"
+import Spinner from "../Spinner/Spinner"
 
 import { validateRegister } from "../../services/formValidationsServices";
-import ValidationMessage from "../ValidationMessage/validationMessage";
-
 import * as userRequester from "../../services/userRequester.js"
+
 import { isNotLoggedIn } from "../../HOC/routesGuard";
+
+import {useModalsContext} from "../../context/ModalsContext";
 
 const Register = () => {
     const[messages,setMessaages] = useState([]);
+    const[isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate();
+    const {modalState,setFailedModal,setSuccessModal,resetModals} = useModalsContext();
+
+    const navigateToLogin = () => {
+        resetModals()
+        navigate('/users/login')  
+    }
 
     const registerHandler = async(event) => {
         event.preventDefault();
         setMessaages([]);
+        setIsLoading(true);
 
         const formdData = new FormData(event.target);
         const data = Object.fromEntries(formdData);
-        let validationsResponse = validateRegister(data);
+
+        const validationsResponse = validateRegister(data);
         if(validationsResponse.length > 0){
-            return setMessaages(validationsResponse);
-        }
-        console.log(data);
+            setIsLoading(false)
+            return setMessaages(validationsResponse);}
+
         try{
             const response = await userRequester.register(data);
-            let json = await response.json();
-            console.log(json);
-            if(json.error){
-                return setMessaages([json.error]);
-            }
-            return navigate('/users/login')
+            const jsonResponse = await response.json();
+            setIsLoading(false)
+
+            if(response.status !== 201) return setFailedModal(jsonResponse.message)
+            if(response.status === 201) return setSuccessModal(jsonResponse.message)
         } catch(err){
             console.log(err);
-            console.log('Server time out');
-            // throw(err)
         }
 
     }
     return(
         <div className="bg-white rounded-3xl mt-6 w-full shadow-lg">
+
+            {isLoading 
+            ? <Spinner/>
+            : null}
+
+            {modalState.isFailed.value 
+            ? <AttentionModal
+            titleMessage={"Something went wrong"}
+            descriptionMessage={modalState.isFailed.message}
+            buttonHandler={resetModals}
+            buttonName={"Try again"}
+            />
+            : null}
+
+            {modalState.isSuccess.value
+            ? <SuccessModal
+            titleMessage={"Congrats!"}
+            descriptionMessage={modalState.isSuccess.message}
+            buttonHandler={navigateToLogin}
+            buttonName={"Login"}/>
+            : null}
+
             <h1 className="text-[#00df9a] py-4 text-3xl italic uppercase font-bold w-full text-center mt-8">Register</h1>
              {messages.length > 0 
             ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
@@ -68,9 +102,6 @@ const Register = () => {
                 <div className="flex justify-center">
                 <button className="mt-8 mb-10 py-2 px-16 rounded-lg bg-[#00df9a] text-white italic font-bold text-xl hover:bg-green-300 ease-in-out duration-500" >Submit</button>
                 </div>
-
-
-
             </form>
         </div>
     )
