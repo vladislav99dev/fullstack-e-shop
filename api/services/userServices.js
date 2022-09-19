@@ -1,17 +1,7 @@
 const User = require('../models/User')
 
-const create = (firstName,lastName,password,email,country,city,street,state,zipCode,unitNumber,phoneNumber) => {
-    return User.create({firstName,
-        lastName,
-        password,
-        email,
-        country,
-        city,
-        street,
-        state,
-        zipCode,
-        unitNumber,
-        phoneNumber})
+const create = (data) => {
+    return User.create({...data})
 }
 
 const findByEmail = (email) => {
@@ -32,7 +22,7 @@ const findByIdPopulated = (id) => {
     }).populate('favourites').lean()
 }
 
-const findByIdAndUpdate = async (data,id) => {
+const findByIdAndUpdate = (data,id) => {
     return User.findByIdAndUpdate(id,data,{returnDocument:'after'});
     
 }
