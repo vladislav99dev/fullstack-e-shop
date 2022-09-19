@@ -78,6 +78,7 @@ const ProductDetails = () => {
       const response = await productsRequester.getOne(null,null,productId);
       const jsonResponse = await response.json();
       addProduct(jsonResponse,size,quantity)
+      toggleCartMenu();
     } catch(err){
       console.log(err)
     }
@@ -178,9 +179,6 @@ const ProductDetails = () => {
                   className="w-[100%] border-2 border-[#DDDDDD] rounded-md font-semibold text-gray-700"
                   onChange={setQuantityChoice}
                 >
-                  <option className="text-center font-semibold text-gray-700" value="">
-                    Choose quantity
-                  </option>
                   <option className="text-center font-semibold text-gray-700" value="1">
                     1
                   </option>
