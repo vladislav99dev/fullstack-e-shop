@@ -1,4 +1,4 @@
-const Product = require('../models/Products/Product')
+const Product = require('../models/Product')
 
 
  const create = (data) => {
