@@ -29,12 +29,12 @@ const findByIdPopulated = (id) => {
             path: '_id',
             model:'Product'
         },
-        // path:'favourites'
     }).populate('favourites').lean()
 }
 
-const findByIdAndUpdate = (data,id) => {
-    return User.findByIdAndUpdate(id,data)
+const findByIdAndUpdate = async (data,id) => {
+    return User.findByIdAndUpdate(id,data,{returnDocument:'after'});
+    
 }
 
 const userServices = {
