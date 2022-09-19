@@ -1,13 +1,19 @@
 import { useAuthContext } from "../context/AuthContext";
+import { useLocalProductsContext } from "../context/LocalProductsContext";
 import {GiTigerHead} from "react-icons/gi"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Checkout = () => {
     const {user} = useAuthContext();
+    const{products} = useLocalProductsContext();
     const [useProfileInfo, setUseProfileInfo] = useState(false);
-    let totalPrice = 0;
-    user.cart.map((product) => totalPrice += product._id.price * product.quantity);
+    const [totalPrice,setTotalPrice] = useState(0);
 
+
+  useEffect(()=> {
+    if(user.email)  user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
+    if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)))
+  },[])
 
     const fillFormWithUserInfo = (event) => {
       event.preventDefault();
@@ -53,15 +59,29 @@ const Checkout = () => {
             <div className="order-first lg:order-last">
                 <div className="mt-20 ml-10 mr-10  bg-gray-100 rounded-lg">
                     <p className="uppercase text-xl font-bold  mt-10 text-center py-4 text-gray-600 border-b-2 border-gray-400">Order Summary</p>
-                    {user.cart.map(product => (
-                        <div key={product._id._id} className="flex justify-between py-2 border-b-2 border-gray-300">
-                            <p className="ml-5 text-md font-bold  text-gray-400">{product._id.name}</p>
-                            <div>
-                            <p className="mr-5 text-md  italic text-gray-400">{`Quantity: ${product.quantity}`}</p>
-                            <p className="mr-5 text-md font-bold italic text-gray-400">{`$${product._id.price}`}</p>
-                            </div>
-                        </div>
-                    )) }
+
+                    {user.email 
+                    ? user.cart.map(product => (
+                      <div key={`${product._id._id}${product.size}`} className="flex justify-between py-2 border-b-2 border-gray-300">
+                          <p className="ml-5 text-md font-bold  text-gray-400">{product._id.name}</p>
+                          <div>
+                          <p className="mr-5 text-md  italic text-gray-400">{`Quantity: ${product.quantity}`}</p>
+                          <p className="mr-5 text-md font-bold italic text-gray-400">{`$${product._id.price}`}</p>
+                          </div>
+                      </div>
+                  ))
+                  : products.map(product => (
+                    <div key={`${product.product._id}${product.size}`} className="flex justify-between py-2 border-b-2 border-gray-300">
+                    <p className="ml-5 text-md font-bold  text-gray-400">{product.product.name}</p>
+                    <div>
+                    <p className="mr-5 text-md  italic text-gray-400">{`Quantity: ${product.quantity}`}</p>
+                    <p className="mr-5 text-md font-bold italic text-gray-400">{`$${product.product.price}`}</p>
+                    </div>
+                  </div>
+                  ))
+                    
+                  }
+
                     <div className="flex justify-between py-4">
                         <p className="ml-5 text-lg font-bold text-gray-500">Total:</p>
                         <p className="mr-10 text-xl font-bold text-gray-800">{`$${totalPrice.toFixed(2)}`}</p>
