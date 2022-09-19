@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import CartCard from "./CartCard";
 import CartFooter from "./CartFooter";
 import CartHeader from "./CartHeader";
@@ -19,9 +19,18 @@ const ProductsCard = () => {
   const { user,login } = useAuthContext();
   const { products, removeProduct} = useLocalProductsContext();
   const {modalState,setFailedModal,resetModals} = useModalsContext();
+  const [totalPrice,setTotalPrice] = useState(0);
 
-  let totalPrice = 0;
+
   // user.cart.map((product) => totalPrice += product._id.price * product.quantity);
+
+
+  useEffect(()=> {
+    if(user.email)  user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
+    if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)))
+  },[])
+
+
 
   const manageIsLoading = (value) => {
     setIsLoading(value)
@@ -48,7 +57,6 @@ const ProductsCard = () => {
     }
 
   }
-  console.log(products);
   return (
     <>
     <div
