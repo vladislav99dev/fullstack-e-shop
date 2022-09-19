@@ -16,6 +16,7 @@ const addHandler = async(service,req,res) => {
         
         const product = await productsServices.getOne(productId);
         if(!product) return res.status(400).json({message: "There is no product with this id!"});
+        
         if(service === 'favourites') {
             if(user[service].includes(productId)) return res.status(409).json({message:`This product is already added to ${service}!`});
             if(!user[service].includes(productId)) user[service].push(productId);
