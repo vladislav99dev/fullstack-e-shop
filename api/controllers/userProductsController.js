@@ -13,10 +13,9 @@ const addHandler = async(service,req,res) => {
     try {
         const user = await userServices.findById(profileId);
         if(!user) return res.status(400).json({message: "There is no user with this id!"});
-
+        
         const product = await productsServices.getOne(productId);
         if(!product) return res.status(400).json({message: "There is no product with this id!"});
-
         if(service === 'favourites') {
             if(user[service].includes(productId)) return res.status(409).json({message:`This product is already added to ${service}!`});
             if(!user[service].includes(productId)) user[service].push(productId);
@@ -27,8 +26,8 @@ const addHandler = async(service,req,res) => {
             let isAlreadyAdded = false
 
             if(!product.sizes.hasOwnProperty(size)) return res.status(400).json({message: "You have entered invalid size!"});
-             
 
+            
             for (const orderDetails of user[service]) {
                 if(String(orderDetails._id).includes(productId) && orderDetails.size === size) {
                     Object.assign(newCartProduct, {size:orderDetails.size, quantity: orderDetails.quantity + quantity,_id:orderDetails._id})
@@ -38,18 +37,21 @@ const addHandler = async(service,req,res) => {
                     break;
                 }
             }
+
             
             if(product.sizes[size] < newCartProduct.quantity  || product.sizes[size] < quantity )
-            return res.status(400).json({message: `There are only ${product.sizes[size]} left from size ${size}!`})
+            return res.status(400).json({message: `There are only ${product.sizes[size]} left from ${product.name} ${product.category} from size ${size}!`})
             
             if(isAlreadyAdded) user[service].push((newCartProduct))
             if(!isAlreadyAdded) user[service].push({_id:productId,size:size,quantity:quantity})
+
         }
+
         const dbResponse = await userServices.findByIdAndUpdate(user,profileId);
         const updatedUser = await userServices.findByIdPopulated(profileId);
         updatedUser.password = null
         if(!updatedUser) return res.status(400).json({message: "There is no user with this id!"});
-        res.status(200).json({message:`Successfully added this product to ${service}.`, user:updatedUser});
+        res.status(200).json({message:`Successfully added ${product.name} ${product.category} from ${size}  to ${service}.`, user:updatedUser});
     } catch (err) {
         console.log(err);
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
