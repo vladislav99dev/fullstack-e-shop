@@ -45,6 +45,7 @@ const Register = () => {
             if(response.status !== 201) return setFailedModal(jsonResponse.message)
             if(response.status === 201) return setSuccessModal(jsonResponse.message)
         } catch(err){
+            setIsLoading(false)
             console.log(err);
         }
 
