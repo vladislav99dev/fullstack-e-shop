@@ -20,6 +20,9 @@ const getManyHandler = async(req,res) => {
         res.status(err.status).json({message:err.message})
     }
 };
+
+
+
 const getOneHandler = async(req,res) => {
     console.log(`GET ${req.originalUrl}`);
     const {productId} = req.params
