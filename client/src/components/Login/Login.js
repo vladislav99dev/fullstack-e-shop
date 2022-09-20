@@ -1,121 +1,132 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { validateLogin } from "../../services/formValidationsServices";
-import ValidationMessage from "../ValidationMessage/validationMessage";
 import * as userRequester from "../../services/userRequester";
+import * as favouritesAndCartServices from "../../services/favouritesAndCartServices";
 
 import { useAuthContext } from "../../context/AuthContext";
 import { useLocalProductsContext } from "../../context/LocalProductsContext";
-import { isNotLoggedIn } from "../../HOC/routesGuard";
-import Spinner from "../Spinner/Spinner";
-import * as favouritesAndCartServices from "../../services/favouritesAndCartServices";
 import { useModalsContext } from "../../context/ModalsContext";
 
+import { isNotLoggedIn } from "../../HOC/routesGuard";
+
+import ValidationMessage from "../ValidationMessage/validationMessage";
+import Spinner from "../Spinner/Spinner";
+import AttentionModal from "../Modals/AttentionModal";
+
 const Login = () => {
-  const [messages, setMessaages] = useState([]);
+  const [messages, setMessages] = useState([]);
   const { login } = useAuthContext();
-  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const { products, clearStorage } = useLocalProductsContext();
-  const { setFailedModal} = useModalsContext();
+  const {modalState, setFailedModal, resetModals } = useModalsContext();
 
-  const addProductsFromLocalStorageToUserCart = async (profileId) => {
-    const failedAddsMessages = [];
-    let user = {}
-    for (const product of products) {
-      const response = await favouritesAndCartServices.addToCart(
-        profileId,
-        product.product._id,
-        product.size,
-        product.quantity
-      );
-      const jsonResponse = await response.json();
-      if(response.status !== 200) failedAddsMessages.push(jsonResponse.message)
-      if(response.status === 200) user = jsonResponse.user
-  };
-  return [user,failedAddsMessages.join(' ')]
-}
+  // const addProductsFromLocalStorageToUserCart = async (profileId) => {
+  //   const failedAddMessages = [];
+  //   let user = {};
+  //   for (const product of products) {
+  //     const response = await favouritesAndCartServices.addToCart(
+  //       profileId,
+  //       product.product._id,
+  //       product.size,
+  //       product.quantity
+  //     );
+  //     const jsonResponse = await response.json();
+  //     if (response.status !== 200) failedAddMessages.push(jsonResponse.message);
+  //     if (response.status === 200) user = jsonResponse.user;
+  //   }
+  //   return [user, failedAddMessages.join(" ")];
+  // };
 
   const loginHandler = async (event) => {
     event.preventDefault();
-    setMessaages([]);
+    setMessages([]);
+    setIsLoading(true);
 
     const formdData = new FormData(event.target);
     const data = Object.fromEntries(formdData);
 
-    let validationsResponse = validateLogin(data);
+    const validationsResponse = validateLogin(data);
     if (validationsResponse.length > 0) {
-      return setMessaages(validationsResponse);
+      setIsLoading(false);
+      return setMessages(validationsResponse);
     }
 
     try {
-      setIsLoading(true);
+      let userData = {};
       const response = await userRequester.login(data);
-      let jsonResponse = await response.json();
-      if (jsonResponse.error) {
-        setIsLoading(false);
-        return setMessaages([jsonResponse.error]);
+      const jsonResponse = await response.json();
+
+      if (response.status !== 200) {
+        setIsLoading(false)
+        return setFailedModal(jsonResponse.message)
       }
-      //if json.isAdmin navigate to admin panel
-      setIsLoading(false);
-      login(jsonResponse);
-      if (products.length > 0) {
-        const [user,failedAddsMessages] = await addProductsFromLocalStorageToUserCart(jsonResponse._id);
-        if(failedAddsMessages) 
-        setFailedModal("There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)")
-        
-        if(user.hasOwnProperty("email")) login(user)
-        
-      }
-      clearStorage();
-      return navigate("/");
+
+      Object.assign(userData,jsonResponse.user)
+
+      // if(products.length > 0) {
+      //   const [user,failedAddMessages] = await addProductsFromLocalStorageToUserCart(jsonResponse._id);
+      //   if(failedAddMessages) setFailedModal(
+      //     "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)"
+      //   );
+      //   if(user.hasOwnProperty("email")) Object.assign(userData,user)
+      //   clearStorage();
+      // }
+
+      login(userData)
     } catch (err) {
       setIsLoading(false);
       console.log(err);
-      console.log("Server time out");
     }
   };
 
+
   return (
     <div className="bg-white pt-6 pb-10  rounded-3xl lg:mt-16 w-full shadow-lg flex-row lg:w-full">
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">
-            Login
-          </h1>
-          {messages.length > 0
-            ? messages.map((message) => (
-                <ValidationMessage key={message} message={message} />
-              ))
-            : null}
-          <form onSubmit={loginHandler}>
-            <input
-              type="text"
-              name="email"
-              className="py-2 w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] mb-2 mt-6 border-2 border-green-300 hover:border-green-100 rounded-md"
-              placeholder="Email:vladislavdorovski@abv.bg"
-            />
-            <input
-              type="password"
-              name="password"
-              className="py-2 w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] border-2 border-green-300 hover:border-green-100 rounded-md"
-              placeholder="Password:"
-            />
-            <div className="w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] flex justify-around mt-4">
-              <p className="italic text-gray-600">You dont have an account?</p>
-              <Link to={"users/register"} className="text-[#00df9a] font-bold">
-                Sign in
-              </Link>
-            </div>
-            <button className="py-2  border-[#00df9a] w-[25%] ml-[37.5%] mt-4 rounded-md italic font-bold text-xl text-white bg-[#00df9a] hover:bg-green-300 ease-in-out duration-500">
-              Submit
-            </button>
-          </form>
-        </>
-      )}
+      {isLoading ? <Spinner /> : null}
+      {modalState.isFailed.value ? (
+        <AttentionModal
+          titleMessage="Something went wrong"
+          descriptionMessage={modalState.isFailed.message}
+          buttonHandler={resetModals}
+          buttonName="Try again"
+        />
+      ) : null}
+      <>
+        <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">
+          Login
+        </h1>
+        {messages.length > 0
+          ? messages.map((message) => (
+              <ValidationMessage key={message} message={message} />
+            ))
+          : null}
+        <form onSubmit={loginHandler}>
+          <input
+            type="text"
+            name="email"
+            className="py-2 w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] mb-2 mt-6 border-2 border-green-300 hover:border-green-100 rounded-md"
+            placeholder="Email:vladislavdorovski@abv.bg"
+          />
+          <input
+            type="password"
+            name="password"
+            className="py-2 w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] border-2 border-green-300 hover:border-green-100 rounded-md"
+            placeholder="Password:"
+          />
+          <div className="w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] flex justify-around mt-4">
+            <p className="italic text-gray-600">You dont have an account?</p>
+            <Link to={"users/register"} className="text-[#00df9a] font-bold">
+              Sign in
+            </Link>
+          </div>
+          <button className="py-2  border-[#00df9a] w-[25%] ml-[37.5%] mt-4 rounded-md italic font-bold text-xl text-white bg-[#00df9a] hover:bg-green-300 ease-in-out duration-500">
+            Submit
+          </button>
+        </form>
+      </>
     </div>
   );
 };
@@ -123,7 +134,36 @@ const Login = () => {
 export default isNotLoggedIn(Login);
 
 
-  /* <div className="flex mt-10 justify-center">
+
+
+
+
+
+// if (response.status === 200) {
+//   let userData = jsonResponse.user;
+//   if (products.length > 0) {
+//     const [user, failedAddMessages] =
+//       await addProductsFromLocalStorageToUserCart(jsonResponse._id);
+//     if (failedAddMessages)
+//       return setFailedModal(
+//         "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)"
+//       );
+//     if (user.hasOwnProperty("email")) Object.assign(userData, user);
+//     clearStorage();
+//   }
+//   login(userData);
+//   return setSuccessModal(jsonResponse.message);
+// }
+
+
+
+
+
+
+
+
+
+/* <div className="flex mt-10 justify-center">
 <label htmlFor="email">Email:</label>
 <input type="input" name="email" id="email" className="ml-8" placeholder="ex.petrpetrov@abv.bg" />
 </div>
@@ -141,4 +181,3 @@ export default isNotLoggedIn(Login);
 <div className="flex justify-center mt-6 ">
 <button type="submit" className="py-2 mb-10 px-10 rounded-md text-white bg-[#DDDDDD] font-bold">Submit</button>
 </div>*/
-
