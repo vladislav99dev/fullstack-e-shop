@@ -18,16 +18,7 @@ const createProductHandler = async (req, res) => {
     }
 };
 
-// const getOneProductHandler = async (req, res) => {
-//   console.log(`GET ${req.originalUrl}`);
-//   const params = req.params;
-//   try {
-//     const dbResponse = await productsServices.getOne(params.productId);
-//     res.status(200).json(dbResponse);
-//   } catch (err) {
-//     res.status(404).json({ message: "Product with this id was not found!" });
-//   }
-// };
+
 
 const editProductHandler = async (req, res) => {
   console.log(`PUT ${req.originalUrl}`);
