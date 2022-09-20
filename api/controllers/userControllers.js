@@ -4,56 +4,56 @@ const bcrypt = require("bcrypt");
 const userServices = require("../services/userServices");
 const tokenServices = require("../services/tokenServices");
 
-const userProductsController = require("../controllers/userProductsController")
-const userDataValidation = require("../services/validations/userDataValidation")
+const userProductsController = require("../controllers/userProductsController");
+const userDataValidation = require("../services/validations/userDataValidation");
 
 
 const registerHandler = async(req,res)=> {
-    console.log(`POST ${req.originalUrl}`);
-    const data = req.body;
+      console.log(`POST ${req.originalUrl}`);
+      const data = req.body;
+
       try {
-          userDataValidation.validateAllData(data)
+          userDataValidation.validateRegisterData(data);
 
           const user = await userServices.findByEmail(data.email);
-          if(user) throw {type:'conflict', message:'User with this email already exist!'};
+          if(user) throw {status:409, message:'User with this email already exist!'};
 
           await userServices.create(data);
           return res.status(201).json({message:"You successfully created new user profile!"});
       } catch(err){
-          if(err.type === 'validation') return res.status(400).json({message:err.message});
-          if(err.type === 'conflict') return res.status(409).json({message:err.message});
+        if(err.status) res.status(status).json({message:err.message});
+        console.log(err);
       }
 }
 
 
 const loginHandler = async(req,res) => {
-  console.log(`POST ${req.originalUrl}`);
-  const {email,password} = req.body;
-  if(!email || !password) return res.status(400).json({error:'Email and Password are required in order to continue'});
+      console.log(`POST ${req.originalUrl}`);
+      const data = req.body;
+      const userData = {};
 
-    try {
-        const user = await userServices.findByEmail(email);
+      try {
+        userDataValidation.validateLoginData(data);
 
-        const isUserFound = Boolean(user);
-        if(!isUserFound) return res.status(404).json({error:'Incorrect email or password'});
-        
-        const isValid = await bcrypt.compare(password,user.password);
-        if(!isValid) return res.status(404).json({error:'Incorrect email or password'});
+        const user = await userServices.findByEmail(data.email);
+        if(!user) throw {status:404, message:'Incorrect email or password!'};
 
-        const populatedUser = await userServices.findByIdPopulated(user._id)
-        
-        populatedUser.password = null
-        user.password = null
+        const isValid = await bcrypt.compare(data.password,user.password);
+        if(!isValid) throw {status:401, message:'Incorrect email or password'};
+
+        const {password, ...populatedUser} = await userServices.findByIdAndPopulate(user._id);
+
         if(populatedUser.isAdmin){
-          const accessToken = tokenServices.generate(user);
-          return res.status(200).json({...populatedUser,accessToken});
-        } else {
-          return res.status(200).json(populatedUser);
-        }
+          const accessToken = tokenServices.generate(populatedUser);
+          Object.assign(userData,{...populatedUser,accessToken});
+        };
+        if(!populatedUser.isAdmin) Object.assign(userData,populatedUser);
 
-    } catch(err){
+        return res.status(200).json({user:userData,message:'You have successfully logged in!'});
+      } catch(err){
+        if(err.status)  res.status(status).json({message:err.message});
         console.log(err);
-    }
+      }
 }
 
 const logoutAdminHandler = (req,res) => {
@@ -68,6 +68,7 @@ const logoutAdminHandler = (req,res) => {
     return res.status(401).json({error:'Your accessToken have expired!'});
   }
 }
+//only here left for refactoring in thsi controller
 
 const logoutHandler = (req,res) => {
   console.log(`POST ${req.originalUrl}`);
