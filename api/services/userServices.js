@@ -12,7 +12,7 @@ const findById = (id) => {
     return User.findById(id)
 }
 
-const findByIdPopulated = (id) => {
+const findByIdAndPopulate = (id) => {
     return User.findById(id).populate({
         path:'cart',
         populate:{
@@ -22,7 +22,7 @@ const findByIdPopulated = (id) => {
     }).populate('favourites').lean()
 }
 
-const findByIdAndUpdate = (data,id) => {
+const findByIdAndUpdate = (id,data) => {
     return User.findByIdAndUpdate(id,data,{returnDocument:'after'});
     
 }
@@ -32,7 +32,7 @@ const userServices = {
     findByEmail,
     findById,
     findByIdAndUpdate,
-    findByIdPopulated
+    findByIdAndPopulate
 }
 
 module.exports = userServices;
