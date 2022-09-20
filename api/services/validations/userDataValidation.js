@@ -84,7 +84,12 @@ const validatePhoneNumber = (phoneNumber) => {
     }
   };
 
-const validateAllData = (data) => {
+
+
+
+
+
+const validateRegisterData = (data) => {
   try{
     validateIsAllDataSend(data)
     validateFirstName(data.firstName);
@@ -99,13 +104,23 @@ const validateAllData = (data) => {
     validateUnitNumber(data.unitNumber);
     validatePhoneNumber(data.phoneNumber);
   } catch(err){
-    throw {type:'validation', message:err.message}
+    throw {status:400, message:err.message}
   }
-
   };
 
+
+  const validateLoginData = (data) => {
+    try{
+      if(!data.email) throw {message:'You did not provide an email!'}
+      if(!data.password) throw {message:'You did not provide password!'}
+    }catch(err){
+      throw {status:400, message:err.message}
+    }
+  }
+
   const userDataValidation ={
-    validateAllData,
+    validateRegisterData,
+    validateLoginData
   }
 
   module.exports = userDataValidation
