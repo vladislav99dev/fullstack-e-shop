@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const userServices = require("../services/userServices");
 const tokenServices = require("../services/tokenServices");
 
-const userProductsController = require("../controllers/userProductsController");
+const userProductsController = require("./userProductsController");
 const userDataValidation = require("../services/validations/userDataValidation");
 
 
