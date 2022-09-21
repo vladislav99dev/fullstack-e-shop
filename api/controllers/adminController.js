@@ -27,8 +27,7 @@ const editProductHandler = async (req, res) => {
 
   try {
     const validatedData = productDataValidation.validateAllData(data)
-    // const validatedAndFormatedData = productDataValidation.validateAndFormatDataSizes(data);
-    const dbResponse = await productsServices.findOneAndUpdate(
+    const dbResponse = await productsServices.findByIdAndUpdate(
       validatedData,
       params.productId
     );
@@ -45,7 +44,7 @@ const deleteProductHandler = async(req,res) => {
 
   const params = req.params;
   try {
-    const dbResponse = await productsServices.deleteOne(params.productId)
+    const dbResponse = await productsServices.deleteById(params.productId)
     if(dbResponse === null) return res.status(404).json({message:'Product with this id was not found!'})
     res.status(200).json({message:"You successfully deleteted this product!"})
   }catch(err){
@@ -55,7 +54,6 @@ const deleteProductHandler = async(req,res) => {
 
 router.post("/products/create", createProductHandler);
 router.put("/products/:productId/edit", editProductHandler);
-// router.get("/products/:productId", getOneProductHandler);
 router.delete("/products/:productId/delete", deleteProductHandler);
 
 
