@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import * as productsRequester from "../../services/productsRequester";
 import * as favouritesAndCartServices from "../../services/favouritesAndCartServices";
-// import useModalState from "../../hooks/useModalState";
+
 import {useModalsContext} from "../../context/ModalsContext"
 import { useAuthContext } from "../../context/AuthContext";
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../context/LocalProductsContext";
+
 import AttentionModal from "../Modals/AttentionModal";
 import Spinner from "../Spinner/Spinner"
 
@@ -19,18 +21,17 @@ const ProductDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
 
 
-  const { modalState, setSuccessModal, setFailedModal, resetModals } =
-  useModalsContext();
+  const { modalState, setFailedModal, resetModals } = useModalsContext();
   const { user, login } = useAuthContext();
   const { toggleCartMenu,toggleFavouritesMenu } = useNavTogglesContext();
-  const {products,addProduct}= useLocalProductsContext();
+  const {addProduct}= useLocalProductsContext();
 
   useEffect(() => {
     setIsLoading(true);
     initialRequset(productId)
       .then(({ response, jsonResponse }) => {
         setIsLoading(false);
-        if (response.status !== 200) setFailedModal(jsonResponse.message);
+        if (response.status !== 200) setFailedModal(jsonResponse.message); //maybe throw 
         if (response.status === 200) setProduct(jsonResponse);
       })
       .catch((err) => {
@@ -55,22 +56,30 @@ const ProductDetails = () => {
   const addToUserCartHandler = async (event) => {
     event.preventDefault();
     setIsLoading(true)
-    const response = await favouritesAndCartServices.addToCart(
-      user._id,
-      product._id,
-      size,
-      quantity
-    );
-    const jsonResponse = await response.json();
-    if (response.status !== 200) setFailedModal(jsonResponse.message);
-    if (response.status === 200) {
-      login(jsonResponse.user);
-      setSize("")
-      toggleCartMenu();
+    try{
+      const response = await favouritesAndCartServices.addToCart(
+        user._id,
+        product._id,
+        size,
+        quantity
+      );
+      const jsonResponse = await response.json();
+      if (response.status !== 200) setFailedModal(jsonResponse.message);
+      if (response.status === 200) {
+        login(jsonResponse.user);
+        setSize("");
+        setQuantity(1);
+        toggleCartMenu();
+        setIsLoading(false)
+      }
+    }catch(err){
+      setSize("");
+      setQuantity(1);
       setIsLoading(false)
+      console.log(err)
     }
-  };
 
+  };
 
   const addToLocalStorage = async(event) => {
     event.preventDefault();
@@ -87,16 +96,22 @@ const ProductDetails = () => {
   const addToFavouriteHandler = async (event) => {
     event.preventDefault();
     setIsLoading(true)
-    const response = await favouritesAndCartServices.addToFavourites(
-      user._id,
-      product._id
-    );
-    const jsonResponse = await response.json();
-    if (response.status !== 200) setFailedModal(jsonResponse.message);
-    if (response.status === 200) {
-      login(jsonResponse.user);
-      setIsLoading(false)
-      toggleFavouritesMenu();
+    //try catch
+    try{
+      const response = await favouritesAndCartServices.addToFavourites(
+        user._id,
+        product._id
+      );
+      const jsonResponse = await response.json();
+      if (response.status !== 200) setFailedModal(jsonResponse.message);
+      if (response.status === 200) {
+        login(jsonResponse.user);
+        setIsLoading(false)
+        toggleFavouritesMenu();
+      }
+    }catch(err){
+      console.log(err);
+      setIsLoading(false);
     }
   };
 
@@ -110,7 +125,6 @@ const ProductDetails = () => {
   const setQuantityChoice = (event) => {
     setQuantity(Number(event.target.value));
   };
-
   const modalButtonHandler = () => {
     setIsLoading(false)
     resetModals();

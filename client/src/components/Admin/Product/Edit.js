@@ -1,9 +1,10 @@
 import { useEffect, useState, useReducer } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
 import { useAuthContext } from "../../../context/AuthContext";
+import {useModalsContext} from "../../../context/ModalsContext"
 
 import * as productsRequester from "../../../services/productsRequester";
-import {useModalsContext} from "../../../context/ModalsContext"
 import productsValidations from "../../../services/formValidations/productsValidations";
 import {
   dataSizeFormater,
@@ -110,6 +111,7 @@ const Edit = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     const data = formDataExtracter(event.target);
+    //remove this bullshit
     const formatedData = dataSizeFormater(data);
     let validationsResponse = productsValidations.validateAllData(formatedData);
     if (validationsResponse.length > 0)

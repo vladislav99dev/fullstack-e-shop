@@ -1,13 +1,16 @@
 import { useState,useEffect } from "react";
-import CartCard from "./CartCard";
-import CartFooter from "./CartFooter";
-import CartHeader from "./CartHeader";
-import Spinner from "../../Spinner/Spinner";
+
 import { removeFromCart } from "../../../services/favouritesAndCartServices";
+
 import { useAuthContext } from "../../../context/AuthContext";
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../../context/LocalProductsContext";
 import { useModalsContext } from "../../../context/ModalsContext";
+
+import CartCard from "./CartCard";
+import CartFooter from "./CartFooter";
+import CartHeader from "./CartHeader";
+import Spinner from "../../Spinner/Spinner";
 import AttentionModal from "../../Modals/AttentionModal";
 
 
@@ -155,15 +158,6 @@ const ProductsCard = () => {
                           ))
                           : <p className="text-md font-bold text-[#00df9a] mt-4">No products added to cart!</p>
                         } */}
-
-
-
-
-
-
-
-
-
                       </ul>
                     </div>
                   </div>

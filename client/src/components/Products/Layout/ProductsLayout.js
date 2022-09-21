@@ -1,8 +1,11 @@
-import ProductLayoutCard from "./ProductLayoutCard";
-import { useParams, useNavigate } from "react-router-dom";
 import { useEffect,useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+
 import * as productsRequester from "../../../services/productsRequester"
 import { useModalsContext } from "../../../context/ModalsContext";
+
+import ProductLayoutCard from "./ProductLayoutCard";
 import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
@@ -11,7 +14,7 @@ const ProductsLayout = () => {
   const navigate = useNavigate();
   const [products,setProducts] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
-  const {modalState,setSuccessModal,setFailedModal,resetModals} = useModalsContext()
+  const {modalState,setFailedModal,resetModals} = useModalsContext()
 
 
   useEffect(()=> {
@@ -21,7 +24,6 @@ const ProductsLayout = () => {
       setIsLoading(false)
       if (response.status !== 200) setFailedModal(jsonResponse.message);
       if (response.status === 200) setProducts(jsonResponse)
-
     }).catch((err) => {
       setFailedModal("Server time out.");
     })

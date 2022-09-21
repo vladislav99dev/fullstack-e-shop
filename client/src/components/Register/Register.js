@@ -1,17 +1,18 @@
 import { useState } from "react";
 import {useNavigate } from "react-router-dom";
 
-import ValidationMessage from "../ValidationMessage/validationMessage";
-import AttentionModal from "../Modals/AttentionModal"
-import SuccessModal from "../Modals/SuccessModal"
-import Spinner from "../Spinner/Spinner"
 
 import { validateRegister } from "../../services/formValidationsServices";
-import * as userRequester from "../../services/userRequester.js"
+import * as userRequester from "../../services/userRequester.js";
 
 import { isNotLoggedIn } from "../../HOC/routesGuard";
 
 import {useModalsContext} from "../../context/ModalsContext";
+
+import ValidationMessage from "../ValidationMessage/validationMessage";
+import AttentionModal from "../Modals/AttentionModal";
+import SuccessModal from "../Modals/SuccessModal";
+import Spinner from "../Spinner/Spinner";
 
 const Register = () => {
     const[messages,setMessaages] = useState([]);

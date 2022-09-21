@@ -3,14 +3,16 @@ import { useAuthContext } from "../../../context/AuthContext";
 
 import  {useModalsContext} from "../../../context/ModalsContext"
 
-import ValidationMessage from "../../ValidationMessage/validationMessage";
 
 import * as productsRequester from '../../../services/productsRequester'
 import {formDataExtracter, dataSizeFormater } from "../../../services/dataServices";
+import productsValidations from "../../../services/formValidations/productsValidations";
+
+
+import ValidationMessage from "../../ValidationMessage/validationMessage";
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal"
 
-import productsValidations from "../../../services/formValidations/productsValidations";
 import formData from "../../../utils/formData";
 
 
@@ -29,6 +31,7 @@ const Create = () => {
     const submitHandler = async(event) => {
         event.preventDefault();
         const data  = formDataExtracter(event.target)
+        // remove this bullshit
         console.log(data);
         const formatedData = dataSizeFormater(data)
         let validationsResponse = productsValidations.validateAllData(formatedData)

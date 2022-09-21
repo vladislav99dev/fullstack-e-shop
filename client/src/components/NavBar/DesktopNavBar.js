@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { RiShoppingCart2Fill, RiUserAddFill } from "react-icons/ri";
 import { MdFavorite } from "react-icons/md";
 import {GiTigerHead} from "react-icons/gi"
+
 import UserLinks from "./UserLinks";
 
 

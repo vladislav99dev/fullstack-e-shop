@@ -1,10 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
+
 import * as productsRequester from "../../../services/productsRequester";
-import AttentionModal from "../../Modals/AttentionModal";
-// import useModalState from "../../../hooks/useModalState";
+
 import { useModalsContext } from "../../../context/ModalsContext";
-import SuccessModal from "../../Modals/SuccessModal";
 import { useAuthContext } from "../../../context/AuthContext";
+
+import AttentionModal from "../../Modals/AttentionModal";
+import SuccessModal from "../../Modals/SuccessModal";
 
 const Delete = () => {
   const { productId } = useParams();

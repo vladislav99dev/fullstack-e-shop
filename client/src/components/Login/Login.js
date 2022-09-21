@@ -16,7 +16,7 @@ import Spinner from "../Spinner/Spinner";
 import AttentionModal from "../Modals/AttentionModal";
 
 const Login = () => {
-  const [messages, setMessages] = useState([]);
+  const [validationMessages, setValidationMessages] = useState([]);
   const { login } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ const Login = () => {
 
   const loginHandler = async (event) => {
     event.preventDefault();
-    setMessages([]);
+    setValidationMessages([]);
     setIsLoading(true);
 
     const formdData = new FormData(event.target);
@@ -51,7 +51,7 @@ const Login = () => {
     const validationsResponse = validateLogin(data);
     if (validationsResponse.length > 0) {
       setIsLoading(false);
-      return setMessages(validationsResponse);
+      return setValidationMessages(validationsResponse);
     }
 
     try {
@@ -98,8 +98,8 @@ const Login = () => {
         <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">
           Login
         </h1>
-        {messages.length > 0
-          ? messages.map((message) => (
+        {validationMessages.length > 0
+          ? validationMessages.map((message) => (
               <ValidationMessage key={message} message={message} />
             ))
           : null}

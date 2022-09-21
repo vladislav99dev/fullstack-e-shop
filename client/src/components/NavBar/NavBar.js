@@ -1,12 +1,12 @@
-import MobileNavBarManager from "./MobileNavBar";
-import DesktopNavBar from "./DesktopNavBar";
-import CartLayout from "./Cart/CartLayout";
-import FavouritesLayout from "./Favourites/FavouritesLayout";
 
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 import { useModalsContext} from "../../context/ModalsContext";
 import { useAuthContext } from "../../context/AuthContext";
 
+import MobileNavBarManager from "./MobileNavBar";
+import DesktopNavBar from "./DesktopNavBar";
+import CartLayout from "./Cart/CartLayout";
+import FavouritesLayout from "./Favourites/FavouritesLayout";
 
 const NavBar = () => {
   const {setFailedModal,resetModals} = useModalsContext();
