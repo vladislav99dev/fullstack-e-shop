@@ -4,14 +4,14 @@ const Product = require('../models/Product')
  const create = (data) => {
     return Product.create({...data})
 }
-const getOne = (id) => {
+const findById = (id) => {
     return Product.findById(id)
 } 
-const findOneAndUpdate = (data,id) => {
+const findByIdAndUpdate = (data,id) => {
     return Product.findByIdAndUpdate(id,data)
 }
 
-const deleteOne = (id) => {
+const deleteById = (id) => {
     return Product.findByIdAndDelete(id)
 }
 const findAll = () => {
@@ -24,9 +24,9 @@ const findByGender = (gender) => {
 
 const productsServices = {
     create,
-    getOne,
-    findOneAndUpdate,
-    deleteOne,
+    findById,
+    findByIdAndUpdate,
+    deleteById,
     findByGender,
     findAll
 }
