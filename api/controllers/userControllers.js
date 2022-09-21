@@ -82,8 +82,6 @@ router.post("/register", registerHandler);
 router.post("/login", loginHandler);
 router.post("/logout", logoutHandler);
 router.use("/products", userProductsController);
-// router.post("/logout-admin", logoutAdminHandler);
-// router.post("/add-product/cart", logoutAdminHandler);
 
 
 
