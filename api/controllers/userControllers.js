@@ -51,7 +51,7 @@ const loginHandler = async(req,res) => {
 
         return res.status(200).json({user:userData,message:'You have successfully logged in!'});
       } catch(err){
-        if(err.status)  res.status(status).json({message:err.message});
+        if(err.status) return  res.status(err.status).json({message:err.message});
         console.log(err);
       }
 }
