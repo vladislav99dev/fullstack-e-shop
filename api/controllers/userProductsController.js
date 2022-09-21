@@ -6,7 +6,6 @@ const userServices = require('../services/userServices')
 const isLoggedIn = require('../middlewares/isLoggedIn');
 
 
-
 const isProfileIdValid = async(profileid) => {
     const user = await userServices.findById(profileid);
     if(!user) throw {status:400, message:'There is no user with this id!'};
@@ -14,7 +13,7 @@ const isProfileIdValid = async(profileid) => {
 }
 
 const isProductIdValid = async(productId) => {
-    const product = await productsServices.getOne(productId);
+    const product = await productsServices.findById(productId);
     if(!product) throw {status:400, message:'There is no product with this id!'};
     return product;
 }

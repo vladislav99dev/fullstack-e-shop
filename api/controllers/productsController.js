@@ -27,7 +27,7 @@ const getOneHandler = async(req,res) => {
     console.log(`GET ${req.originalUrl}`);
     const {productId} = req.params
     try{
-        const dbResponse = await productsServices.getOne(productId)
+        const dbResponse = await productsServices.findById(productId)
         res.status(200).json(dbResponse)
     } catch(err){
     res.status(404).json({ message: "Product with this id was not found!" });
