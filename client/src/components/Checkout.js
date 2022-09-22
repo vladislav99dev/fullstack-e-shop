@@ -3,13 +3,19 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import { useLocalProductsContext } from "../context/LocalProductsContext";
 
+import ordersRequester from "../services/ordersRequester"
+
+import { validateOrderUserInfo } from "../validations/userValidations";
+
 import {GiTigerHead} from "react-icons/gi"
 
 const Checkout = () => {
-    const {user} = useAuthContext();
-    const{products} = useLocalProductsContext();
-    const [useProfileInfo, setUseProfileInfo] = useState(false);
-    const [totalPrice,setTotalPrice] = useState(0);
+  const [useProfileInfo, setUseProfileInfo] = useState(false);
+  const [totalPrice,setTotalPrice] = useState(0);
+  const [validationMessages,setValidationMessages] = useState([]);
+
+  const {user} = useAuthContext();
+  const{products} = useLocalProductsContext();
 
 
   useEffect(()=> {
@@ -23,13 +29,26 @@ const Checkout = () => {
       setUseProfileInfo(!useProfileInfo)
     }
 
-    const checkoutHandler = (event) => {
+    const checkoutHandler = async(event) => {
       event.preventDefault();
+
       const formData = new FormData(event.target);
       const data = Object.fromEntries(formData);
+      data["price"] = totalPrice
 
-      console.log(data)
+      let validationsResponse = validateOrderUserInfo(data);
+      if(validationsResponse.length > 0) return setValidationMessages(validationsResponse);
+      if(!validationsResponse.length) setValidationMessages([]);
 
+      let response ;
+      try {
+        if(user.email) response = await ordersRequester.createOrder(data,user._id,null);
+        if(!user.email) response = await ordersRequester.createOrder(data,null,products);
+        const jsonResponse = await response.json();
+        console.log(jsonResponse);
+      } catch(err){
+        console.log(err);
+      }
     }
 
     return (
@@ -47,6 +66,7 @@ const Checkout = () => {
                     <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="firstName" id="firstName" placeholder="First Name *" defaultValue={useProfileInfo ? `${user.firstName}` : ''}/>
                     <input className="border-2 py-2 w-[50%]  ml-5 lg:ml-10 rounded-lg" type="text" name="lastName" id="lastName" placeholder="Last Name *" defaultValue={useProfileInfo ? `${user.lastName}` : ''}/>
                 </div>
+                <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="email" id="email" placeholder="Email" defaultValue={useProfileInfo ? `${user.email}` : ''}/>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="street" id="street" placeholder="Street Address *" defaultValue={useProfileInfo ? `${user.street}` : ''}/>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="unitNumber" id="unitNumber" placeholder="Apartment/House Number# *" defaultValue={useProfileInfo ? `${user.unitNumber}` : ''}/>
                 <input className="border-2 py-2 w-[93.5%]  ml-5 lg:ml-10 mb-6 rounded-lg" type="text" name="country" id="country" placeholder="Country *" defaultValue={useProfileInfo ? `${user.country}` : ''}/>
