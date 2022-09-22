@@ -17,10 +17,10 @@ const Checkout = () => {
     if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)))
   },[])
 
+
     const fillFormWithUserInfo = (event) => {
       event.preventDefault();
       setUseProfileInfo(!useProfileInfo)
-
     }
 
     const checkoutHandler = (event) => {
