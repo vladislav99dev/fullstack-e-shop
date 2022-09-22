@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import * as productsRequester from "../../services/productsRequester";
-import * as favouritesAndCartServices from "../../services/favouritesAndCartServices";
+import * as favouritesAndCartRequester from "../../services/favouritesAndCartRequester";
 
 import {useModalsContext} from "../../context/ModalsContext"
 import { useAuthContext } from "../../context/AuthContext";
@@ -31,13 +31,12 @@ const ProductDetails = () => {
     initialRequset(productId)
       .then(({ response, jsonResponse }) => {
         setIsLoading(false);
-        if (response.status !== 200) setFailedModal(jsonResponse.message); //maybe throw 
+        if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
         if (response.status === 200) setProduct(jsonResponse);
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
-        setFailedModal("server time out.");
+        if(err.responseStatus) return setFailedModal(err.message);
       });
   }, [productId]);
 
@@ -57,7 +56,7 @@ const ProductDetails = () => {
     event.preventDefault();
     setIsLoading(true)
     try{
-      const response = await favouritesAndCartServices.addToCart(
+      const response = await favouritesAndCartRequester.addToCart(
         user._id,
         product._id,
         size,
@@ -91,14 +90,14 @@ const ProductDetails = () => {
     } catch(err){
       console.log(err)
     }
-  }
+  };
 
-  const addToFavouriteHandler = async (event) => {
+  const addToFavouritesHandler = async (event) => {
     event.preventDefault();
     setIsLoading(true)
     //try catch
     try{
-      const response = await favouritesAndCartServices.addToFavourites(
+      const response = await favouritesAndCartRequester.addToFavourites(
         user._id,
         product._id
       );
@@ -113,6 +112,11 @@ const ProductDetails = () => {
       console.log(err);
       setIsLoading(false);
     }
+  };
+
+  const denyAccessToFavourites = (event) => {
+    event.preventDefault();
+    setFailedModal("You should be logged in to use this feature!")
   };
 
   const setSizeChoice = (event) => {
@@ -236,7 +240,7 @@ const ProductDetails = () => {
               <div className="flex justify-center">
                 <button
                   className="py-6 px-[26%] border-2 mb-2 mt-4 rounded-2xl font-medium hover:bg-green-200 ease-in-out duration-500"
-                  onClick={addToFavouriteHandler}
+                  onClick={user.email ? addToFavouritesHandler : denyAccessToFavourites}
                 >
                   Add to favourites &#x2764;
                 </button>
@@ -248,48 +252,3 @@ const ProductDetails = () => {
   );
 };
 export default ProductDetails;
-
-// if(selectedSize === size){
-//     return specialno
-// }
-// return normalno
-
-{
-  /*              <button  key={size} value={qty} className={qty > 0 
-                ? 'border-2 rounded-md border-gray-300 flex justify-center' 
-                : 'rounded-md bg-gray-300 line-through flex justify-center cursor-default'}>{size}</button> */
-}
-
-{
-  /* <div className="lg:order-last">
-<p className="text-2xl pt-4 ml-6 font-semibold">{product.name}</p>
-<p className="text-xl ml-6 capitalize text-[grey]">{`${product.gender}'s ${product.type}`}</p>
-<p className="text-xl py-4 ml-6 font-medium text-[grey]">{`USD $${product.price}`}</p>
-</div>
-
-<img className="w-full lg:order-first" src={`${product.imageUrl}`} alt={`${product.name}`} />
-
-<div id="sizesAndButtons" className="lg:order-last">
-<p className="text-xl mt-4 py-4 ml-6 font-medium text-[grey]">Select Size</p>
-<div className="mt-6  grid grid-cols-3 gap-y-4 gap-x-8">
-{product.name ?  Object.entries(product.sizes).map(([size]) => <div className="border-2 rounded-md border-gray-300"><p className="ml-[40%]">{size}</p></div> ) : null}
-</div>
-<div className="flex justify-center">
-<button className="py-6 px-[30%] border-2 mt-8 mb-4 rounded-2xl bg-neutral-900 font-medium text-white">Add to basket</button>
-</div>
-<div className="flex justify-center">
-<button className="py-6 px-[33%] border-2 mb-8 rounded-2xl font-medium">Favourite<MdFavorite className="ml-[35%]"size={20}/></button>
-</div>
-</div> */
-}
-
-
-
-      {/* {modalState.isSuccess.value ? (
-        <SuccessModal
-          titleMessage={"Success!"}
-          descriptionMessage={modalState.isSuccess.message}
-          buttonHandler={resetModals}
-          buttonName={"Continue"}
-        />
-      ) : null} */}
