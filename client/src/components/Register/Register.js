@@ -2,7 +2,7 @@ import { useState } from "react";
 import {useNavigate } from "react-router-dom";
 
 
-import { validateRegister } from "../../services/formValidationsServices";
+import { validateRegister } from "../../validations/userValidations";
 import * as userRequester from "../../services/userRequester.js";
 
 import { isNotLoggedIn } from "../../HOC/routesGuard";
@@ -17,7 +17,9 @@ import Spinner from "../Spinner/Spinner";
 const Register = () => {
     const[messages,setMessaages] = useState([]);
     const[isLoading, setIsLoading] = useState(false)
+
     const navigate = useNavigate();
+    
     const {modalState,setFailedModal,setSuccessModal,resetModals} = useModalsContext();
 
     const navigateToLogin = () => {
@@ -43,10 +45,11 @@ const Register = () => {
             const jsonResponse = await response.json();
             setIsLoading(false)
 
-            if(response.status !== 201) return setFailedModal(jsonResponse.message)
-            if(response.status === 201) return setSuccessModal(jsonResponse.message)
+            if(response.status !== 201) throw {responseStatus:response.status, message:jsonResponse.message};
+            if(response.status === 201) return setSuccessModal(jsonResponse.message);
         } catch(err){
-            setIsLoading(false)
+            setIsLoading(false);
+            if(err.responseStatus) return setFailedModal(err.message);
             console.log(err);
         }
 
@@ -109,48 +112,3 @@ const Register = () => {
     )
 }
 export default isNotLoggedIn(Register);
-
-
-
-
-
-
-
-{/* <div className="flex mt-4 justify-center">
-<label htmlFor="firstName" className="">First Name:</label>
-<input type="input" name="firstName" id="firstName" className="ml-6"/>
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="lastName" className=" ">Last Name:</label>
-<input type="input" name="lastName" id="lastName" className="ml-6" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="email" className="">Email:</label>
-<input type="input" name="email" id="email" className="ml-[72px]" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="country" className="">Country:</label>
-<input type="input" name="country" id="country" className="ml-12" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="city" className="mr-2">City:</label>
-<input type="input" name="city" id="city" className="ml-20" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="street" className="">Street Adress:</label>
-<input type="input" name="street" id="street" className="" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="password" className="">Password:</label>
-<input type="password" name="password" id="password" className="ml-8" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="re-password" className="">Re-Password:</label>
-<input type="password" name="re-password" id="re-password" className="" />
-</div>
-<div className="flex justify-center mt-8">
-<label>Already have an account?<Link to={"users/login"} className="text-[#3abeff] text-lg"> Sign in</Link></label>
-</div> 
-<div className="flex mt-6 justify-center">
-<button type="submit" className="py-2 mb-10 px-10 rounded-md text-white bg-[#DDDDDD] font-bold">Submit</button>
-</div> */}
