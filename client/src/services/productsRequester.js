@@ -49,8 +49,8 @@ const productsRequester = (method,data,token,id) => {
 export const create = productsRequester.bind(null,"POST");
 export const edit = productsRequester.bind(null,"PUT");
 export const getOne = productsRequester.bind(null,"GET");
-export const deleteOne = productsRequester.bind(null,"DELETE");
 export const getMany = productsRequester.bind(null,"GET");
+export const deleteOne = productsRequester.bind(null,"DELETE");
 
 
 
