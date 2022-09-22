@@ -2,32 +2,63 @@ import { useState } from "react";
 
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useAuthContext } from "../../../context/AuthContext";
+import { useModalsContext } from "../../../context/ModalsContext";
+
+import * as favouritesAndCartRequester from "../../../services/favouritesAndCartRequester";
 
 import FavouritesCard from "./FavouritesCard";
 import FavouritesFooter from "./FavouritesFooter";
 import FavouritesHeader from "./FavouritesHeader";
+import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
 
 const FavouritesLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toggleFavouritesMenu } = useNavTogglesContext();
-  const { user } = useAuthContext();
+  const { user,login } = useAuthContext();
+  const {modalState,setFailedModal,resetModals} = useModalsContext();
+
 
 
   const manageIsLoading = (value) => {
     setIsLoading(value);
   };
 
+  const removeFromFavouritesHandler = async(productId,event) => {
+    event.preventDefault();
+    manageIsLoading(true)
+    try{
+      const response = await favouritesAndCartRequester.removeFromFavourties(user._id,productId);
+      const jsonResponse = await response.json();
+      manageIsLoading(false)
+
+      if(response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message}
+      if(response.status === 200) login(jsonResponse.user);
+    }catch(err){
+      manageIsLoading(false)
+      if(err.status) return setFailedModal(err.message);
+      console.log(err);
+    }
+  }
+
   return (
     <div>
-      {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
-<div
+      <div
       className="relative z-10"
       aria-labelledby="slide-over-title"
       role="dialog"
       aria-modal="true"
-    >
+      >
+      {modalState.isFailed.value 
+      ? <AttentionModal
+        titleMessage={"Something went wrong"}
+        descriptionMessage={modalState.isFailed.message}
+        buttonHandler={resetModals}
+        buttonName={"Try again"}
+      />
+      : null
+      }
       {/* //   <!--
       //     Background backdrop, show/hide based on slide-over state.
       
@@ -70,9 +101,8 @@ const FavouritesLayout = () => {
                         <FavouritesCard
                           key={favourite._id}
                           product={favourite}
-                          profileId = {user._id}
-                          manageIsLoading={manageIsLoading}
                           toggleFavouritesMenu={toggleFavouritesMenu}
+                          removeFromFavouritesHandler={removeFromFavouritesHandler.bind(null,favourite._id)}
                         />
                       ))
                       }
@@ -87,7 +117,7 @@ const FavouritesLayout = () => {
         </div>
       </div>
     </div>
-    </div>
+  </div>
   );
 };
 
