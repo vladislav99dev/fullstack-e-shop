@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { validateLogin } from "../../services/formValidationsServices";
+import { validateLogin } from "../../validations/userValidations";
 import * as userRequester from "../../services/userRequester";
-import * as favouritesAndCartServices from "../../services/favouritesAndCartServices";
+import * as favouritesAndCartRequester from "../../services/favouritesAndCartRequester";
 
 import { useAuthContext } from "../../context/AuthContext";
 import { useLocalProductsContext } from "../../context/LocalProductsContext";
@@ -27,7 +27,7 @@ const Login = () => {
   //   const failedAddMessages = [];
   //   let user = {};
   //   for (const product of products) {
-  //     const response = await favouritesAndCartServices.addToCart(
+  //     const response = await favouritesAndCartRequester.addToCart(
   //       profileId,
   //       product.product._id,
   //       product.size,
