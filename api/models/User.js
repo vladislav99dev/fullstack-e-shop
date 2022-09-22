@@ -72,11 +72,17 @@ const userSchema = new mongoose.Schema({
   ],
   cart: [
     {
-      id:{type: mongoose.Types.ObjectId,
+      _id:{type: mongoose.Types.ObjectId,
       ref: 'Product'},
       size: String,
       quantity:Number
     }  
+  ],
+  orders: [
+    {
+      order:{type:mongoose.Types.ObjectId,
+      ref: 'Order'}
+    }
   ],
   isAdmin: {
     type:Boolean,
