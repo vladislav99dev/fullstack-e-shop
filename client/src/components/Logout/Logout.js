@@ -13,9 +13,9 @@ const Logout = () => {
     const {logout} = useAuthContext();
     const navigate = useNavigate()
 
-    const logoutHandler = () => {
+    const logoutHandler = async() => {
         try {
-            userRequester.logout()
+            await userRequester.logout()
             logout()
             return navigate('/')
         } catch(err){
