@@ -11,10 +11,10 @@ const createProductHandler = async (req, res) => {
     req.body;
     try{
       const validatedData = productDataValidation.validateAllData(data)
-      const dbResponse = await productsServices.create(validatedData);
-      res.status(201).json(dbResponse);
+      const newProduct = await productsServices.create(validatedData);
+      res.status(201).json(newProduct);
     }catch(err){
-      res.status(err.status).json({message: err.message})
+      if(err.status) return res.status(err.status).json({message: err.message})
     }
 };
 
@@ -27,14 +27,14 @@ const editProductHandler = async (req, res) => {
 
   try {
     const validatedData = productDataValidation.validateAllData(data)
-    const dbResponse = await productsServices.findByIdAndUpdate(
+    const updatedProduct = await productsServices.findByIdAndUpdate(
       validatedData,
       params.productId
     );
-    res.status(200).json(dbResponse);
+    res.status(200).json(updatedProduct);
   } catch (err) {
     if(err.path === '_id') return res.status(404).json({message:"Product with this id does not exist!"})
-    res.status(err.status).json({ message:err.message});
+    if(err.status) return res.status(err.status).json({ message:err.message});
   }
 };
 
@@ -44,11 +44,10 @@ const deleteProductHandler = async(req,res) => {
 
   const params = req.params;
   try {
-    const dbResponse = await productsServices.deleteById(params.productId)
-    if(dbResponse === null) return res.status(404).json({message:'Product with this id was not found!'})
+    const deleteResponse = await productsServices.deleteById(params.productId)
     res.status(200).json({message:"You successfully deleteted this product!"})
   }catch(err){
-    res.status(404).json({message:'Product with this id was not found!'})
+    if(err.path === '_id') return  res.status(404).json({message:'Product with this id was not found!'});
   }
 }
 
