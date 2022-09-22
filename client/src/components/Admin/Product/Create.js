@@ -42,7 +42,7 @@ const Create = () => {
         if(!validationsResponse.length)  setValidationMessages([]);
 
 
-        try{
+        try {
             const response = await productsRequester.create(formatedData,user.accessToken)
             const jsonResponse = await response.json();
 
