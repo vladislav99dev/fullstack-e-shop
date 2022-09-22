@@ -3,9 +3,11 @@ const bcrypt = require("bcrypt");
 
 const userServices = require("../services/userServices");
 const tokenServices = require("../services/tokenServices");
+const userDataValidation = require("../services/validations/userDataValidation");
+
+
 
 const userProductsController = require("./userProductsController");
-const userDataValidation = require("../services/validations/userDataValidation");
 
 
 const registerHandler = async(req,res)=> {
