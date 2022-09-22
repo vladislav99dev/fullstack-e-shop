@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
+import { useModalsContext } from "../../context/ModalsContext";
 const AttentionModal = ({
   titleMessage,
   descriptionMessage,
@@ -7,7 +8,9 @@ const AttentionModal = ({
   buttonName,
 }) => {
   const navigate = useNavigate();
+  const {resetModals} = useModalsContext();
   const cancelHandler = () => {
+    resetModals();
     navigate("/");
   };
   return (
