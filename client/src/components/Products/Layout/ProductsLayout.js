@@ -10,10 +10,12 @@ import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
 const ProductsLayout = () => {
-  const {gender} = useParams();
-  const navigate = useNavigate();
   const [products,setProducts] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
+
+  const {gender} = useParams();
+  const navigate = useNavigate();
+
   const {modalState,setFailedModal,resetModals} = useModalsContext()
 
 
@@ -22,10 +24,11 @@ const ProductsLayout = () => {
     if(gender !== 'men' && gender !== 'women' && gender !== 'boys' && gender !== 'girls' && gender !== 'all') navigate('/');
     initialRequest(gender).then(({response,jsonResponse}) => {
       setIsLoading(false)
-      if (response.status !== 200) setFailedModal(jsonResponse.message);
+      if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
       if (response.status === 200) setProducts(jsonResponse)
     }).catch((err) => {
-      setFailedModal("Server time out.");
+      if(err.responseStatus) return setFailedModal(err.message);
+      console.log(err)
     })
 
   },[gender])
