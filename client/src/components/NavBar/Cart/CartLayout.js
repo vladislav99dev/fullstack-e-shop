@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 
-import { removeFromCart } from "../../../services/favouritesAndCartServices";
+import { removeFromCart } from "../../../services/favouritesAndCartRequester";
 
 import { useAuthContext } from "../../../context/AuthContext";
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
@@ -18,48 +18,47 @@ import AttentionModal from "../../Modals/AttentionModal";
 const ProductsCard = () => {
 
   const [isLoading,setIsLoading] = useState(false);
+  const [totalPrice,setTotalPrice] = useState(0);
+  
   const {toggleCartMenu} = useNavTogglesContext();
   const { user,login } = useAuthContext();
   const { products, removeProduct} = useLocalProductsContext();
   const {modalState,setFailedModal,resetModals} = useModalsContext();
-  const [totalPrice,setTotalPrice] = useState(0);
 
 
-  // user.cart.map((product) => totalPrice += product._id.price * product.quantity);
 
 
   useEffect(()=> {
-    if(user.email)  user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
-    if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)))
+    if(user.email) user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
+    if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)));
   },[])
 
 
 
-  const manageIsLoading = (value) => {
-    setIsLoading(value)
-  }
 
   const removeProductFromStorage = (product,size,event) => {
     event.preventDefault();
     removeProduct(product,size);
   }
 
+  
   const removeFromCartHandler = async(productId,size,event) => {
     event.preventDefault();
-    manageIsLoading(true)
+    setIsLoading(true)
     try{
       const response = await removeFromCart(user._id,productId,size)
       const jsonResponse = await response.json();
-      console.log(response);
-      if(response.status !== 200) setFailedModal(jsonResponse.message);
-      if(response.status === 200) login(jsonResponse.user);
-      manageIsLoading(false)
-    }catch(err){
-      console.log(err);
-      manageIsLoading(false)
-    }
+      setIsLoading(false)
 
+      if(response.status !== 200) throw {responseStatus:response.status,message:jsonResponse.message};
+      if(response.status === 200) login(jsonResponse.user);
+    }catch(err){
+      setIsLoading(false)
+      if(err.responseStatus) return setFailedModal(err.message)
+    }
   }
+
+
   return (
     <>
     <div
