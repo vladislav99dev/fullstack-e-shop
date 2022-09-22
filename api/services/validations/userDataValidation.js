@@ -108,7 +108,6 @@ const validateRegisterData = (data) => {
   }
   };
 
-
   const validateLoginData = (data) => {
     try{
       if(!data.email) throw {message:'You did not provide an email!'}
@@ -120,7 +119,7 @@ const validateRegisterData = (data) => {
 
   const userDataValidation ={
     validateRegisterData,
-    validateLoginData
+    validateLoginData,
   }
 
   module.exports = userDataValidation
