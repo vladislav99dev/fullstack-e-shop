@@ -1,6 +1,6 @@
 
 
-export const dataSizeFormater = (data) => {
+export const productSizeFormater = (data) => {
     data.sizes = data.sizes.split(',');
     data.sizes = data.sizes.map(x => x.split(':')) ;
     data.sizes = Object.fromEntries(data.sizes);
@@ -12,8 +12,3 @@ export const dataSizeFormater = (data) => {
     return data;
 };
 
-export const formDataExtracter = (form) => {
-    const formData = new FormData(form) ;
-    const data = Object.fromEntries(formData);
-    return data
-};
