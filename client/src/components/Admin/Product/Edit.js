@@ -2,73 +2,108 @@ import { useEffect, useState, useReducer } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { useAuthContext } from "../../../context/AuthContext";
-import {useModalsContext} from "../../../context/ModalsContext"
+import { useModalsContext } from "../../../context/ModalsContext";
 
 import * as productsRequester from "../../../services/productsRequester";
-import productsValidations from "../../../services/formValidations/productsValidations";
+import productsValidations from "../../../validations/productsValidations";
 import {
-  dataSizeFormater,
-  formDataExtracter,
+  productSizeFormater,
 } from "../../../services/dataServices";
 
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal";
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 
-import formData from "../../../utils/formData";
+import productData from "../../../utils/productData";
 
 const initialSelectStates = { type: "", category: "", gender: "", brand: "" };
 
 const reducerSelectStates = (state, action) => {
   switch (action.type) {
     case "type":
-      return { type:action.payload, category:state.category, gender:state.gender, brand: state.brand };
+      return {
+        type: action.payload,
+        category: state.category,
+        gender: state.gender,
+        brand: state.brand,
+      };
     case "category":
-      return { type:state.type, category:action.payload, gender:state.gender, brand: state.brand };
+      return {
+        type: state.type,
+        category: action.payload,
+        gender: state.gender,
+        brand: state.brand,
+      };
     case "gender":
-      return { type:state.type, category:state.category, gender:action.payload, brand: state.brand };
+      return {
+        type: state.type,
+        category: state.category,
+        gender: action.payload,
+        brand: state.brand,
+      };
     case "brand":
-      return {type:state.type, category:state.category, gender:state.gender, brand: action.payload };
+      return {
+        type: state.type,
+        category: state.category,
+        gender: state.gender,
+        brand: action.payload,
+      };
+    case "all":
+      return {
+        type: action.payload.type,
+        category: action.payload.category,
+        gender: action.payload.gender,
+        brand: action.payload.brand,
+      };
+    default:
+      return{
+        type:"",
+        category:"",
+        gender:"",
+        brand:"",
+      }
   }
 };
 
 const Edit = () => {
-  const { user } = useAuthContext();
-  const [type, setType] = useState("");
+
+  const [validationMessages, setValidationMessages] = useState([]);
+  const [product, setProduct] = useState({});
+
   const [selectStates, dispatch] = useReducer(
     reducerSelectStates,
     initialSelectStates
-  );
-  const [messages, setMessaages] = useState([]);
-  const [product, setProduct] = useState({});
+    );
+  const navigate = useNavigate();
   const { productId } = useParams();
+
+
+  const { user } = useAuthContext();
   const { modalState, setFailedModal, setSuccessModal, resetModals } =
     useModalsContext();
-  const navigate = useNavigate();
-
 
 
   useEffect(() => {
     initialRequest(user.accessToken, productId)
       .then(({ response, jsonResponse }) => {
-        if (response.status !== 200) setFailedModal(jsonResponse.message);
+        if (response.status !== 200)  throw {responseStatus:response.status, message:jsonResponse.message}
         if (response.status === 200) {
-          const result = stringifySizes(jsonResponse);
+          const result = productDisplaySizeFormatter(jsonResponse);
           setProduct(result);
-          setSelectStates("type", result.type);
-          setSelectStates("category", result.category);
-          setSelectStates("gender", result.gender);
-          setSelectStates("brand", result.brand);
+          setAllSelectStates("all", {
+            type: result.type,
+            category: result.category,
+            gender: result.gender,
+            brand: result.brand,
+          });
         }
       })
       .catch((err) => {
+        if(err.responseStatus) setFailedModal(err.jsonResponse.message)
         console.log(err);
-        setFailedModal("Server time out.");
       });
   }, []);
-  const setSelectStates = (state, data) => {
-    dispatch({ type: state, payload: data });
-  };
+
   const initialRequest = async (accessToken, productId) => {
     const response = await productsRequester.getOne(
       null,
@@ -78,7 +113,9 @@ const Edit = () => {
     const jsonResponse = await response.json();
     return { response, jsonResponse };
   };
-  const stringifySizes = (product) => {
+
+
+  const productDisplaySizeFormatter = (product) => {
     product.sizes = JSON.stringify(product.sizes);
     product.sizes = product.sizes.replaceAll('"', "");
     product.sizes = product.sizes.replace("{", "");
@@ -86,37 +123,46 @@ const Edit = () => {
     return product;
   };
 
-  let sortedBrands = formData.brands.sort((a) =>
+  const setSelectState = (state, event) => {
+    dispatch({ type: state, payload: event.target.value });
+  };
+
+  const setAllSelectStates = (state, data) => {
+    dispatch({ type: state, payload: data });
+  };
+
+  let sortedBrands = productData.brands.sort((a) =>
     a === product.brand ? -1 : 1
   );
-  let sortedGenders = formData.genders.sort((a) =>
+  let sortedGenders = productData.genders.sort((a) =>
     a === product.gender ? -1 : 1
   );
-  let sortedClothingOptions = formData.clothingOptions.sort((a) =>
+  let sortedClothingOptions = productData.clothingOptions.sort((a) =>
     a === product.category ? -1 : 1
   );
-  let sortedShoeOptions = formData.shoeOptions.sort((a) =>
+  let sortedShoeOptions = productData.shoeOptions.sort((a) =>
     a === product.category ? -1 : 1
   );
-  let sortedTypes = formData.types.sort((a) => (a === product.type ? -1 : 1));
+  let sortedTypes = productData.types.sort((a) => (a === product.type ? -1 : 1));
+
 
   const modalButtonHandler = () => {
     resetModals();
     navigate("/");
   };
-  const handleSelect = (state, event) => {
-    setSelectStates(state, event.target.value);
-  };
+
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    const data = formDataExtracter(event.target);
-    //remove this bullshit
-    const formatedData = dataSizeFormater(data);
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData);
+
+    const formatedData = productSizeFormater(data);
+
     let validationsResponse = productsValidations.validateAllData(formatedData);
-    if (validationsResponse.length > 0)
-      return setMessaages(validationsResponse);
-    if (!validationsResponse.length) setMessaages([]);
+    if (validationsResponse.length > 0) return setValidationMessages(validationsResponse);
+    if (!validationsResponse.length) setValidationMessages([]);
 
     try {
       const response = await productsRequester.edit(
@@ -125,13 +171,11 @@ const Edit = () => {
         product._id
       );
       const jsonResponse = await response.json();
-      if (response.status !== 200) {
-        setFailedModal(jsonResponse.message);
-      }
-      if (response.status === 200) {
-        setSuccessModal("You have successfully updated the product!");
-      }
+      
+      if (response.status !== 200) throw{responseStatus:response.status,message:jsonResponse.message}
+      if (response.status === 200) setSuccessModal("You have successfully updated the product!");
     } catch (err) {
+      if(err.status) return setFailedModal(err.message)
       console.log(err);
     }
   };
@@ -162,8 +206,8 @@ const Edit = () => {
           <br />
           what we will edit today?
         </h1>
-        {messages.length > 0
-          ? messages.map((message) => (
+        {validationMessages.length > 0
+          ? validationMessages.map((message) => (
               <ValidationMessage key={message} message={message} />
             ))
           : null}
@@ -176,7 +220,7 @@ const Edit = () => {
               type="input"
               name="type"
               id="type"
-              onChange={handleSelect.bind(null, "type")}
+              onChange={setSelectState.bind(null, "type")}
               className="w-[190px] capitalize"
               value={selectStates.type}
             >
@@ -196,7 +240,7 @@ const Edit = () => {
               name="category"
               id="category"
               className="w-[190px] capitalize"
-              onChange={handleSelect.bind(null, "category")}
+              onChange={setSelectState.bind(null, "category")}
               value={selectStates.category}
             >
               {selectStates.type === "clothing"
@@ -213,9 +257,17 @@ const Edit = () => {
             </select>
           </div>
           <div className="flex mt-4 justify-center">
-            <label htmlFor="name" className="w-[60px] mr-12">Name:</label>
-            <input type="input" name="name" id="name" className="w-[190px] capitalize" defaultValue={product.name}></input>
-        </div>
+            <label htmlFor="name" className="w-[60px] mr-12">
+              Name:
+            </label>
+            <input
+              type="input"
+              name="name"
+              id="name"
+              className="w-[190px] capitalize"
+              defaultValue={product.name}
+            ></input>
+          </div>
           <div className="flex mt-4 justify-center">
             <label htmlFor="gender" className="w-[60px] mr-12">
               Gender:
@@ -225,7 +277,7 @@ const Edit = () => {
               name="gender"
               id="gender"
               className="w-[190px] capitalize"
-              onChange={handleSelect.bind(null, "gender")}
+              onChange={setSelectState.bind(null, "gender")}
               value={selectStates.gender}
             >
               {sortedGenders.map((gender) => (
@@ -244,7 +296,7 @@ const Edit = () => {
               name="brand"
               id="brand"
               value={selectStates.brand}
-              onChange={handleSelect.bind(null, "brand")}
+              onChange={setSelectState.bind(null, "brand")}
               className="w-[190px] capitalize"
             >
               {sortedBrands.map((brand) => (
@@ -263,7 +315,7 @@ const Edit = () => {
               name="sizes"
               defaultValue={product.sizes}
               placeholder={
-                type === "clothing"
+                selectStates.type === "clothing"
                   ? "ex: XL : 5, M : 15,  S : 13 You should add comma as shown in example"
                   : "ex: 43 : 10, 46 : 15, 42 : 13 You should add comma as shown in example"
               }
