@@ -10,10 +10,11 @@ import SuccessModal from "../../Modals/SuccessModal";
 
 const Delete = () => {
   const { productId } = useParams();
+  const navigate = useNavigate();
+  
   const { modalState, setSuccessModal, setFailedModal, resetModals } =
   useModalsContext();
   const { user } = useAuthContext();
-  const navigate = useNavigate();
 
   const deleteHandler = async () => {
     try {
@@ -23,12 +24,10 @@ const Delete = () => {
         productId
       );
       const jsonResponse = await response.json();
-      console.log(response);
-      console.log(jsonResponse);
-      if (response.status === 404) setFailedModal(jsonResponse.message);
+      if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
       if (response.status === 200) return setSuccessModal(jsonResponse.message);
     } catch (err) {
-      console.log(err);
+      if(err.responseStatus) return setFailedModal(err.message);
       console.log("err");
     }
   };
