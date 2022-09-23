@@ -26,6 +26,7 @@ const extractProductsAndFindIfAnonymous = async(data) => {
     if(isAnonymousRequest) productsWanted = [...data.products];
     if(!isAnonymousRequest) {
         user = await getPopulatedProfile(data.profileId);
+        if(!user) throw {status:400, mesage:'User with this id was not found!'}
         productsWanted = [...user.cart]
     }
     return {isAnonymousRequest,productsWanted,user}
@@ -58,6 +59,23 @@ const formatProductsForDb = (products) => {
     return formatedProducts;
 }
 
+const decrementProductQuantitys = async(products) => {
+    for (const product of products) {
+        const foundProduct = await getProduct(product._id);
+        foundProduct.sizes[product.size] -= product.quantity;
+        await productServices.findByIdAndUpdate(foundProduct,foundProduct._id);
+    }
+}
+
+const updateUserProfile = async(user,order) => {
+    user.cart = [];
+    user.orders.push({_id:order._id});
+    console.log(user.orders);
+    const updatedUser = await  userServices.findByIdAndUpdate(user._id,user);
+    const populatedUser = await userServices.findByIdAndPopulate(updatedUser._id);
+    return populatedUser;
+}
+
 
 const createOrderHandler = async(req,res) => {
     console.log(`POST ${req.originalUrl}`);
@@ -68,19 +86,16 @@ const createOrderHandler = async(req,res) => {
         const products = await checkIfSizesAvailible(isAnonymousRequest,productsWanted);
         const formatedProducts  = formatProductsForDb(products);
         const order = await orderSerices.create({...data,productsOrdered:[...formatedProducts]});
-        console.log(order._id);
+        await decrementProductQuantitys(formatedProducts)
         if(!isAnonymousRequest) {
-            user.cart = [];
-            user.orders.push({_id:order._id});
-            console.log(user.orders);
-            const updatedUser = await  userServices.findByIdAndUpdate(user._id,user);
-            const populatedUser = await userServices.findByIdAndPopulate(updatedUser._id);
-            return res.status(200).json({message:"Successfully made an order", user:populatedUser})
+            const populatedUser = await updateUserProfile(user,order);
+            return res.status(200).json({message:"You successfully made an order.", user:populatedUser});
         }
-        //if not logged in just response with message
+        if(isAnonymousRequest) return res.status(200).json({message:"You successfully made an order."});
     }catch(err){
-        console.log(err)
-        console.log('err');
+        if(err.status) res.status(err.status).json({message:err.message});
+        if(err.path === "_id") res.status(400).json({message:"Some if the id's you provided is not in valid format"});
+        console.log(err);
     }
 
 }
