@@ -1,27 +1,43 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {GiTigerHead} from "react-icons/gi"
 
 import { useAuthContext } from "../context/AuthContext";
 import { useLocalProductsContext } from "../context/LocalProductsContext";
+import { useModalsContext } from "../context/ModalsContext";
 
 import ordersRequester from "../services/ordersRequester"
 
 import { validateOrderUserInfo } from "../validations/userValidations";
 
-import {GiTigerHead} from "react-icons/gi"
+import AttentionModal from "./Modals/AttentionModal";
+import ValidaionMessage from "./ValidationMessage/validationMessage";
+import SuccessModal from "./Modals/SuccessModal";
+import Spinner from "./Spinner/Spinner";
+import ValidationMessage from "./ValidationMessage/validationMessage";
+
 
 const Checkout = () => {
   const [useProfileInfo, setUseProfileInfo] = useState(false);
   const [totalPrice,setTotalPrice] = useState(0);
   const [validationMessages,setValidationMessages] = useState([]);
+  const [isLoading,setIsLoading] = useState(false);
 
-  const {user} = useAuthContext();
+  const navigate = useNavigate();
+
+  const {user,login} = useAuthContext();
   const{products} = useLocalProductsContext();
-
+  const {modalState,setFailedModal,setSuccessModal,resetModals} = useModalsContext();
+  // setValidation messages
 
   useEffect(()=> {
     if(user.email)  user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
-    if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)))
-  },[])
+    if(!user.email)  products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)))
+    
+    return (()=> {
+      setTotalPrice(0);
+    })
+  },[user,products])
 
 
     const fillFormWithUserInfo = (event) => {
@@ -40,20 +56,55 @@ const Checkout = () => {
       if(validationsResponse.length > 0) return setValidationMessages(validationsResponse);
       if(!validationsResponse.length) setValidationMessages([]);
 
-      let response ;
       try {
+        let response ;
+        setIsLoading(true)
         if(user.email) response = await ordersRequester.createOrder(data,user._id,null);
         if(!user.email) response = await ordersRequester.createOrder(data,null,products);
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
+        setIsLoading(false);
+        
+        if(response.status !== 200) throw {responseStatus:response.status,message:jsonResponse.message};
+        if(response.status === 200) {
+          if(user.email) login(jsonResponse.user);
+          return setSuccessModal(jsonResponse.message);
+        }
       } catch(err){
-        console.log(err);
+        if(err.responseStatus) return setFailedModal(err.message);
       }
     }
+    const modalButtonHandler = () => {
+      navigate('/');
+      resetModals();
+    }
+
 
     return (
+      <>
+      {modalState.isFailed.value 
+      ? <AttentionModal
+        titleMessage={"Something went wrong!"}
+        descriptionMessage={modalState.isFailed.message}
+        buttonHandler={modalButtonHandler}
+        buttonName={"Try again"}
+      />
+      : null}
+      {modalState.isSuccess.value 
+      ? <SuccessModal 
+      titleMessage={"Congrats!"}
+      descriptionMessage={modalState.isSuccess.message}
+      buttonHandler={modalButtonHandler}
+      buttonName={"Go to orders page"}/>
+      : null}
+      {isLoading 
+      ? <Spinner/>
+      :null}
         <div className=" bg-white py-10 flex-column lg:grid lg:grid-cols-2 h-full">
             <form onSubmit={checkoutHandler} className="py-6 lg:py-10">
+              {validationMessages.length > 0
+                ? validationMessages.map((message) => <ValidationMessage key={message} message={message}/>)
+                : null
+            }
               <div className="flex justify-between">
                 <p className="uppercase text-2xl  ml-5 lg:ml-10 mb-2 font-bold text-gray-600">Shipping address</p>
                 { user.email 
@@ -121,6 +172,7 @@ const Checkout = () => {
             </div>
             
         </div>
+      </>
     )
 }
 export default Checkout;
