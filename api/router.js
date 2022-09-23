@@ -4,12 +4,15 @@ const isAdmin = require('./middlewares/isAdmin')
 const userController = require('./controllers/userController')
 const adminController = require('./controllers/adminController')
 const productsController = require('./controllers/productsController')
-const ordersController = require('./controllers/ordersController')
+const ordersController = require("./controllers/ordersController");
+
 
 router.use('/users',userController)
 router.use('/admin',isAdmin,adminController)
 router.use('/products',productsController)
 router.use('/orders',ordersController)
+
+
 
 
 
