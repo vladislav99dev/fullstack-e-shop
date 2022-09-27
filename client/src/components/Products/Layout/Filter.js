@@ -2,6 +2,8 @@ import { useReducer } from "react";
 
 import productData from "../../../utils/productData";
 
+import { getManyFiltered } from "../../../services/productsRequester";
+
 const initialFilterState = {
     type:'',
     category:'',
@@ -63,7 +65,9 @@ const reducerFilterState = (state,action) => {
     }
   }
 
-const Filter = () => {
+const Filter = ({
+    gender
+}) => {
   const [filterState,dispatch] = useReducer(reducerFilterState,initialFilterState);
 
   const setFilterState = (state,event) => {
@@ -77,9 +81,17 @@ const Filter = () => {
     dispatch({type:state,payload:event.target.value})
   }
 
-  const submitHandler = (event) => {
+  const submitHandler = async(event) => {
     event.preventDefault();
-    console.log(filterState)
+    try{
+        const response = await getManyFiltered({...filterState,gender})
+        const jsonResponse = await response.json();
+        console.log(jsonResponse);
+    }catch(err) {
+        console.log(err);
+        console.log('err');
+    }
+    
   }
 
     return (
