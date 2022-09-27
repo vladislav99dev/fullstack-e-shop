@@ -22,7 +22,7 @@ const reducerModalsState = (state,action) => {
             return{
                 isSuccess:{value:false,messages:''},
                 isFailed:{value:false, message:''}
-            }     
+            };     
     }
 };
 
