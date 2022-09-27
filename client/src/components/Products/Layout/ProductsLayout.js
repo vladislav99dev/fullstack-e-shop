@@ -7,11 +7,14 @@ import { useModalsContext } from "../../../context/ModalsContext";
 
 import ProductLayoutCard from "./ProductLayoutCard";
 import AttentionModal from "../../Modals/AttentionModal";
+import Filter from "./Filter";
 import Spinner from "../../Spinner/Spinner";
 
 const ProductsLayout = () => {
   const [products,setProducts] = useState([]);
+  const [isFilterShown,setIsFilterShown] = useState(false);
   const [isLoading,setIsLoading] = useState(true);
+
 
   const {gender} = useParams();
   const navigate = useNavigate();
@@ -39,6 +42,10 @@ const ProductsLayout = () => {
     return {response,jsonResponse}
   }
 
+  const filterButtonHandler = () => {
+    setIsFilterShown(!isFilterShown);
+  }
+
   return (
     <>
     {modalState.isFailed.value 
@@ -54,7 +61,14 @@ const ProductsLayout = () => {
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
           Customers also purchased
         </h2>
-        <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <div className="mt-2">
+          <button onClick={filterButtonHandler} className="py-2 px-10 rounded-md italic font-bold text-xl text-white bg-[#00df9a] hover:bg-green-300 ease-in-out duration-500">{isFilterShown ? 'Hide Filters' : 'Show Filters'}</button>
+        </div>
+        {isFilterShown 
+        ?<Filter/>
+        :null
+        }
+        <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {products.map(product  => <ProductLayoutCard key={product._id} product={product}/>)}
         </div>
       </div>}
