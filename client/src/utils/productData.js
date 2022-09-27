@@ -34,7 +34,7 @@ const brands = ["nike", "jordan", "adidas"];
 
 const colors = ["black", "white", "yellow", "green", "red", "blue","grey", "navy","orange"];
 
-const formData = {
+const productData = {
   clothingSizes,
   shoeSizes,
   clothingOptions,
@@ -45,4 +45,4 @@ const formData = {
   types
 }
 
-export default formData;
+export default productData;
