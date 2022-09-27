@@ -23,7 +23,6 @@ const productsRequester = (method,data,token,id) => {
     }
     if(method === "GET" && data === "men" || data === "women" || data === "boys" || data === "girls" || data === 'all'){
         fetchUrl = `${url}/products/${data}`
-
     }
     if(method === "DELETE") {
         fetchUrl = `${url}/admin/products/${id}/delete`
@@ -46,6 +45,26 @@ const productsRequester = (method,data,token,id) => {
     return fetch(fetchUrl,options);
 }
 
+export const getManyFiltered = (data) => {
+    // for (const property of data) {
+    //     if(!data[property]) data[property] = '';
+    // }
+       let  fetchUrl = `${url}/products/filter`;
+       return fetch(fetchUrl,{
+        method:"POST",
+        headers:{
+            'content-type':'application/json'
+        },
+        body: JSON.stringify({
+            type:data.type,
+            category:data.category,
+            gender:data.gender,
+            brand:data.brand,
+            color:data.color,
+            sizes:data.size
+        })
+       })
+}
 export const create = productsRequester.bind(null,"POST");
 export const edit = productsRequester.bind(null,"PUT");
 export const getOne = productsRequester.bind(null,"GET");
