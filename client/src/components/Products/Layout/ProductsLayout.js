@@ -65,7 +65,8 @@ const ProductsLayout = () => {
           <button onClick={filterButtonHandler} className="py-2 px-10 rounded-md italic font-bold text-xl text-white bg-[#00df9a] hover:bg-green-300 ease-in-out duration-500">{isFilterShown ? 'Hide Filters' : 'Show Filters'}</button>
         </div>
         {isFilterShown 
-        ?<Filter/>
+        ?<Filter
+        gender={gender}/>
         :null
         }
         <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
