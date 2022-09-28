@@ -168,8 +168,6 @@ const Filter = ({
             <div className="flex justify-center mt-2">
               <button className="py-2 px-10 rounded-md italic font-bold text-xl text-white bg-green-300 hover:bg-green-200 ease-in-out duration-500">Submit</button>
             </div>
-
-
         </form>
     )
 }
