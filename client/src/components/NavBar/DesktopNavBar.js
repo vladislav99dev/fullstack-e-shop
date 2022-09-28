@@ -20,7 +20,7 @@ const DesktopNavBar = ({
       <div className="text-white w-[95%] hidden lg:flex mt-14 justify-between items-center h-26 px-4 bg-[#DDDDDD] rounded-full ml-[2.5%] mr-[2.5%]">
         <div className="flex">
         <GiTigerHead size={100}/>
-        <Link to={'products/all'} className="w-full text-3xl font-bold italic text-[#00df9a] drop-shadow-xl mt-2 ml-4">
+        <Link to={'/home'} className="w-full text-3xl font-bold italic text-[#00df9a] drop-shadow-xl mt-2 ml-4">
           Supreme
           <br/>
            Fashion Shop
