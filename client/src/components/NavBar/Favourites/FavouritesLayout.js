@@ -1,9 +1,5 @@
 import { useState } from "react";
 
-import { useNavTogglesContext } from "../../../context/NavTogglesContext";
-import { useAuthContext } from "../../../context/AuthContext";
-import { useModalsContext } from "../../../context/ModalsContext";
-
 import * as favouritesAndCartRequester from "../../../services/favouritesAndCartRequester";
 
 import FavouritesCard from "./FavouritesCard";
@@ -13,30 +9,29 @@ import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
 
-const FavouritesLayout = () => {
+const FavouritesLayout = ({
+  toggleFavouritesMenu,
+  modalState,
+  setFailedModal,
+  resetModals,
+  user,
+  login
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toggleFavouritesMenu } = useNavTogglesContext();
-  const { user,login } = useAuthContext();
-  const {modalState,setFailedModal,resetModals} = useModalsContext();
 
-
-
-  const manageIsLoading = (value) => {
-    setIsLoading(value);
-  };
 
   const removeFromFavouritesHandler = async(productId,event) => {
     event.preventDefault();
-    manageIsLoading(true)
+    setIsLoading(true)
     try{
       const response = await favouritesAndCartRequester.removeFromFavourties(user._id,productId);
       const jsonResponse = await response.json();
-      manageIsLoading(false)
+      setIsLoading(false)
 
       if(response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message}
       if(response.status === 200) login(jsonResponse.user);
     }catch(err){
-      manageIsLoading(false)
+      setIsLoading(false)
       if(err.status) return setFailedModal(err.message);
       console.log(err);
     }
@@ -84,6 +79,7 @@ const FavouritesLayout = () => {
               //     From: "translate-x-0"
               //     To: "translate-x-full"
               // --> */}
+
             <div className="pointer-events-auto w-screen max-w-md">
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
