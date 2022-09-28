@@ -14,7 +14,7 @@ const MobileProductsLinks = ({
 }) => {
   return (
     <>
-      <div className="h-24 mt-4 flex justify-around lg:hidden">
+      <div className="h-24 mt-4 flex justify-around lg:hidden bg-[#DDDDDD]" >
         <div className="flex">
           <GiTigerHead className="mt-2 mr-32" size={80} color={'white'}/>
         </div>
@@ -25,7 +25,7 @@ const MobileProductsLinks = ({
           onClick={toggleProductsMenu}
         />
       </div>
-      <div className="h-30 flex-row lg:hidden">
+      <div className="h-30 flex-row lg:hidden bg-[#DDDDDD]">
         <div className="container-links">
           <Link to={"products/all"} className="mobile-links">
             All
@@ -75,7 +75,7 @@ export const MobileUserLinks = ({
 }) => {
   return (
     <>
-      <div className="h-24 mt-4 flex justify-around lg:hidden">
+      <div className="h-24 mt-4 flex justify-around lg:hidden bg-[#DDDDDD]">
         <GiTigerHead className="mt-2 mr-32" size={80} color={'white'}/>
         <IoClose
           size={50}
@@ -84,7 +84,7 @@ export const MobileUserLinks = ({
           onClick={toggleUserMenu}
         />
       </div>
-      <div className="h-30 flex-row  lg:hidden">
+      <div className="h-30 flex-row  lg:hidden bg-[#DDDDDD]">
         <UserLinks clickHandler={toggleUserMenu} user={user} />
       </div>
     </>
@@ -98,7 +98,7 @@ const MobileNavBar = ({
   toggleFavouritesMenu
 }) => {
   return (
-    <div className="flex justify-around w-full mt-4 lg:hidden">
+    <div className="flex justify-around w-full mt-4 lg:hidden bg-[#DDDDDD]">
       <div className="flex">
       <GiTigerHead className="mt-4 ml-6" size={80} color={'white'}/>
       </div>

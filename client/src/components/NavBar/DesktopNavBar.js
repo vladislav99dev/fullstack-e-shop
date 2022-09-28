@@ -18,7 +18,7 @@ const DesktopNavBar = ({
 
   return (
     <>
-      <div className="text-white hidden lg:flex mt-6 justify-between items-center h-26 mx-auto px-4 xl:mx-12">
+      <div className="text-white w-full hidden lg:flex mt-6 justify-between items-center h-26 px-4 bg-[#DDDDDD] rounded-full">
         <div className="flex">
         <GiTigerHead size={100}/>
         <Link to={'products/all'} className="w-full text-3xl font-bold italic text-[#00df9a] drop-shadow-xl mt-2 ml-4">
