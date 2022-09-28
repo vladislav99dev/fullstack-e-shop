@@ -71,6 +71,7 @@ const Filter = ({
 }) => {
   const [filterState,dispatch] = useReducer(reducerFilterState,initialFilterState);
 
+
   const setFilterState = (state,event) => {
     if(state === 'size') {
         if(filterState.size.includes(event.target.innerText)) {
@@ -84,6 +85,7 @@ const Filter = ({
 
   const submitHandler = async(event) => {
     event.preventDefault();
+
     try{
       let response ;
         if(gender === 'all') response = await getManyFiltered({...filterState})
