@@ -15,7 +15,6 @@ const DesktopNavBar = ({
   toggleFavouritesMenu,
   user
 }) => {
-
   return (
     <>
       <div className="text-white w-[95%] hidden lg:flex mt-14 justify-between items-center h-26 px-4 bg-[#DDDDDD] rounded-full ml-[2.5%] mr-[2.5%]">
