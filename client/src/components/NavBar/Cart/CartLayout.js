@@ -1,11 +1,9 @@
 import { useState,useEffect } from "react";
 
+
 import { removeFromCart } from "../../../services/favouritesAndCartRequester";
 
-import { useAuthContext } from "../../../context/AuthContext";
-import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../../context/LocalProductsContext";
-import { useModalsContext } from "../../../context/ModalsContext";
 
 import CartCard from "./CartCard";
 import CartFooter from "./CartFooter";
@@ -15,25 +13,24 @@ import AttentionModal from "../../Modals/AttentionModal";
 
 
 
-const ProductsCard = () => {
+const CartLayout = ({
+  toggleCartMenu,
+  modalState,
+  setFailedModal,
+  resetModals,
+  user,
+  login
+}) => {
 
   const [isLoading,setIsLoading] = useState(false);
   const [totalPrice,setTotalPrice] = useState(0);
   
-  const {toggleCartMenu} = useNavTogglesContext();
-  const { user,login } = useAuthContext();
   const { products, removeProduct} = useLocalProductsContext();
-  const {modalState,setFailedModal,resetModals} = useModalsContext();
-
-
-
 
   useEffect(()=> {
     if(user.email) user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
     if(!user.email) products.map(product => setTotalPrice((prev) => prev + (product.product.price * product.quantity)));
   },[])
-
-
 
 
   const removeProductFromStorage = (product,size,event) => {
@@ -58,9 +55,8 @@ const ProductsCard = () => {
     }
   }
 
-
   return (
-    <>
+  <>
     <div
       className="relative z-10"
       aria-labelledby="slide-over-title"
@@ -168,10 +164,10 @@ const ProductsCard = () => {
         </div>
       </div>
     </div>
-                        </>
+  </>
   );
 };
-export default ProductsCard;
+export default CartLayout;
 
 
 
