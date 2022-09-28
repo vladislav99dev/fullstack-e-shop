@@ -29,6 +29,7 @@ const ProductsLayout = () => {
       setIsLoading(false)
       if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
       if (response.status === 200) setProducts(jsonResponse)
+      setIsFilterShown(false)
     }).catch((err) => {
       if(err.responseStatus) return setFailedModal(err.message);
       console.log(err)
@@ -44,6 +45,9 @@ const ProductsLayout = () => {
 
   const filterButtonHandler = () => {
     setIsFilterShown(!isFilterShown);
+  }
+  const setFilteredProducts = (products) => {
+    setProducts(products)
   }
 
   return (
@@ -66,11 +70,15 @@ const ProductsLayout = () => {
         </div>
         {isFilterShown 
         ?<Filter
-        gender={gender}/>
+        gender={gender}
+        setFilteredProducts={setFilteredProducts}/>
         :null
         }
         <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            {products.map(product  => <ProductLayoutCard key={product._id} product={product}/>)}
+          {products.length > 0 
+          ?products.map(product  => <ProductLayoutCard key={product._id} product={product}/>) 
+          :<p>There are no products in database with these criterias.</p>}
+
         </div>
       </div>}
     </div>
