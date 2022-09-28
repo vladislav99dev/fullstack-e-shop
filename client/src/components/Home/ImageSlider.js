@@ -20,8 +20,8 @@ const ImageSlider = ({
 
     return (
         <div className="h-[100%] relative">
-            <AiOutlineArrowLeft onClick={slideLeft} color={'black'} size={100} className="absolute left-1 mt-[25%] z-10 rounded-lg cursor-pointer opacity-70 hover:opacity-25"/>
-            <AiOutlineArrowRight onClick={slideRight} color={'black'} size={100} className="absolute right-1 mt-[25%] z-10 rounded-lg cursor-pointer opacity-70 hover:opacity-25"/>
+            <AiOutlineArrowLeft onClick={slideLeft} color={'white'} size={100} className="absolute left-1 mt-[25%] z-10 rounded-lg cursor-pointer opacity-90 hover:opacity-50"/>
+            <AiOutlineArrowRight onClick={slideRight} color={'white'} size={100} className="absolute right-1 mt-[25%] z-10 rounded-lg cursor-pointer opacity-90 hover:opacity-50"/>
             <div className="w-[100%] h-[100%] rounded-3xl bg-center bg-cover" style={{backgroundImage:`url(${slides[currentIndex].url})`}}></div>
         </div>
     )
