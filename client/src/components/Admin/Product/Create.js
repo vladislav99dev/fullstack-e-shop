@@ -72,18 +72,18 @@ const Create = () => {
         buttonName={'Create another one'}/> 
         : null}
 
-        <div className="bg-[#FAF9F6] rounded-3xl mt-6 w-full shadow-lg flex-row py-4">
+        <div className="bg-white rounded-3xl mt-6 w-full shadow-lg flex-row py-4">
         <h1 className="text-[#00df9a] text-2xl italic  font-bold w-full text-center mt-2">
             Hello, {user.firstName}
             <br/>
             what product we will create today?
             </h1>
         {validationMessages.length > 0 
-        ? validationMessages.map((message) => <ValidationMessage key={message} message={message}/>)
+        ? validationMessages.map((message) => (
+            <ValidationMessage key={message} message={message}/>))
         : null
         }
         <form onSubmit={submitHandler}>
-
         <select type="text" name="type" onChange={handleSelect} className="form-input capitalize font-semibold text-gray-700" placeholder="">
             {productData.types.map(type => <option className="text-center font-semibold text-gray-700" key={type} value={type}>{type}</option>)}
         </select>
