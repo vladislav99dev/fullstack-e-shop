@@ -52,6 +52,14 @@ const reducerMenuState = (state, action) => {
           isCartMenuActive: false,
           isFavouritesMenuActive: !state.isFavouritesMenuActive
         }     
+    case "resetAll": 
+        return {
+          isUserMobileLinksActive: false,
+          isProductsMobileLinksActive: false,
+          isDesktopUserLinksActive: false,
+          isCartMenuActive: false,
+          isFavouritesMenuActive: false
+        }
     default:
       return{
         isUserMobileLinksActive: false,
@@ -86,9 +94,9 @@ export const NavTogglesProvider = ({ children }) => {
     dispatch({type:'setFavouriteMenu'})
   }
 
-  // const outsideClick = () => {
-  //   dispatch();
-  // }
+  const outsideClick = () => {
+    dispatch({type:'resetAll'});
+  }
 
   return (
     <NavTogglesContext.Provider
@@ -102,7 +110,8 @@ export const NavTogglesProvider = ({ children }) => {
         isCartMenuActive:state.isCartMenuActive,
         toggleCartMenu,
         isFavouritesMenuActive:state.isFavouritesMenuActive,
-        toggleFavouritesMenu
+        toggleFavouritesMenu,
+        outsideClick
       }}
     >
       {children}
