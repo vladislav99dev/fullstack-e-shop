@@ -7,10 +7,11 @@ import MobileNavBarManager from "./MobileNavBar";
 import DesktopNavBar from "./DesktopNavBar";
 import CartLayout from "./Cart/CartLayout";
 import FavouritesLayout from "./Favourites/FavouritesLayout";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const NavBar = () => {
-  const {setFailedModal,resetModals} = useModalsContext();
-  const {user} = useAuthContext()
+  const {modalState,setFailedModal,resetModals} = useModalsContext();
+  const {user,login} = useAuthContext()
 
   const {
     isDesktopUserLinksActive,
@@ -22,7 +23,8 @@ const NavBar = () => {
     isUserMobileLinksActive,
     toggleUserMenu,
     isProductsMobileLinksActive,
-    toggleProductsMenu
+    toggleProductsMenu,
+    outsideClick
   } = useNavTogglesContext();
 
 
@@ -35,7 +37,8 @@ const NavBar = () => {
     if(!user.email) return setFailedModal("You should be logged in to use this feature!")
   }
   return (
-    <>
+    <OutsideClickHandler onOutsideClick={outsideClick}>
+      
       <MobileNavBarManager
       isUserMobileLinksActive={isUserMobileLinksActive}
       toggleUserMenu={toggleUserMenu}
@@ -50,9 +53,26 @@ const NavBar = () => {
         toggleCartMenu={toggleCartMenu}
         toggleFavouritesMenu={manageFavouritesAccess}
       />
-      {isCartMenuActive ? <CartLayout /> : null}
-      {isFavouritesMenuActive ? <FavouritesLayout /> : null}
-    </>
+
+      {isCartMenuActive ? <CartLayout 
+      toggleCartMenu={toggleCartMenu}
+      modalState={modalState}
+      setFailedModal={setFailedModal}
+      resetModals={resetModals}
+      user={user}
+      login={login}
+      /> : null}
+
+      {isFavouritesMenuActive ? <FavouritesLayout 
+      toggleFavouritesMenu={toggleFavouritesMenu}
+      modalState={modalState}
+      setFailedModal={setFailedModal}
+      resetModals={resetModals}
+      user={user}
+      login={login}
+      /> : null}
+
+    </OutsideClickHandler>
   );
 };
 export default NavBar;
