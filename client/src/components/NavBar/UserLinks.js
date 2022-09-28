@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 
+import OutsideClickHandler from "react-outside-click-handler";
+
+
 const UserLinks = ({
     clickHandler,
     user
 }) => {
 
     return(
-        <>
+        <OutsideClickHandler onOutsideClick={clickHandler} >
             {!user.email
             ?<>
                 <div className="container-links">
@@ -25,7 +28,7 @@ const UserLinks = ({
                 </div>
             </>
             }
-        </>
+        </OutsideClickHandler>
     )
 }
 
