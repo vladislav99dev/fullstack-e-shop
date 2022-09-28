@@ -23,6 +23,8 @@ import ProductDetails from "./components/Products/ProductDetails.js";
 import ErrorPage from "./components/ErrorPage.js";
 import Checkout from "./components/Checkout.js";
 
+import TryStuff from "./components/TryStuff.js";
+
 function App() {
   return (
     <AuthProvider>
@@ -44,6 +46,7 @@ function App() {
 
                   <Route path="/products/">
                     <Route path=":gender" element={<ProductsLayout />} />
+                    {/* <Route path=":gender/*" element={<TryStuff />} /> */}
                     <Route path=":gender/details/:productId" element={<ProductDetails />} />
                   </Route>
 
