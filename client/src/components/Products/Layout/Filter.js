@@ -66,7 +66,8 @@ const reducerFilterState = (state,action) => {
   }
 
 const Filter = ({
-    gender
+    gender,
+    setFilteredProducts
 }) => {
   const [filterState,dispatch] = useReducer(reducerFilterState,initialFilterState);
 
@@ -84,12 +85,13 @@ const Filter = ({
   const submitHandler = async(event) => {
     event.preventDefault();
     try{
-        const response = await getManyFiltered({...filterState,gender})
+      let response ;
+        if(gender === 'all') response = await getManyFiltered({...filterState})
+        if(gender !== 'all') response = await getManyFiltered({...filterState,gender})
         const jsonResponse = await response.json();
-        console.log(jsonResponse);
+        setFilteredProducts(jsonResponse)
     }catch(err) {
-        console.log(err);
-        console.log('err');
+      console.log(err);
     }
     
   }
