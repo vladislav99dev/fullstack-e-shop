@@ -54,6 +54,7 @@ const ProductDetails = () => {
 
   const addToUserCartHandler = async (event) => {
     event.preventDefault();
+    if(size === '') return setFailedModal("You should select size first")
     setIsLoading(true)
     try{
       const response = await favouritesAndCartRequester.addToCart(
@@ -82,6 +83,7 @@ const ProductDetails = () => {
 
   const addToLocalStorage = async(event) => {
     event.preventDefault();
+    if(!size) return setFailedModal("You should select size first")
     try{
       const response = await productsRequester.getOne(null,null,productId);
       const jsonResponse = await response.json();
@@ -95,7 +97,6 @@ const ProductDetails = () => {
   const addToFavouritesHandler = async (event) => {
     event.preventDefault();
     setIsLoading(true)
-    //try catch
     try{
       const response = await favouritesAndCartRequester.addToFavourites(
         user._id,
