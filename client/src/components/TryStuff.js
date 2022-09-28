@@ -4,7 +4,7 @@ const TryStuff = () => {
     const params = useParams();
     console.log(params);
     return(
-        <h1>Hello</h1>
+        <h1>S</h1>
     )
 }
 export default TryStuff;

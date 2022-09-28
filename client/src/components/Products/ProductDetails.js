@@ -162,7 +162,7 @@ const ProductDetails = () => {
             </div>
 
             <img
-              className="w-full lg:row-span-3 lg:order-first lg:h-[40rem] lg:min-w-[70%] lg:max-w-[80%] xl:max-w-[60%] lg:rounded-xl lg:ml-[15%] xl:ml-[20%]"
+              className="w-full lg:row-span-3 lg:order-first lg:h-[40rem] lg:min-w-[50%] lg:max-w-[60%] xl:max-w-[60%] lg:rounded-xl lg:ml-[15%] xl:ml-[20%]"
               src={`${product.imageUrl}`}
               alt={`${product.name}`}
             />
