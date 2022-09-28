@@ -38,7 +38,7 @@ const NavBar = () => {
   }
   return (
     <OutsideClickHandler onOutsideClick={outsideClick}>
-      
+
       <MobileNavBarManager
       isUserMobileLinksActive={isUserMobileLinksActive}
       toggleUserMenu={toggleUserMenu}
@@ -46,12 +46,14 @@ const NavBar = () => {
       toggleProductsMenu={toggleProductsMenu}
       toggleCartMenu={toggleCartMenu}
       toggleFavouritesMenu={manageFavouritesAccess}
+      user={user}
       />
       <DesktopNavBar
         isDesktopUserLinksActive={isDesktopUserLinksActive}
         toggleDesktopUserMenu={toggleDesktopUserMenu}
         toggleCartMenu={toggleCartMenu}
         toggleFavouritesMenu={manageFavouritesAccess}
+        user={user}
       />
 
       {isCartMenuActive ? <CartLayout 
