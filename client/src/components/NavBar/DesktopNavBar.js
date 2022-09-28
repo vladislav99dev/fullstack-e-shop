@@ -12,7 +12,8 @@ const DesktopNavBar = ({
   isDesktopUserLinksActive,
   toggleDesktopUserMenu,
   toggleCartMenu,
-  toggleFavouritesMenu
+  toggleFavouritesMenu,
+  user
 }) => {
 
   return (
@@ -65,7 +66,7 @@ const DesktopNavBar = ({
       </div>
       {isDesktopUserLinksActive ? (
         <div className="hidden lg:block bg-[#DDDDDD]  w-[30%] fixed right-4  border-4 border-[#00df9a] rounded-lg z-10">
-          <UserLinks clickHandler={toggleDesktopUserMenu} />
+          <UserLinks clickHandler={toggleDesktopUserMenu} user={user}/>
         </div>
       ) : null}
     </>
