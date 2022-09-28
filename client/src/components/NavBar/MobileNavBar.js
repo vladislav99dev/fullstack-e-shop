@@ -70,7 +70,8 @@ const MobileProductsLinks = ({
 };
 
 export const MobileUserLinks = ({
-  toggleUserMenu
+  toggleUserMenu,
+  user
 }) => {
   return (
     <>
@@ -84,7 +85,7 @@ export const MobileUserLinks = ({
         />
       </div>
       <div className="h-30 flex-row  lg:hidden">
-        <UserLinks clickHandler={toggleUserMenu} />
+        <UserLinks clickHandler={toggleUserMenu} user={user} />
       </div>
     </>
   );
@@ -129,10 +130,11 @@ const MobileNavBarManager = ({
   isProductsMobileLinksActive,
   toggleProductsMenu,
   toggleCartMenu,
-  toggleFavouritesMenu
+  toggleFavouritesMenu,
+  user
 }) => {
 
-  if (isUserMobileLinksActive) return <MobileUserLinks toggleUserMenu={toggleUserMenu} />;
+  if (isUserMobileLinksActive) return <MobileUserLinks toggleUserMenu={toggleUserMenu} user={user} />;
 
   if (isProductsMobileLinksActive) return <MobileProductsLinks toggleProductsMenu={toggleProductsMenu} />;
 
