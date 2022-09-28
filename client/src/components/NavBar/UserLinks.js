@@ -9,7 +9,8 @@ const UserLinks = ({
 }) => {
 
     return(
-        <OutsideClickHandler onOutsideClick={clickHandler} >
+        // <OutsideClickHandler onOutsideClick={clickHandler} >
+        <>
             {!user.email
             ?<>
                 <div className="container-links">
@@ -28,7 +29,8 @@ const UserLinks = ({
                 </div>
             </>
             }
-        </OutsideClickHandler>
+            </>
+        // </OutsideClickHandler>
     )
 }
 
