@@ -6,6 +6,9 @@ import { NavTogglesProvider } from "./context/NavTogglesContext.js";
 import { ModalsProvider } from "./context/ModalsContext.js";
 
 import NavBar from "./components/NavBar/NavBar.js";
+
+import Home from "./components/Home/Home.js"
+
 import Login from "./components/Login/Login.js";
 import Register from "./components/Register/Register.js";
 import Logout from "./components/Logout/Logout.js";
@@ -30,6 +33,9 @@ function App() {
                 <NavBar />
               <div id="main-content" className="mt-10 h-full w-full">
                 <Routes>
+
+                  <Route path="/home" element={<Home/>}/>
+
                   <Route path="/users/">
                     <Route path="login" element={<Login />} />
                     <Route path='register' element={<Register />}/>
@@ -43,8 +49,6 @@ function App() {
 
                   <Route path="/order/">
                     <Route path="checkout" element={<Checkout />} />
-                    {/* <Route path="products/:productId/edit" element={<Edit />} />
-                    <Route path="products/:productId/delete" element={<Delete />} /> */}
                   </Route>
 
                   <Route path="/admin/">
