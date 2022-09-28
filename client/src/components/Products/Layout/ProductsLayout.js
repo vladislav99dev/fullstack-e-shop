@@ -30,6 +30,7 @@ const ProductsLayout = () => {
       if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
       if (response.status === 200) setProducts(jsonResponse)
       setIsFilterShown(false)
+
     }).catch((err) => {
       if(err.responseStatus) return setFailedModal(err.message);
       console.log(err)
