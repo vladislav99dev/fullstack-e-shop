@@ -23,22 +23,24 @@ const Login = () => {
   const { products, clearStorage } = useLocalProductsContext();
   const {modalState, setFailedModal, resetModals } = useModalsContext();
 
-  // const addProductsFromLocalStorageToUserCart = async (profileId) => {
-  //   const failedAddMessages = [];
-  //   let user = {};
-  //   for (const product of products) {
-  //     const response = await favouritesAndCartRequester.addToCart(
-  //       profileId,
-  //       product.product._id,
-  //       product.size,
-  //       product.quantity
-  //     );
-  //     const jsonResponse = await response.json();
-  //     if (response.status !== 200) failedAddMessages.push(jsonResponse.message);
-  //     if (response.status === 200) user = jsonResponse.user;
-  //   }
-  //   return [user, failedAddMessages.join(" ")];
-  // };
+  const addProductsFromLocalStorageToUserCart = async (profileId) => {
+    const failedAddMessages = [];
+    let user = {};
+    console.log(profileId);
+    for (const product of products) {
+      const response = await favouritesAndCartRequester.addToCart(
+        profileId,
+        product.product._id,
+        product.size,
+        product.quantity
+      );
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+      if (response.status !== 200) failedAddMessages.push(jsonResponse.message);
+      if (response.status === 200) user = jsonResponse.user;
+    }
+    return [user, failedAddMessages.join(" ")];
+  };
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -66,14 +68,14 @@ const Login = () => {
 
       Object.assign(userData,jsonResponse.user)
 
-      // if(products.length > 0) {
-      //   const [user,failedAddMessages] = await addProductsFromLocalStorageToUserCart(jsonResponse._id);
-      //   if(failedAddMessages) setFailedModal(
-      //     "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)"
-      //   );
-      //   if(user.hasOwnProperty("email")) Object.assign(userData,user)
-      //   clearStorage();
-      // }
+      if(products.length > 0) {
+        const [user,failedAddMessages] = await addProductsFromLocalStorageToUserCart(userData._id);
+        if(failedAddMessages) setFailedModal(
+          "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)"
+        );
+        if(user.hasOwnProperty("email")) Object.assign(userData,user)
+        clearStorage();
+      }
 
       login(userData)
     } catch (err) {
