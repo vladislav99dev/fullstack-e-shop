@@ -5,6 +5,9 @@ import * as productsRequester from "../../../services/productsRequester";
 import { useModalsContext } from "../../../context/ModalsContext";
 import { useAuthContext } from "../../../context/AuthContext";
 
+import isAdmin from "../../../HOC/adminRoutesGuard";
+
+
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal";
 
@@ -67,4 +70,4 @@ const Delete = () => {
   );
 };
 
-export default Delete;
+export default isAdmin(Delete);
