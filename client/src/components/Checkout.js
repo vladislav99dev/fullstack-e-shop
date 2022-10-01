@@ -160,7 +160,7 @@ const Checkout = () => {
                         <p className="mr-10 text-xl font-bold text-gray-800">{`$${totalPrice.toFixed(2)}`}</p>
                     </div>
                 </div>
-                <div className=" flex justify-around border-2 border-[#00df9a] h-[30%] mt-10 ml-10 mr-10 rounded-md">
+                <div className=" flex justify-around border-2 border-[#00df9a] h-[180px] mt-10 ml-10 mr-10 rounded-md">
                         <GiTigerHead className="ml-4 mt-10 2xl:ml-32" size={100} color={'#00df9a'}/>
                         <div className="ml-4 mt-10 2xl:mr-32">
                             <p className="italic text-gray-500 lg:text-center">We are glad you choose us!</p>
