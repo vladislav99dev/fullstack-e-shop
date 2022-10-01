@@ -1,7 +1,8 @@
 const router = require('express').Router();
 
 const productsServices = require('../services/productsServices');
-const userServices = require('../services/userServices')
+const userServices = require('../services/userServices');
+const tokenServices = require('../services/tokenServices');
 
 const isLoggedIn = require('../middlewares/isLoggedIn');
 
@@ -64,6 +65,7 @@ const addProductWithSameSizeHandler = productWithSameSizeHandler.bind(null,"add"
 
 const addToCartHandler = async(req,res) => {
     console.log(`POST ${req.originalUrl}`);
+    
     const {profileId,size,quantity} = req.body;
     const {productId} = req.params;
 
@@ -77,6 +79,7 @@ const addToCartHandler = async(req,res) => {
         if(!isUpdated) profile["cart"].push({_id:productId,size:size,quantity:quantity});
 
         const modifiedUser = await updateAndPopulateUserProfile(profile);
+        if(modifiedUser.isAdmin) modifiedUser.accessToken = tokenServices.generate(modifiedUser);
         res.status(200).json({message: `Successfully added ${product.name} ${product.category} from ${size}`, user:modifiedUser});
     }catch(err){
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
@@ -94,9 +97,12 @@ const removeFromCartHandler = async(req,res) => {
     try{
         const user = await isProfileIdValid(profileId);
         const product = await isProductIdValid(productId);
+
         const {isUpdated,profile} = await removeProductWithSameSizeHandler(user,productId,size);
         if(!isUpdated) throw {status:404, message:`There was no found product in this profile with this id!`};
+
         const modifiedUser = await updateAndPopulateUserProfile(profile);
+        if(modifiedUser.isAdmin) modifiedUser.accessToken = tokenServices.generate(modifiedUser);
         res.status(200).json({message:`Successfully removed ${product.name} from profile cart.`, user:modifiedUser});
     }catch(err){
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
@@ -107,15 +113,19 @@ const removeFromCartHandler = async(req,res) => {
 
 const addToFavouritesHandler = async(req,res) => {
     console.log(`POST ${req.originalUrl}`);
+
     const {profileId} = req.body;
     const {productId} = req.params;
 
     try{
         const user = await isProfileIdValid(profileId);
         const product = await isProductIdValid(productId);
+
         if(user["favourites"].includes(productId)) throw {status:409, message:`Product ${product.name} is already added to favourites!`};
         user["favourites"].push(productId);
+
         const modifiedUser = await updateAndPopulateUserProfile(user);
+        if(modifiedUser.isAdmin) modifiedUser.accessToken = tokenServices.generate(modifiedUser);
         res.status(200).json({message:`Successfully added ${product.name} to your profile.`, user:modifiedUser});
     }catch(err){
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."})
@@ -132,10 +142,13 @@ const removeFromFavouritesHandler = async(req,res) => {
     try {
         const user = await isProfileIdValid(profileId);
         const product = await isProductIdValid(productId);
+
         if(!user["favourites"].includes(productId)) throw {status:404,message:`Product ${product.name} is not found in profile favourites!`};
         const indexOfProduct = user["favourites"].indexOf(productId);
         user["favourites"].splice(indexOfProduct,1)
+
         const modifiedUser = await updateAndPopulateUserProfile(user);
+        if(modifiedUser.isAdmin) modifiedUser.accessToken = tokenServices.generate(modifiedUser);
         res.status(200).json({message:`Successfully removed ${product.name} from your profile.`, user:modifiedUser})
     } catch (err) {
         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."})
@@ -146,27 +159,26 @@ const removeFromFavouritesHandler = async(req,res) => {
 
 
 
-const getHandler = async(req,res) => {
-    console.log(`POST ${req.originalUrl}`);
-    const {profileId} = req.body;
+// const getHandler = async(req,res) => {
+//     console.log(`POST ${req.originalUrl}`);
+//     const {profileId} = req.body;
 
-    try {
-        const user = await userServices.findByIdPopulated(profileId);
-        if(!user) return res.status(400).json({message: "There is no user with this id!"});
-        res.status(200).json(user)
-    }catch(err) {
-        console.log(err);
-        if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
-    }
-};
+//     try {
+//         const user = await userServices.findByIdPopulated(profileId);
+//         if(!user) return res.status(400).json({message: "There is no user with this id!"});
+//         res.status(200).json(user)
+//     }catch(err) {
+//         console.log(err);
+//         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
+//     }
+// };
 
 
 
-// router.get('/favourites-get', getHandler)
+
 router.post('/:productId/favourites-add', isLoggedIn, addToFavouritesHandler)
 router.delete('/:productId/favourites-remove', isLoggedIn, removeFromFavouritesHandler)
 
-// router.get('/cart-get', getHandler)
 router.post('/:productId/cart-add', isLoggedIn, addToCartHandler)
 router.delete('/:productId/cart-remove', isLoggedIn, removeFromCartHandler)
 
