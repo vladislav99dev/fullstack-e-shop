@@ -10,6 +10,9 @@ import {
   productSizeFormater,
 } from "../../../services/dataServices";
 
+import isAdmin from "../../../HOC/adminRoutesGuard";
+
+
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal";
 import ValidationMessage from "../../ValidationMessage/validationMessage";
@@ -255,7 +258,7 @@ const Edit = () => {
     </>
   );
 };
-export default Edit;
+export default isAdmin(Edit);
 
 
 
