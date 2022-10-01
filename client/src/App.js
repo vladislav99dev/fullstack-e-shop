@@ -36,7 +36,7 @@ function App() {
               <div id="main-content" className="mt-10 h-full w-full">
                 <Routes>
 
-                  <Route path="/home" element={<Home/>}/>
+                  <Route path="/" element={<Home/>}/>
 
                   <Route path="/users/">
                     <Route path="login" element={<Login />} />
