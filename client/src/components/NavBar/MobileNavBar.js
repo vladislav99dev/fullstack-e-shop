@@ -14,7 +14,7 @@ const MobileProductsLinks = ({
 }) => {
   return (
     <>
-      <div className="h-24 mt-4 flex justify-around lg:hidden bg-[#DDDDDD]" >
+      <div className="h-24 flex justify-around lg:hidden bg-[#DDDDDD]" >
         <div className="flex">
           <Link to={'/home'}>
           <GiTigerHead className="mt-2 mr-32" size={80} color={'white'}/>
@@ -77,7 +77,7 @@ export const MobileUserLinks = ({
 }) => {
   return (
     <>
-      <div className="h-24 mt-4 flex justify-around lg:hidden bg-[#DDDDDD]">
+      <div className="h-24 flex justify-around lg:hidden bg-[#DDDDDD]">
         <Link to={'/home'} >
         <GiTigerHead className="mt-2 mr-32" size={80} color={'white'}/>
         </Link>
@@ -102,7 +102,7 @@ const MobileNavBar = ({
   toggleFavouritesMenu
 }) => {
   return (
-    <div className="flex justify-around w-full mt-4 lg:hidden bg-[#DDDDDD]">
+    <div className="flex justify-around w-full lg:hidden bg-[#DDDDDD]">
       <div className="flex">
         <Link to={'/home'}>
         <GiTigerHead className="mt-4 ml-6" size={80} color={'white'}/>
