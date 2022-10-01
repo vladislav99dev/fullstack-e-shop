@@ -18,8 +18,6 @@ const createProductHandler = async (req, res) => {
     }
 };
 
-
-
 const editProductHandler = async (req, res) => {
   console.log(`PUT ${req.originalUrl}`);
   const data = req.body;
@@ -51,6 +49,12 @@ const deleteProductHandler = async(req,res) => {
   }
 }
 
+const checkAccessToken = async (req,res) => {
+    console.log(`GET ${req.originalUrl}`);
+    return res.status(200).json({isAdmin:true});
+}
+
+router.get("/checkToken", checkAccessToken);
 router.post("/products/create", createProductHandler);
 router.put("/products/:productId/edit", editProductHandler);
 router.delete("/products/:productId/delete", deleteProductHandler);
