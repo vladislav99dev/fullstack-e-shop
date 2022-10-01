@@ -3,7 +3,7 @@ const tokenServices = require('../services/tokenServices')
 
 const isAdmin = (req, res, next) => {
     const token = req.headers.authorization;
-    if(token === 'undefined') return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
+    if(token === 'undefined' || !token) return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
     try{
         const admin = tokenServices.verify(token);
     } catch(err){
