@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 
 import * as productsRequester from "../../services/productsRequester";
 import * as favouritesAndCartRequester from "../../services/favouritesAndCartRequester";
@@ -14,12 +14,13 @@ import Spinner from "../Spinner/Spinner"
 
 
 const ProductDetails = () => {
-  const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-
+  
+  const { productId } = useParams();
+  const navigate = useNavigate();
 
   const { modalState, setFailedModal, resetModals } = useModalsContext();
   const { user, login } = useAuthContext();
@@ -50,6 +51,7 @@ const ProductDetails = () => {
     "Made from soft fabric for lasting comfort, the Paris Saint-Germain T-Shirt has signature details to let you show everyone who you support";
   const shoeText =
     "At home on Italian runways and local neighbourhood streets, the Nike Air Max Plus 3 features a design that's ahead of its time.";
+
 
 
   const addToUserCartHandler = async (event) => {
@@ -134,6 +136,9 @@ const ProductDetails = () => {
     setIsLoading(false)
     resetModals();
   }
+  const editAndDeleteButtonHandlers = (action,productId) => {
+    return navigate(`/admin/products/${productId}/${action}`)
+  }
 
   return (
     <>
@@ -170,7 +175,7 @@ const ProductDetails = () => {
             <form
               onSubmit={user.email ? addToUserCartHandler : addToLocalStorage}
               id="sizesAndButtons"
-              className="w-[60%] ml-[15%]"
+              className="w-[60%] ml-[20%]"
             >
               <p className="text-xl mt-4 py-4 ml-6 font-medium text-[grey]">
                 Select Size
@@ -233,19 +238,41 @@ const ProductDetails = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="py-6 px-[32%] border-2 mt-8 mb-4 rounded-2xl bg-neutral-900 font-medium text-white hover:bg-neutral-700 ease-in-out duration-500"
+                  className="py-6 w-[500px] border-2 mt-8 mb-4 rounded-2xl bg-neutral-900 font-medium text-white hover:bg-neutral-700 ease-in-out duration-500"
                 >
                   Add to cart
                 </button>
               </div>
               <div className="flex justify-center">
                 <button
-                  className="py-6 px-[26%] border-2 mb-2 mt-4 rounded-2xl font-medium hover:bg-green-200 ease-in-out duration-500"
+                  className="py-6 w-[500px] border-2 mb-2 mt-4 rounded-2xl font-medium hover:bg-green-200 ease-in-out duration-500"
                   onClick={user.email ? addToFavouritesHandler : denyAccessToFavourites}
                 >
                   Add to favourites &#x2764;
                 </button>
               </div>
+              {user.accessToken 
+              ? <>
+                <div className="flex justify-center">
+                <button
+                  className="py-6 w-[500px]  mb-2 mt-4 rounded-2xl font-medium bg-green-200 hover:bg-green-100 ease-in-out duration-500"
+                  onClick={editAndDeleteButtonHandlers.bind(null,'edit', product._id)}
+                >
+                  Edit
+                </button>
+              </div>
+              <div className="flex justify-center">
+                <button
+                  className="py-6 w-[500px]  mb-2 mt-4 rounded-2xl font-medium bg-red-200 hover:bg-red-100 ease-in-out duration-500"
+                  onClick={editAndDeleteButtonHandlers.bind(null,'delete', product._id)}
+                >
+                  Delete
+                </button>
+              </div>
+              </>
+              :null
+              }
+
             </form>
           </div>
         )}
