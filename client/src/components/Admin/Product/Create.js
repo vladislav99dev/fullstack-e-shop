@@ -8,12 +8,14 @@ import * as productsRequester from '../../../services/productsRequester'
 import { productSizeFormater } from "../../../services/dataServices";
 import productsValidations from "../../../validations/productsValidations";
 
+import productData from "../../../utils/productData";
+
+import isAdmin from "../../../HOC/adminRoutesGuard";
 
 import ValidationMessage from "../../ValidationMessage/validationMessage";
 import AttentionModal from "../../Modals/AttentionModal";
 import SuccessModal from "../../Modals/SuccessModal"
 
-import productData from "../../../utils/productData";
 
 
 
@@ -127,5 +129,5 @@ const Create = () => {
     );
 };
 
-export default Create;
+export default isAdmin(Create);
 
