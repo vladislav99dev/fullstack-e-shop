@@ -1,2 +1,3 @@
 # fullstack-e-shop
- fullstack app using express,atlas and react
+ fullstack app using Express,Atlas,React and Tailwind.
+ ## SUPPORTS
