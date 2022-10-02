@@ -33,9 +33,13 @@ const CartLayout = ({
   },[])
 
 
+
+
   const removeProductFromStorage = (product,size,event) => {
     event.preventDefault();
     removeProduct(product,size);
+    if(products.length > 0) return products.map(product => setTotalPrice((product.product.price * product.quantity)));
+    if(products.length <= 0) setTotalPrice(0);
   }
 
   
@@ -48,7 +52,13 @@ const CartLayout = ({
       setIsLoading(false)
 
       if(response.status !== 200) throw {responseStatus:response.status,message:jsonResponse.message};
-      if(response.status === 200) login(jsonResponse.user);
+      if(response.status === 200) {
+        login(jsonResponse.user)
+        console.log(jsonResponse);
+        if(jsonResponse.user.cart.length > 0) return jsonResponse.user.cart.map(product => setTotalPrice((product._id.price * product.quantity)));
+        if(jsonResponse.user.cart.length <= 0) setTotalPrice(0);
+      }
+
     }catch(err){
       setIsLoading(false)
       if(err.responseStatus) return setFailedModal(err.message)
@@ -136,23 +146,6 @@ const CartLayout = ({
                           : null) 
                           : null 
                       }
-                  
-                        {/* {isLoading 
-                        ? <Spinner/>
-                        : user.cart.length 
-                        ? user.cart.map((product) => (
-                          <CartCard
-                          key={`${product._id._id}${product.size}`}
-                          product={product._id}
-                          quantity={product.quantity}
-                          size={product.size}
-                          toggleCartMenu={toggleCartMenu}
-                          profileId={user._id}
-                          manageIsLoading={manageIsLoading}
-                          />
-                          ))
-                          : <p className="text-md font-bold text-[#00df9a] mt-4">No products added to cart!</p>
-                        } */}
                       </ul>
                     </div>
                   </div>
