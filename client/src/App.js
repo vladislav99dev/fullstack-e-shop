@@ -6,6 +6,7 @@ import { NavTogglesProvider } from "./context/NavTogglesContext.js";
 import { ModalsProvider } from "./context/ModalsContext.js";
 
 import NavBar from "./components/NavBar/NavBar.js";
+import Footer from "./components/Footer/Footer.js";
 
 import Home from "./components/Home/Home.js"
 
@@ -62,6 +63,7 @@ function App() {
 
                   <Route path="*"  element={<ErrorPage/>} />
                 </Routes>
+                <Footer/>
               </div>
             </div>
           </LocalProductsProvider>
