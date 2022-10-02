@@ -37,8 +37,7 @@ const NavBar = () => {
     if(!user.email) return setFailedModal("You should be logged in to use this feature!")
   }
   return (
-    <OutsideClickHandler onOutsideClick={outsideClick}>
-
+    <>
       <MobileNavBarManager
       isUserMobileLinksActive={isUserMobileLinksActive}
       toggleUserMenu={toggleUserMenu}
@@ -54,6 +53,7 @@ const NavBar = () => {
         toggleCartMenu={toggleCartMenu}
         toggleFavouritesMenu={manageFavouritesAccess}
         user={user}
+        outsideClick={outsideClick}
       />
 
       {isCartMenuActive ? <CartLayout 
@@ -73,8 +73,7 @@ const NavBar = () => {
       user={user}
       login={login}
       /> : null}
-
-    </OutsideClickHandler>
+    </>
   );
 };
 export default NavBar;

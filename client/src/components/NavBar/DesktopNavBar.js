@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 
+import OutsideClickHandler from "react-outside-click-handler";
 import { RiShoppingCart2Fill, RiUserAddFill } from "react-icons/ri";
 import { MdFavorite } from "react-icons/md";
 import {GiTigerHead} from "react-icons/gi"
@@ -13,14 +14,15 @@ const DesktopNavBar = ({
   toggleDesktopUserMenu,
   toggleCartMenu,
   toggleFavouritesMenu,
-  user
+  user,
+  outsideClick
 }) => {
   return (
     <>
       <div className="text-white w-[95%] hidden lg:flex mt-14 justify-between items-center h-26 px-4 bg-[#DDDDDD] rounded-full ml-[2.5%] mr-[2.5%]">
         <div className="flex">
         <GiTigerHead size={100}/>
-        <Link to={'/home'} className="w-full text-3xl font-bold italic text-[#00df9a] drop-shadow-xl mt-2 ml-4">
+        <Link to={'/'} className="w-full text-3xl font-bold italic text-[#00df9a] drop-shadow-xl mt-2 ml-4">
           Supreme
           <br/>
            Fashion Shop
@@ -65,7 +67,9 @@ const DesktopNavBar = ({
       </div>
       {isDesktopUserLinksActive ? (
         <div className="hidden lg:block bg-[#DDDDDD]  w-[30%] fixed right-4  border-4 border-[#00df9a] rounded-lg z-10">
-          <UserLinks clickHandler={toggleDesktopUserMenu} user={user}/>
+          <OutsideClickHandler onOutsideClick={outsideClick}>
+            <UserLinks clickHandler={toggleDesktopUserMenu} user={user}/>
+          </OutsideClickHandler>
         </div>
       ) : null}
     </>
