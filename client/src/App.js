@@ -63,8 +63,8 @@ function App() {
 
                   <Route path="*"  element={<ErrorPage/>} />
                 </Routes>
-                <Footer/>
               </div>
+                <Footer/>
             </div>
           </LocalProductsProvider>
         </NavTogglesProvider>
