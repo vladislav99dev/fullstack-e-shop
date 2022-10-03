@@ -17,7 +17,7 @@ const Logout = () => {
         try {
             await userRequester.logout()
             logout()
-            return navigate('/')
+            return navigate('/home')
         } catch(err){
             console.log(err);
         }
