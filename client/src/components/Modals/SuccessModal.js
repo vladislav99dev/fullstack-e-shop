@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import {AiFillCheckCircle} from 'react-icons/ai'
+import {useModalsContext} from '../../context/ModalsContext'
 
 const SuccessModal = ({
     titleMessage,
@@ -8,8 +9,10 @@ const SuccessModal = ({
     buttonName
 }) => {
     const navigate = useNavigate();
+    const {resetModals} = useModalsContext();
     const cancelHandler = () => {
-        navigate('/')
+        resetModals()
+        navigate('/home')
     }
     return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
