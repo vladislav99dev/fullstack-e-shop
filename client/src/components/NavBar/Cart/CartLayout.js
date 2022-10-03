@@ -68,7 +68,7 @@ const CartLayout = ({
   return (
   <>
     <div
-      className="relative z-10"
+      className="relative z-30"
       aria-labelledby="slide-over-title"
       role="dialog"
       aria-modal="true"
