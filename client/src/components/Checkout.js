@@ -74,10 +74,9 @@ const Checkout = () => {
       }
     }
     const modalButtonHandler = () => {
-      navigate('/');
       resetModals();
+      navigate('/home');
     }
-
 
     return (
       <>
@@ -94,7 +93,7 @@ const Checkout = () => {
       titleMessage={"Congrats!"}
       descriptionMessage={modalState.isSuccess.message}
       buttonHandler={modalButtonHandler}
-      buttonName={"Go to orders page"}/>
+      buttonName={"Go to home page"}/>
       : null}
       {isLoading 
       ? <Spinner/>
