@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 
 import { validateLogin } from "../../validations/userValidations";
 import * as userRequester from "../../services/userRequester";
@@ -17,9 +17,12 @@ import AttentionModal from "../Modals/AttentionModal";
 
 const Login = () => {
   const [validationMessages, setValidationMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate()
+
   const { login } = useAuthContext();
 
-  const [isLoading, setIsLoading] = useState(false);
   const { products, clearStorage } = useLocalProductsContext();
   const {modalState, setFailedModal, resetModals } = useModalsContext();
 
@@ -78,6 +81,7 @@ const Login = () => {
       }
 
       login(userData)
+      navigate('/home')
     } catch (err) {
       setIsLoading(false);
       console.log(err);
