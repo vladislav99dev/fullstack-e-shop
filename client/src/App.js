@@ -13,6 +13,7 @@ import Home from "./components/Home/Home.js"
 import Login from "./components/Login/Login.js";
 import Register from "./components/Register/Register.js";
 import Logout from "./components/Logout/Logout.js";
+import PersonalInfo from "./components/PersonalInfo/PersonalInfo.js";
 
 import Create from "./components/Admin/Product/Create.js"
 import Edit from "./components/Admin/Product/Edit.js";
@@ -22,7 +23,7 @@ import ProductsLayout from "./components/Products/Layout/ProductsLayout.js";
 import ProductDetails from "./components/Products/ProductDetails.js";
 
 import ErrorPage from "./components/ErrorPage.js";
-import Checkout from "./components/Checkout.js";
+import Checkout from "./components/Checkout/Checkout.js";
 
 import TryStuff from "./components/TryStuff.js";
 
@@ -42,6 +43,7 @@ function App() {
                   <Route path="/users/">
                     <Route path="login" element={<Login />} />
                     <Route path='register' element={<Register />}/>
+                    <Route path='profile' element={<PersonalInfo/>}/>
                     <Route path='logout' element={<Logout />}/>
                   </Route>
 
