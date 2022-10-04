@@ -9,7 +9,6 @@ const UserLinks = ({
 }) => {
 
     return(
-        // <OutsideClickHandler onOutsideClick={clickHandler} >
         <>
             {!user.email
             ?<>
@@ -25,12 +24,11 @@ const UserLinks = ({
                     <Link to={"users/logout"} className="mobile-links" onClick={clickHandler}>Logout</Link>
                 </div>
                 <div className="container-links border-0">
-                    <Link to={"#"} className="mobile-links" onClick={clickHandler}>Edit Profile</Link>
+                    <Link to={"users/profile"} className="mobile-links" onClick={clickHandler}>Profile</Link>
                 </div>
             </>
             }
             </>
-        // </OutsideClickHandler>
     )
 }
 
