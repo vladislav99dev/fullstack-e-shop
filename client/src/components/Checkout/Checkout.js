@@ -2,19 +2,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {GiTigerHead} from "react-icons/gi"
 
-import { useAuthContext } from "../context/AuthContext";
-import { useLocalProductsContext } from "../context/LocalProductsContext";
-import { useModalsContext } from "../context/ModalsContext";
+import { useAuthContext } from "../../context/AuthContext";
+import { useLocalProductsContext } from "../../context/LocalProductsContext";
+import { useModalsContext } from "../../context/ModalsContext";
 
-import ordersRequester from "../services/ordersRequester"
+import ordersRequester from "../../services/ordersRequester"
 
-import { validateOrderUserInfo } from "../validations/userValidations";
+import { validateOrderUserInfo } from "../../validations/userValidations";
 
-import AttentionModal from "./Modals/AttentionModal";
-import ValidaionMessage from "./ValidationMessage/validationMessage";
-import SuccessModal from "./Modals/SuccessModal";
-import Spinner from "./Spinner/Spinner";
-import ValidationMessage from "./ValidationMessage/validationMessage";
+import AttentionModal from "../Modals/AttentionModal";
+import SuccessModal from "../Modals/SuccessModal";
+import Spinner from "../Spinner/Spinner";
+import ValidationMessage from "../ValidationMessage/validationMessage";
 
 
 const Checkout = () => {
