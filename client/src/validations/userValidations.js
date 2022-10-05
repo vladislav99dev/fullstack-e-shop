@@ -92,5 +92,6 @@ const validateUserForms = (service, data) => {
 
 export const validateRegister = validateUserForms.bind(null, "register");
 export const validateOrderUserInfo = validateUserForms.bind(null, "order");
+export const validateUserEdit = validateUserForms.bind(null, "order");
 export const validateLogin = validateUserForms.bind(null, "login");
 //unit
