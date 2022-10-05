@@ -23,10 +23,36 @@ const registerHandler = async(req,res)=> {
           await userServices.create(data);
           return res.status(201).json({message:"You successfully created new user profile!"});
       } catch(err){
-        if(err.status) res.status(status).json({message:err.message});
+        if(err.status) res.status(err.status).json({message:err.message});
         console.log(err);
       }
 }
+
+const editHandler = async(req,res) => {
+  console.log(`PUT ${req.originalUrl}`);
+  const {profileId} = req.params
+  const data = req.body;
+
+  
+  try{
+    const user = await userServices.findById(profileId);
+    if(!user) throw {status:400, message:'There is no user with this id!'};
+
+    userDataValidation.validateEditData(data);
+    await userServices.findByIdAndUpdate(profileId,data)
+    const populatedUser = await userServices.findByIdAndPopulate(profileId);
+    delete populatedUser.password
+
+    return res.status(201).json({message:"You successfully updated your profile!",user:populatedUser})
+  }catch(err) {
+    if(err.status) res.status(err.status).json({message:err.message});
+    console.log(err);
+  }
+  res.end();
+
+}
+
+
 
 
 const loginHandler = async(req,res) => {
@@ -82,6 +108,7 @@ const logoutHandler = (req,res) => {
 
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
+router.put("/:profileId/edit", editHandler);
 router.post("/logout", logoutHandler);
 router.use("/products", userProductsController);
 
