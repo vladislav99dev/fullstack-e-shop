@@ -1,6 +1,6 @@
 import { url } from "../constants";
 
-const requester = (service,data,profileId) => {
+const requester = (service,data,profileId,token) => {
     let fetchUrl ='';
     let options = {};
     if(service === 'login'){
@@ -44,6 +44,7 @@ const requester = (service,data,profileId) => {
         Object.assign(options,{
             method:"PUT",
             headers:{
+                'Authorization':token,
                 'content-type':'application/json'
             },
             body:JSON.stringify({
