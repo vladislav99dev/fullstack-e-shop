@@ -36,7 +36,7 @@ const reducerButtonsState = (state,action) => {
 
 const PersonalInfo = () => {
     const [buttonsState,dispatch] = useReducer(reducerButtonsState,initialButtonsState)
-    const {user} = useAuthContext();
+    const {user,login} = useAuthContext();
 
     const btnClickHandler = (type) => {
         dispatch({type:type})
@@ -49,7 +49,7 @@ const PersonalInfo = () => {
                 <button onClick={btnClickHandler.bind(null,"orders")} className="py-4 border-b-4 border-[#00df9a] w-full text-left font-extrabold text-[#28282B]">Orders</button>
             </div>
             <div className="w-[40%] border-2 border-[#00df9a] border-l-0">
-                { buttonsState.edit ? <EditProfile user={user}/> : null }
+                { buttonsState.edit ? <EditProfile user={user} login={login}/> : null }
                 { buttonsState.changePassword ? <ChangePassword/> : null}
             </div>
         </div>
