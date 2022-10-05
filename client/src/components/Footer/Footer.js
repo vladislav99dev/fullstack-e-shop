@@ -45,7 +45,7 @@ const Footer = () => {
         dispatch({type:type})
     }
     return (
-        <div className="bg-black md:grid md:grid-cols-5 mt-[20rem] w-full">
+        <div className="bg-[#28282B] md:grid md:grid-cols-5 mt-[27rem] w-full h-full">
             <div>
                 <ul className="text-white px-6 pt-8 pb-4 font-semibold w-full lg:ml-20">
                     <li className="py-[0.4rem] text-sm hover:cursor-pointer hover:text-[#00df9a]">FIND A STORE</li>
