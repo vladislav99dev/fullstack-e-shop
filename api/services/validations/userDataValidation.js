@@ -85,10 +85,6 @@ const validatePhoneNumber = (phoneNumber) => {
   };
 
 
-
-
-
-
 const validateRegisterData = (data) => {
   try{
     validateIsAllDataSend(data)
@@ -96,6 +92,25 @@ const validateRegisterData = (data) => {
     validateLastName(data.lastName);
     validateEmail(data.email);
     validatePassword(data.password)
+    validateCountry(data.country);
+    validateCity(data.city);
+    validateStreet(data.street);
+    validateState(data.state);
+    validateZipCode(data.zipCode);
+    validateUnitNumber(data.unitNumber);
+    validatePhoneNumber(data.phoneNumber);
+  } catch(err){
+    throw {status:400, message:err.message}
+  }
+  };
+
+
+  
+const validateEditData = (data) => {
+  try{
+    validateFirstName(data.firstName);
+    validateLastName(data.lastName);
+    validateEmail(data.email);
     validateCountry(data.country);
     validateCity(data.city);
     validateStreet(data.street);
@@ -120,6 +135,7 @@ const validateRegisterData = (data) => {
   const userDataValidation ={
     validateRegisterData,
     validateLoginData,
+    validateEditData
   }
 
   module.exports = userDataValidation
