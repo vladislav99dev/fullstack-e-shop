@@ -32,8 +32,6 @@ const editHandler = async(req,res) => {
   console.log(`PUT ${req.originalUrl}`);
   const {profileId} = req.params
   const data = req.body;
-
-  
   try{
     const user = await userServices.findById(profileId);
     if(!user) throw {status:400, message:'There is no user with this id!'};
@@ -43,7 +41,7 @@ const editHandler = async(req,res) => {
     const populatedUser = await userServices.findByIdAndPopulate(profileId);
     delete populatedUser.password
 
-    return res.status(201).json({message:"You successfully updated your profile!",user:populatedUser})
+    return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser})
   }catch(err) {
     if(err.status) res.status(err.status).json({message:err.message});
     console.log(err);
