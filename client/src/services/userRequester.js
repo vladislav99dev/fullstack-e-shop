@@ -40,7 +40,7 @@ const requester = (service,data,profileId) => {
     }
 
     if(service === 'edit') {
-        fetchUrl = `${url}/users/edit/${profileId}`
+        fetchUrl = `${url}/users/${profileId}/edit`
         Object.assign(options,{
             method:"PUT",
             headers:{
@@ -67,7 +67,7 @@ const requester = (service,data,profileId) => {
             method: "POST"
         })
     }
-    return fetch(url,options)
+    return fetch(fetchUrl,options)
 }
 
 
