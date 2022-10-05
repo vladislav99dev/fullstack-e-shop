@@ -15,7 +15,7 @@ const AttentionModal = ({
   };
   return (
       <div
-        className="relative z-10"
+        className="relative z-20"
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
