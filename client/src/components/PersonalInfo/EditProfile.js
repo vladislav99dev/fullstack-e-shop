@@ -56,18 +56,17 @@ const EditProfile = ({user,login}) => {
         if(validationsResponse.length > 0) return setValidationMessages(validationsResponse);
 
         try{
-            const response = await userRequester.edit(formDataState,user._id);
+            const response = await userRequester.edit(formDataState,user._id,user.accessToken);
             const jsonResponse = await response.json();
             if(response.status !== 200) throw {message:jsonResponse.message};
             if(response.status === 200) {
-                login(jsonResponse.user)
+                login({...jsonResponse.user,accessToken:user.accessToken})
                 return setSuccessModal(jsonResponse.message)
             } 
         }catch(err){
             console.log(err);
             return setFailedModal(err.message)
         }
-        
     }
 
     const modalBtnHandlers = (modal) => {
