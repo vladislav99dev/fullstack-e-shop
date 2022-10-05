@@ -1,4 +1,4 @@
-import { useReducer,useEffect,useState } from "react";
+import { useReducer,useState } from "react";
 
 import { validateUserEdit } from "../../validations/userValidations";
 
@@ -37,14 +37,6 @@ const EditProfile = ({user}) => {
         phoneNumber: user.phoneNumber,
     })
 
-    useEffect(()=>{
-        return () => {
-            changeFormData('cleanup')
-        }
-    })
-
-
-
     const changeFormData = (type,event) => {
         if(type === 'cleanup') return {};
         dispatch({type:type,payload:event.target.value})
@@ -64,6 +56,7 @@ const EditProfile = ({user}) => {
             ?   validationMessages.map((x) => <ValidationMessage key={x} message={x}/>)
             :   null
             }
+
             <Input labelName={"First Name"} defaultValue={formDataState.firstName} changeFormData={changeFormData.bind(null,"firstName")}/>
             <Input labelName={"Last Name"} defaultValue={formDataState.lastName} changeFormData={changeFormData.bind(null,"lastName")}/>
             <Input labelName={"Email"} defaultValue={formDataState.email} changeFormData={changeFormData.bind(null,"email")}/>
