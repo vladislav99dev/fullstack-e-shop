@@ -30,9 +30,16 @@ const registerHandler = async(req,res)=> {
 
 const editHandler = async(req,res) => {
   console.log(`PUT ${req.originalUrl}`);
-  const {profileId} = req.params
+
+  const token = req.headers.authorization;
+  const {profileId} = req.params;
   const data = req.body;
+
+  if(token === 'undefined' || !token) return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
+
   try{
+    tokenServices.verifyUser(token)
+
     const user = await userServices.findById(profileId);
     if(!user) throw {status:400, message:'There is no user with this id!'};
 
@@ -43,8 +50,12 @@ const editHandler = async(req,res) => {
 
     return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser})
   }catch(err) {
-    if(err.status) res.status(err.status).json({message:err.message});
-    console.log(err);
+    if(err.status) return res.status(err.status).json({message:err.message});
+
+    const[error,errorMessage] = Object.values(err);
+    if(errorMessage === 'invalid token') return res.status(401).json({isAdmin:false,message:'Access token is invalid!'});
+    if(errorMessage === 'jwt malformed') return  res.status(401).json({isAdmin:false,message:'Access token is invalid!'});
+    if(errorMessage === 'jwt expired') return  res.status(401).json({isAdmin:false,message:'Access token expired,you should re-login!'});
   }
   res.end();
 
@@ -70,11 +81,13 @@ const loginHandler = async(req,res) => {
         const {password, ...populatedUser} = await userServices.findByIdAndPopulate(user._id);
 
         if(populatedUser.isAdmin){
-          const accessToken = tokenServices.generate(populatedUser);
+          const accessToken = tokenServices.generateAdmin(populatedUser);
           Object.assign(userData,{...populatedUser,accessToken});
         };
-        if(!populatedUser.isAdmin) Object.assign(userData,populatedUser);
-
+        if(!populatedUser.isAdmin) {
+          const accessToken = tokenServices.generateUser(populatedUser);
+          Object.assign(userData,{...populatedUser,accessToken});
+        }
         return res.status(200).json({user:userData,message:'You have successfully logged in!'});
       } catch(err){
         if(err.status) return  res.status(err.status).json({message:err.message});
