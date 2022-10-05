@@ -15,7 +15,7 @@ import SuccessModal from "../Modals/SuccessModal";
 import Spinner from "../Spinner/Spinner";
 
 const Register = () => {
-    const[messages,setMessaages] = useState([]);
+    const[validationMessages,setValidationsMessages] = useState([]);
     const[isLoading, setIsLoading] = useState(false)
 
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Register = () => {
 
     const registerHandler = async(event) => {
         event.preventDefault();
-        setMessaages([]);
+        setValidationsMessages([]);
         setIsLoading(true);
 
         const formdData = new FormData(event.target);
@@ -38,7 +38,7 @@ const Register = () => {
         const validationsResponse = validateRegister(data);
         if(validationsResponse.length > 0){
             setIsLoading(false)
-            return setMessaages(validationsResponse);}
+            return setValidationsMessages(validationsResponse);}
 
         try{
             const response = await userRequester.register(data);
@@ -79,8 +79,8 @@ const Register = () => {
             : null}
 
             <h1 className="text-[#00df9a] py-4 text-3xl italic uppercase font-bold w-full text-center mt-8">Register</h1>
-             {messages.length > 0 
-            ? messages.map((message) => <ValidationMessage key={message} message={message}/>)
+             {validationMessages.length > 0 
+            ? validationMessages.map((message) => <ValidationMessage key={message} message={message}/>)
             : null
             }
             <form onSubmit={registerHandler} className=" " >
