@@ -45,7 +45,7 @@ const EditProfile = ({user,login}) => {
     const navigate = useNavigate();
     const {modalState,setFailedModal,setSuccessModal,resetModals} = useModalsContext();
 
-    const changeFormData = (type,event) => {
+    const changeFormDataState = (type,event) => {
         if(type === 'cleanup') return {};
         dispatch({type:type,payload:event.target.value})
     }
@@ -101,17 +101,17 @@ const EditProfile = ({user,login}) => {
             :   null
             }
 
-            <Input labelName={"First Name"} defaultValue={formDataState.firstName} changeFormData={changeFormData.bind(null,"firstName")}/>
-            <Input labelName={"Last Name"} defaultValue={formDataState.lastName} changeFormData={changeFormData.bind(null,"lastName")}/>
-            <Input labelName={"Email"} defaultValue={formDataState.email} changeFormData={changeFormData.bind(null,"email")}/>
-            <Input labelName={"Country"} defaultValue={formDataState.country} changeFormData={changeFormData.bind(null,"country")}/>
-            <Input labelName={"State"} defaultValue={formDataState.state} changeFormData={changeFormData.bind(null,"state")}/>
-            <Input labelName={"City"} defaultValue={formDataState.city} changeFormData={changeFormData.bind(null,"city")}/>
-            <Input labelName={"Zip Code"} defaultValue={formDataState.zipCode} changeFormData={changeFormData.bind(null,"zipCode")}/>
-            <Input labelName={"Country"} defaultValue={formDataState.country} changeFormData={changeFormData.bind(null,"country")}/>
-            <Input labelName={"Street"} defaultValue={formDataState.street} changeFormData={changeFormData.bind(null,"street")}/>
-            <Input labelName={"Unit Number"} defaultValue={formDataState.unitNumber} changeFormData={changeFormData.bind(null,"unitNumber")}/>
-            <Input labelName={"Phone Number"} defaultValue={formDataState.phoneNumber} changeFormData={changeFormData.bind(null,"phoneNumber")}/>
+            <Input labelName={"First Name"} defaultValue={formDataState.firstName} changeState={changeFormDataState.bind(null,"firstName")}/>
+            <Input labelName={"Last Name"} defaultValue={formDataState.lastName} changeState={changeFormDataState.bind(null,"lastName")}/>
+            <Input labelName={"Email"} defaultValue={formDataState.email} changeState={changeFormDataState.bind(null,"email")}/>
+            <Input labelName={"Country"} defaultValue={formDataState.country} changeState={changeFormDataState.bind(null,"country")}/>
+            <Input labelName={"State"} defaultValue={formDataState.state} changeState={changeFormDataState.bind(null,"state")}/>
+            <Input labelName={"City"} defaultValue={formDataState.city} changeState={changeFormDataState.bind(null,"city")}/>
+            <Input labelName={"Zip Code"} defaultValue={formDataState.zipCode} changeState={changeFormDataState.bind(null,"zipCode")}/>
+            <Input labelName={"Country"} defaultValue={formDataState.country} changeState={changeFormDataState.bind(null,"country")}/>
+            <Input labelName={"Street"} defaultValue={formDataState.street} changeState={changeFormDataState.bind(null,"street")}/>
+            <Input labelName={"Unit Number"} defaultValue={formDataState.unitNumber} changeState={changeFormDataState.bind(null,"unitNumber")}/>
+            <Input labelName={"Phone Number"} defaultValue={formDataState.phoneNumber} changeState={changeFormDataState.bind(null,"phoneNumber")}/>
 
             <div className="flex justify-center">
                 <button className="mt-4 mb-4 py-2 px-16 rounded-lg bg-[#00df9a] text-white italic font-bold text-xl hover:bg-green-300 ease-in-out duration-500">Submit</button>
