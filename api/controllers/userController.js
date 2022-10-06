@@ -51,7 +51,6 @@ const editHandler = async(req,res) => {
     return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser})
   }catch(err) {
     if(err.status) return res.status(err.status).json({message:err.message});
-
     const[error,errorMessage] = Object.values(err);
     if(errorMessage === 'invalid token') return res.status(401).json({isAdmin:false,message:'Access token is invalid!'});
     if(errorMessage === 'jwt malformed') return  res.status(401).json({isAdmin:false,message:'Access token is invalid!'});
@@ -60,9 +59,6 @@ const editHandler = async(req,res) => {
   res.end();
 
 }
-
-
-
 
 const loginHandler = async(req,res) => {
       console.log(`POST ${req.originalUrl}`);
@@ -95,36 +91,29 @@ const loginHandler = async(req,res) => {
       }
 }
 
-const logoutAdminHandler = (req,res) => {
-  console.log(`POST ${req.originalUrl}`);
-  const token = req.headers.authorization;
-  if(!token) return res.status(401).json({error:'No access token provided!'});
-   
-  try {
-    const decodedToken = tokenServices.verify(token);
-    res.status(200).json({successMessage: 'You have successfully loged out!'});
-  } catch(err) {
-    return res.status(401).json({error:'Your accessToken have expired!'});
-  }
-}
-//only here left for refactoring in thsi controller
-
 const logoutHandler = (req,res) => {
   console.log(`POST ${req.originalUrl}`);
   res.status(200).json({successMessage: 'You have successfully loged out!'});
 }
 
+const changePasswordHandler = async(req,res) => {
+  console.log(`POST ${req.originalUrl}`);
+  //check token valid
+  //check if password is valid
+  //update user 
+  //return new user
 
+}
 
 
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
-router.put("/:profileId/edit", editHandler);
 router.post("/logout", logoutHandler);
+router.put("/:profileId/change-password", changePasswordHandler);
+router.put("/:profileId/edit", editHandler);
 router.use("/products", userProductsController);
 
 
 
 
 module.exports = router;
-
