@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 
 const userServices = require("../services/userServices");
+const tokenGenerationAndVerification = require("../services/tokenGenerationAndVerification");
 const tokenServices = require("../services/tokenServices");
 const userDataValidation = require("../services/validations/userDataValidation");
 
@@ -38,7 +39,7 @@ const editHandler = async(req,res) => {
   if(token === 'undefined' || !token) return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
 
   try{
-    tokenServices.verifyUser(token)
+    tokenGenerationAndVerification.verifyUser(token)
 
     const user = await userServices.findById(profileId);
     if(!user) throw {status:400, message:'There is no user with this id!'};
@@ -64,6 +65,7 @@ const loginHandler = async(req,res) => {
       console.log(`POST ${req.originalUrl}`);
       const data = req.body;
       const userData = {};
+      let accessToken = '';
 
       try {
         userDataValidation.validateLoginData(data);
@@ -74,16 +76,18 @@ const loginHandler = async(req,res) => {
         const isValid = await bcrypt.compare(data.password,user.password);
         if(!isValid) throw {status:401, message:'Incorrect email or password'};
 
+
+        if(user.isAdmin) 
+          accessToken = tokenGenerationAndVerification.generateAdmin(user);
+
+        if(!user.isAdmin) 
+          accessToken = tokenGenerationAndVerification.generateUser(user);
+  
+        await tokenServices.create({profileId:user._id,token:accessToken});
+
         const {password, ...populatedUser} = await userServices.findByIdAndPopulate(user._id);
 
-        if(populatedUser.isAdmin){
-          const accessToken = tokenServices.generateAdmin(populatedUser);
-          Object.assign(userData,{...populatedUser,accessToken});
-        };
-        if(!populatedUser.isAdmin) {
-          const accessToken = tokenServices.generateUser(populatedUser);
-          Object.assign(userData,{...populatedUser,accessToken});
-        }
+        Object.assign(userData,{...populatedUser});
         return res.status(200).json({user:userData,message:'You have successfully logged in!'});
       } catch(err){
         if(err.status) return  res.status(err.status).json({message:err.message});
@@ -97,11 +101,8 @@ const logoutHandler = (req,res) => {
 }
 
 const changePasswordHandler = async(req,res) => {
-  console.log(`POST ${req.originalUrl}`);
-  //check token valid
-  //check if password is valid
-  //update user 
-  //return new user
+  console.log(`PUT ${req.originalUrl}`);
+  res.end();
 
 }
 
