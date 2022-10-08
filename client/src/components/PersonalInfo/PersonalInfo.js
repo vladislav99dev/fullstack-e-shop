@@ -50,7 +50,7 @@ const PersonalInfo = () => {
             </div>
             <div className="w-[40%] border-2 border-[#00df9a] border-l-0">
                 { buttonsState.edit ? <EditProfile user={user} login={login}/> : null }
-                { buttonsState.changePassword ? <ChangePassword/> : null}
+                { buttonsState.changePassword ? <ChangePassword user={user} login={login}/> : null}
             </div>
         </div>
     )
