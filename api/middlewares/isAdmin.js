@@ -1,4 +1,4 @@
-const tokenServices = require('../services/tokenServices')
+const tokenServices = require('../services/tokenGenerationAndVerification')
 
 
 const isAdmin = (req, res, next) => {
