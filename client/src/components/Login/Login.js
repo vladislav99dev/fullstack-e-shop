@@ -26,6 +26,9 @@ const Login = () => {
   const { products, clearStorage } = useLocalProductsContext();
   const {modalState, setFailedModal, resetModals } = useModalsContext();
 
+
+
+
   const addProductsFromLocalStorageToUserCart = async (profileId) => {
     const failedAddMessages = [];
     let user = {};
@@ -44,6 +47,8 @@ const Login = () => {
     }
     return [user, failedAddMessages.join(" ")];
   };
+
+
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -87,6 +92,7 @@ const Login = () => {
       console.log(err);
     }
   };
+
 
 
   return (
@@ -147,52 +153,3 @@ const Login = () => {
 };
 
 export default isNotLoggedIn(Login);
-
-
-
-
-
-
-
-// if (response.status === 200) {
-//   let userData = jsonResponse.user;
-//   if (products.length > 0) {
-//     const [user, failedAddMessages] =
-//       await addProductsFromLocalStorageToUserCart(jsonResponse._id);
-//     if (failedAddMessages)
-//       return setFailedModal(
-//         "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)"
-//       );
-//     if (user.hasOwnProperty("email")) Object.assign(userData, user);
-//     clearStorage();
-//   }
-//   login(userData);
-//   return setSuccessModal(jsonResponse.message);
-// }
-
-
-
-
-
-
-
-
-
-/* <div className="flex mt-10 justify-center">
-<label htmlFor="email">Email:</label>
-<input type="input" name="email" id="email" className="ml-8" placeholder="ex.petrpetrov@abv.bg" />
-</div>
-<div className="flex mt-4 justify-center">
-<label htmlFor="password">Password:</label>
-<input type="password" name="password" id="password"  />
-</div>
-<div className="flex justify-center mt-10">
-<label htmlFor="rememberMe">Remember me?</label>
-<input className="ml-1" type="checkbox" name="rememberMe"/>
-</div> 
-<div className="flex justify-center mt-2">
-<label>Don't have an account?<Link to={"users/register"} className="text-[#3abeff] text-lg"> Sign up</Link></label>
-</div> 
-<div className="flex justify-center mt-6 ">
-<button type="submit" className="py-2 mb-10 px-10 rounded-md text-white bg-[#DDDDDD] font-bold">Submit</button>
-</div>*/
