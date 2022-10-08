@@ -1,24 +1,21 @@
-const jwt = require('jsonwebtoken');
+const Token = require('../models/Token');
 
- const verifyAdmin = (token) => {
-    return jwt.verify(token,process.env.ADMIN_ACCESS_TOKEN_SECRET);
- }
- const verifyUser = (token) => {
-   return jwt.verify(token,process.env.USER_ACCESS_TOKEN_SECRET);
+
+const create = (data) => {
+    return Token.create({...data})
 }
- 
- const generateAdmin = (user) => {
-   return jwt.sign(user,process.env.ADMIN_ACCESS_TOKEN_SECRET,{expiresIn: '1d'});
- }
- const generateUser = (user) => {
-   return jwt.sign(user,process.env.USER_ACCESS_TOKEN_SECRET,{expiresIn: '1d'});
- }
 
- const tokenServices = {
-   verifyAdmin,
-   verifyUser,
-   generateAdmin,
-   generateUser
- }
 
- module.exports = tokenServices;
+const tokensServices = {
+    create
+}
+
+module.exports = tokensServices
+
+
+
+//user logs in 
+    //make token (where)
+    //return user without token
+    //on each change user trys we search for token in db 
+    //if we found we should verify if its still valid
