@@ -23,8 +23,10 @@ const findByIdAndPopulate = (id) => {
 }
 
 const findByIdAndUpdate = (id,data) => {
-    return User.findByIdAndUpdate(id,data,{returnDocument:'after'});
-    
+    return User.findByIdAndUpdate(id,data,{returnDocument:'after'}); 
+}
+const findByIdAndUpdatePassword = (id,data) => {
+    return User.updateOne({_id:id},data,{returnDocument:'after'})
 }
 
 const userServices = {
@@ -32,7 +34,8 @@ const userServices = {
     findByEmail,
     findById,
     findByIdAndUpdate,
-    findByIdAndPopulate
+    findByIdAndPopulate,
+    findByIdAndUpdatePassword
 }
 
 module.exports = userServices;
