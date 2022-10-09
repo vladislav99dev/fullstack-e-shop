@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 
-const verifyAdminToken = (token) => {
+const admin = (token) => {
     return jwt.verify(token,process.env.ADMIN_ACCESS_TOKEN_SECRET);
  }
- const verifyUserToken = (token) => {
+ const user = (token) => {
    return jwt.verify(token,process.env.USER_ACCESS_TOKEN_SECRET);
 }
 
 const verifyAccessToken = {
-    verifyAdminToken,
-    verifyUserToken
+    admin,
+    user
 }
 module.exports = verifyAccessToken;
