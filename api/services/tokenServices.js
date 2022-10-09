@@ -19,11 +19,3 @@ const tokenServices = {
 }
 
 module.exports = tokenServices
-
-
-
-//user logs in 
-    //make token (where)
-    //return user without token
-    //on each change user trys we search for token in db 
-    //if we found we should verify if its still valid
