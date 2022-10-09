@@ -2,7 +2,6 @@ const router = require('express').Router();
 
 const productsServices = require('../services/productsServices');
 const userServices = require('../services/userServices');
-const tokenServices = require('../services/tokenGenerationAndVerification');
 
 const isLoggedIn = require('../middlewares/isLoggedIn');
 
