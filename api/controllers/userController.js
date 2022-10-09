@@ -9,6 +9,7 @@ const findUserByIdAndUpdate = require("../utils/users/findUserByIdAndUpdate");
 const findUserByIdAndPopulate = require("../utils/users/findUserByIdAndPopulate");
 const checkUserPassword = require("../utils/users/checkUserPassword");
 const findUserByIdAndUpdatePassword = require("../utils/users/findUserByIdAndUpdatePassword");
+const checkIfEmailRegistered = require("../utils/users/checkIfEmailRegistered");
 
 const findUserAccessToken = require("../utils/tokens/findUserAccessToken");
 const createUserAccessToken = require("../utils/tokens/createUserAccessToken");
@@ -27,10 +28,10 @@ const registerHandler = async(req,res)=> {
   try {
       userDataValidation.validateRegisterData(data);
 
-      const user = await findUserByEmail(data.email);
-      if(user) throw {status:409, message:'User with this email already exist!'};
-
+      await checkIfEmailRegistered(data.email);
+      
       await createUser(data);
+      
       return res.status(201).json({message:"You successfully created new user profile!"});
 
   } catch(err){
@@ -108,12 +109,12 @@ const changePasswordHandler = async(req,res) => {
 
     const updatedUser = await findUserByIdAndUpdatePassword(user);
 
-    const populatedUser = await findUserByIdAndPopulate(updatedUser._id);
+    const populatedUser = await findUserByIdAndPopulate(user._id);
     
     return res.status(200).json({user:populatedUser,message:"You successfully updated your password!"});
-
   }catch(err) {
     if(err.status) return res.status(err.status).json({message:err.message})
+    console.log(err)
   }
 }
 
@@ -124,14 +125,15 @@ const logoutHandler = async(req,res) => {
   const {profileId} = req.params;
 
   try{
-    const user = findUserById(profileId);
-
+    const user = await findUserById(profileId);
+    console.log(user);
     const [{token}] = await findUserAccessToken(user._id);
 
     await verifyAccessToken(user,token);
 
     await deleteUserAccessToken(user._id);
 
+    return res.status(200).json({successMessage: 'You have successfully loged out!'});
   } catch(err){
     if(err.status) return res.status(err.status).json({message:err.message})
   }
@@ -146,10 +148,5 @@ router.put("/:profileId/edit", editHandler);
 router.use("/products", userProductsController);
 
 
-
-
 module.exports = router;
-
-
-
 
