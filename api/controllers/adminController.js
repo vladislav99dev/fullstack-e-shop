@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const productsServices = require("../services/productsServices");
 
-const productDataValidation = require("../services/validations/productDataValidation")
+const productDataValidation = require("../validations/productDataValidation")
 
 
 const createProductHandler = async (req, res) => {
@@ -52,6 +52,7 @@ const deleteProductHandler = async(req,res) => {
 const checkAccessToken = async (req,res) => {
     console.log(`GET ${req.originalUrl}`);
     return res.status(200).json({isAdmin:true});
+    // not finished
 }
 
 router.get("/checkToken", checkAccessToken);
