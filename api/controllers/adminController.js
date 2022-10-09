@@ -1,18 +1,25 @@
 const router = require("express").Router();
 
-const productsServices = require("../services/productsServices");
+const createProduct = require("../utils/products/createProduct");
+const findProductByIdAndUpdate = require("../utils/products/findProductByIdAndUpdate");
+const findProductById = require("../utils/products/findProductById");
+const deleteProductById = require("../utils/products/deleteProductById");
 
 const productDataValidation = require("../validations/productDataValidation")
 
 
 const createProductHandler = async (req, res) => {
   console.log(`POST ${req.originalUrl}`);
-  const data =
-    req.body;
+
+  const data = req.body;
+
     try{
-      const validatedData = productDataValidation.validateAllData(data)
-      const newProduct = await productsServices.create(validatedData);
-      res.status(201).json(newProduct);
+      productDataValidation.validateAllData(data);
+
+      const newProduct = await createProduct(data);
+
+      return res.status(201).json(newProduct);
+
     }catch(err){
       if(err.status) return res.status(err.status).json({message: err.message})
     }
@@ -20,18 +27,21 @@ const createProductHandler = async (req, res) => {
 
 const editProductHandler = async (req, res) => {
   console.log(`PUT ${req.originalUrl}`);
+
   const data = req.body;
-  const params = req.params;
+
+  const {productId} = req.params;
 
   try {
-    const validatedData = productDataValidation.validateAllData(data)
-    const updatedProduct = await productsServices.findByIdAndUpdate(
-      validatedData,
-      params.productId
-    );
-    res.status(200).json(updatedProduct);
+    productDataValidation.validateAllData(data);
+
+    await findProductById(productId);
+
+    await findProductByIdAndUpdate(productId,data);
+
+    res.status(200).json({message:`You successfully updated ${productId}!`});
+
   } catch (err) {
-    if(err.path === '_id') return res.status(404).json({message:"Product with this id does not exist!"})
     if(err.status) return res.status(err.status).json({ message:err.message});
   }
 };
@@ -40,19 +50,23 @@ const editProductHandler = async (req, res) => {
 const deleteProductHandler = async(req,res) => {
   console.log(`DELETE ${req.originalUrl}`);
 
-  const params = req.params;
+  const {productId} = req.params;
+
   try {
-    const deleteResponse = await productsServices.deleteById(params.productId)
-    res.status(200).json({message:"You successfully deleteted this product!"})
+    await findProductById(productId);
+
+    await deleteProductById(productId);
+
+    res.status(200).json({message:"You successfully deleteted this product!"});
+
   }catch(err){
-    if(err.path === '_id') return  res.status(404).json({message:'Product with this id was not found!'});
+    if(err.status) return res.status(err.status).json({message:err.message});
   }
 }
 
 const checkAccessToken = async (req,res) => {
     console.log(`GET ${req.originalUrl}`);
     return res.status(200).json({isAdmin:true});
-    // not finished
 }
 
 router.get("/checkToken", checkAccessToken);
