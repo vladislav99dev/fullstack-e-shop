@@ -1,6 +1,7 @@
 import { url } from "../constants";
 
 const requester = (service,data,profileId,token) => {
+    console.log(service,data,profileId)
     let fetchUrl ='';
     let options = {};
     if(service === 'login'){
@@ -39,25 +40,15 @@ const requester = (service,data,profileId,token) => {
         })
     }
 
-    if(service === 'edit') {
-        fetchUrl = `${url}/users/${profileId}/edit`
+    if(service === 'edit' || service ==='change-password') {
+        fetchUrl = `${url}/users/${profileId}/${service}`
         Object.assign(options,{
             method:"PUT",
             headers:{
-                'Authorization':token,
                 'content-type':'application/json'
             },
             body:JSON.stringify({
-                firstName:data.firstName,
-                lastName:data.lastName,
-                email: data.email,
-                country:data.country,
-                state:data.state,
-                city:data.city,
-                zipCode:data.zipCode,
-                street:data.street,
-                unitNumber:data.unitNumber,
-                phoneNumber:data.phoneNumber,
+                ...data
             })
         })
     }
@@ -75,5 +66,6 @@ const requester = (service,data,profileId,token) => {
 export const login = requester.bind(null,'login')
 export const register = requester.bind(null,'register')
 export const edit = requester.bind(null,'edit')
+export const changePassword = requester.bind(null,'change-password')
 export const logout = requester.bind(null,'logout')
 
