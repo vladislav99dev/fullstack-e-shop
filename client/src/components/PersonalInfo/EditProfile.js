@@ -64,7 +64,6 @@ const EditProfile = ({user,login}) => {
                 return setSuccessModal(jsonResponse.message)
             } 
         }catch(err){
-            console.log(err);
             return setFailedModal(err.message)
         }
     }
