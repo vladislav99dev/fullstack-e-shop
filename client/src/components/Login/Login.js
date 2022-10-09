@@ -26,13 +26,9 @@ const Login = () => {
   const { products, clearStorage } = useLocalProductsContext();
   const {modalState, setFailedModal, resetModals } = useModalsContext();
 
-
-
-
   const addProductsFromLocalStorageToUserCart = async (profileId) => {
     const failedAddMessages = [];
     let user = {};
-    console.log(profileId);
     for (const product of products) {
       const response = await favouritesAndCartRequester.addToCart(
         profileId,
@@ -47,8 +43,6 @@ const Login = () => {
     }
     return [user, failedAddMessages.join(" ")];
   };
-
-
 
   const loginHandler = async (event) => {
     event.preventDefault();
