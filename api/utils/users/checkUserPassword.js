@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 
 const checkUserPassword = async(submitedPassword,userPassword) => {
     const isValid = await bcrypt.compare(submitedPassword,userPassword);
-    if(!isValid) throw {status:401, message:'Incorrect email or password'};
+    if(!isValid) throw {status:401, message:'Incorrect password'};
 }
 
 module.exports = checkUserPassword
