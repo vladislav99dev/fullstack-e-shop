@@ -10,6 +10,31 @@ const userDataValidation = require("../services/validations/userDataValidation")
 
 const userProductsController = require("./userProductsController");
 
+const isProfileIdValid = async(profileid) => {
+  const user = await userServices.findById(profileid);
+  if(!user) throw {status:400, message:'There is no user with this id!'};
+  return user;
+}
+
+const verifyToken = async(user,token) => {
+  try {
+    if(!user.isAdmin) tokenGenerationAndVerification.verifyUser(token);
+    if(user.isAdmin) tokenGenerationAndVerification.verifyAdmin(token);
+
+    return {tokenValidated:true}
+  } catch(err) {
+    const[error,errorMessage] = Object.values(err);
+
+    if(errorMessage === 'invalid token' || errorMessage === 'jwt malformed') 
+    return {tokenValidated:false,message:"Invalid Access Token!"}
+
+    if(errorMessage === 'jwt expired') {
+      await tokenServices.deleteById(user._id);
+      return {tokenValidated:false, message:"Token expired! Please re-login to make any changes!"}
+    }
+  }
+}
+
 
 const registerHandler = async(req,res)=> {
       console.log(`POST ${req.originalUrl}`);
@@ -53,9 +78,9 @@ const editHandler = async(req,res) => {
   }catch(err) {
     if(err.status) return res.status(err.status).json({message:err.message});
     const[error,errorMessage] = Object.values(err);
-    if(errorMessage === 'invalid token') return res.status(401).json({isAdmin:false,message:'Access token is invalid!'});
-    if(errorMessage === 'jwt malformed') return  res.status(401).json({isAdmin:false,message:'Access token is invalid!'});
-    if(errorMessage === 'jwt expired') return  res.status(401).json({isAdmin:false,message:'Access token expired,you should re-login!'});
+    if(errorMessage === 'invalid token') return res.status(401).json({message:'Access token is invalid!'});
+    if(errorMessage === 'jwt malformed') return  res.status(401).json({message:'Access token is invalid!'});
+    if(errorMessage === 'jwt expired') return  res.status(401).json({message:'Access token expired,you should re-login!'});
   }
   res.end();
 
@@ -102,6 +127,35 @@ const logoutHandler = (req,res) => {
 
 const changePasswordHandler = async(req,res) => {
   console.log(`PUT ${req.originalUrl}`);
+  const {profileId} = req.params;
+  const {oldPassword,newPassword,repeatNewPassword} = req.body;
+  
+  if(newPassword !== repeatNewPassword) return res.status(400).json({message:"Passwords does not match!"});
+
+  try {
+    const user = await isProfileIdValid(profileId);
+
+    const [{token}] = await tokenServices.findByUserId(user._id);
+    const tokenVerification = await verifyToken(user,token);
+
+    if(!tokenVerification.tokenValidated)
+    throw {status:401,message:tokenVerification.message};
+
+    const isValid = await bcrypt.compare(oldPassword,user.password);
+    if(!isValid) throw {status:401, message:'Incorrect password!'};
+
+    user.password = newPassword;
+    const updatedUser = await userServices
+    .findByIdAndUpdatePassword(user._id,user)
+
+    const populatedUser = await userServices
+    .findByIdAndPopulate(updatedUser._id)
+    
+    return res.status(200).json({user:populatedUser,message:"You successfully updated your password!"});
+  }catch(err) {
+    if(err.status) return res.status(err.status).json({message:err.message})
+    console.log(err);
+  }
   res.end();
 
 }
@@ -118,3 +172,7 @@ router.use("/products", userProductsController);
 
 
 module.exports = router;
+
+
+
+
