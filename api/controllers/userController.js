@@ -1,170 +1,146 @@
 const router = require("express").Router();
-const bcrypt = require("bcrypt");
 
-const userServices = require("../services/userServices");
-const tokenServices = require("../services/tokenServices");
 const userDataValidation = require("../validations/userDataValidation");
+
+const findUserByEmail = require("../utils/users/findUserByEmail");
+const createUser = require("../utils/users/createUser")
+const findUserById = require("../utils/users/findUserById");
+const findUserByIdAndUpdate = require("../utils/users/findUserByIdAndUpdate");
+const findUserByIdAndPopulate = require("../utils/users/findUserByIdAndPopulate");
+const checkUserPassword = require("../utils/users/checkUserPassword");
+const findUserByIdAndUpdatePassword = require("../utils/users/findUserByIdAndUpdatePassword");
+
+const findUserAccessToken = require("../utils/tokens/findUserAccessToken");
+const createUserAccessToken = require("../utils/tokens/createUserAccessToken");
 const verifyAccessToken = require("../utils/tokens/verifyAccessToken");
-const generateAccessToken = require("../utils/tokens/generateAccessToken")
-
-
+const deleteUserAccessToken = require("../utils/tokens/deleteUserAccessToken");
 
 const userProductsController = require("./userProductsController");
 
-const isProfileIdValid = async(profileid) => {
-  const user = await userServices.findById(profileid);
-  if(!user) throw {status:400, message:'There is no user with this id!'};
-  return user;
-}
-
-const verifyToken = async(user,token) => {
-  try {
-    if(!user.isAdmin) verifyAccessToken.user(token);
-    if(user.isAdmin) verifyAccessToken.admin(token);
-
-    return {tokenValidated:true}
-  } catch(err) {
-    const[error,errorMessage] = Object.values(err);
-
-    if(errorMessage === 'invalid token' || errorMessage === 'jwt malformed') 
-    return {tokenValidated:false,message:"Invalid Access Token!"}
-
-    if(errorMessage === 'jwt expired') {
-      await tokenServices.deleteById(user._id);
-      return {tokenValidated:false, message:"Token expired! Please re-login to make any changes!"}
-    }
-  }
-}
 
 
 const registerHandler = async(req,res)=> {
-      console.log(`POST ${req.originalUrl}`);
-      const data = req.body;
+  console.log(`POST ${req.originalUrl}`);
 
-      try {
-          userDataValidation.validateRegisterData(data);
+  const data = req.body;
 
-          const user = await userServices.findByEmail(data.email);
-          if(user) throw {status:409, message:'User with this email already exist!'};
+  try {
+      userDataValidation.validateRegisterData(data);
 
-          await userServices.create(data);
-          return res.status(201).json({message:"You successfully created new user profile!"});
-      } catch(err){
-        if(err.status) res.status(err.status).json({message:err.message});
-        console.log(err);
-      }
+      const user = await findUserByEmail(data.email);
+      if(user) throw {status:409, message:'User with this email already exist!'};
+
+      await createUser(data);
+      return res.status(201).json({message:"You successfully created new user profile!"});
+
+  } catch(err){
+      if(err.status) res.status(err.status).json({message:err.message});
+  }
 }
 
 const editHandler = async(req,res) => {
   console.log(`PUT ${req.originalUrl}`);
 
-  const token = req.headers.authorization;
   const {profileId} = req.params;
   const data = req.body;
 
-  if(token === 'undefined' || !token) return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
-
   try{
-    verifyAccessToken.user(token)
+    const user = await findUserById(profileId);
+    
+    const token = await findUserAccessToken(profileId);
 
-    const user = await userServices.findById(profileId);
-    if(!user) throw {status:400, message:'There is no user with this id!'};
+    await verifyAccessToken(user,token)
 
     userDataValidation.validateEditData(data);
-    await userServices.findByIdAndUpdate(profileId,data)
-    const populatedUser = await userServices.findByIdAndPopulate(profileId);
-    delete populatedUser.password
 
-    return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser})
+    await findUserByIdAndUpdate(user._id,data);
+
+    const populatedUser = await findUserByIdAndPopulate(profileId);
+
+    return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser});
+
   }catch(err) {
     if(err.status) return res.status(err.status).json({message:err.message});
-    const[error,errorMessage] = Object.values(err);
-    if(errorMessage === 'invalid token') return res.status(401).json({message:'Access token is invalid!'});
-    if(errorMessage === 'jwt malformed') return  res.status(401).json({message:'Access token is invalid!'});
-    if(errorMessage === 'jwt expired') return  res.status(401).json({message:'Access token expired,you should re-login!'});
   }
-  res.end();
-
 }
 
 const loginHandler = async(req,res) => {
-      console.log(`POST ${req.originalUrl}`);
-      const data = req.body;
-      const userData = {};
-      let accessToken = '';
-
-      try {
-        userDataValidation.validateLoginData(data);
-
-        const user = await userServices.findByEmail(data.email);
-        if(!user) throw {status:404, message:'Incorrect email or password!'};
-
-        const isValid = await bcrypt.compare(data.password,user.password);
-        if(!isValid) throw {status:401, message:'Incorrect email or password'};
-
-
-        if(user.isAdmin) 
-          accessToken = generateAccessToken.admin(user);
-
-        if(!user.isAdmin) 
-          accessToken = generateAccessToken.user(user);
-  
-        await tokenServices.create({profileId:user._id,token:accessToken});
-
-        const {password, ...populatedUser} = await userServices.findByIdAndPopulate(user._id);
-
-        Object.assign(userData,{...populatedUser});
-        return res.status(200).json({user:userData,message:'You have successfully logged in!'});
-      } catch(err){
-        if(err.status) return  res.status(err.status).json({message:err.message});
-        console.log(err);
-      }
-}
-
-const logoutHandler = (req,res) => {
   console.log(`POST ${req.originalUrl}`);
-  res.status(200).json({successMessage: 'You have successfully loged out!'});
+
+  const data = req.body;
+
+  try {
+    userDataValidation.validateLoginData(data);
+
+    const user = await findUserByEmail(data.email);
+
+    await checkUserPassword(data.password,user.password)
+
+    await createUserAccessToken(user);
+
+    const populatedUser = await findUserByIdAndPopulate(user._id);
+
+    return res.status(200).json({user:populatedUser,message:'You have successfully logged in!'});
+  
+  } catch(err){
+    if(err.status) return  res.status(err.status).json({message:err.message});
+  }
 }
 
 const changePasswordHandler = async(req,res) => {
   console.log(`PUT ${req.originalUrl}`);
+
   const {profileId} = req.params;
   const {oldPassword,newPassword,repeatNewPassword} = req.body;
   
   if(newPassword !== repeatNewPassword) return res.status(400).json({message:"Passwords does not match!"});
 
   try {
-    const user = await isProfileIdValid(profileId);
+    const user = await findUserById(profileId);
 
-    const [{token}] = await tokenServices.findByUserId(user._id);
-    const tokenVerification = await verifyToken(user,token);
+    const [{token}] = await findUserAccessToken(user._id)
 
-    if(!tokenVerification.tokenValidated)
-    throw {status:401,message:tokenVerification.message};
+    await verifyAccessToken(user,token)
 
-    const isValid = await bcrypt.compare(oldPassword,user.password);
-    if(!isValid) throw {status:401, message:'Incorrect password!'};
+    await checkUserPassword(oldPassword,user.password);
 
     user.password = newPassword;
-    const updatedUser = await userServices
-    .findByIdAndUpdatePassword(user._id,user)
 
-    const populatedUser = await userServices
-    .findByIdAndPopulate(updatedUser._id)
+    const updatedUser = await findUserByIdAndUpdatePassword(user);
+
+    const populatedUser = await findUserByIdAndPopulate(updatedUser._id);
     
     return res.status(200).json({user:populatedUser,message:"You successfully updated your password!"});
+
   }catch(err) {
     if(err.status) return res.status(err.status).json({message:err.message})
-    console.log(err);
   }
-  res.end();
+}
 
+
+const logoutHandler = async(req,res) => {
+  console.log(`POST ${req.originalUrl}`);
+
+  const {profileId} = req.params;
+
+  try{
+    const user = findUserById(profileId);
+
+    const [{token}] = await findUserAccessToken(user._id);
+
+    await verifyAccessToken(user,token);
+
+    await deleteUserAccessToken(user._id);
+
+  } catch(err){
+    if(err.status) return res.status(err.status).json({message:err.message})
+  }
 }
 
 
 router.post("/register", registerHandler);
 router.post("/login", loginHandler);
-router.post("/logout", logoutHandler);
+router.post("/:profileId/logout", logoutHandler);
 router.put("/:profileId/change-password", changePasswordHandler);
 router.put("/:profileId/edit", editHandler);
 router.use("/products", userProductsController);
