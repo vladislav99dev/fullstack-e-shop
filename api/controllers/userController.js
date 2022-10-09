@@ -2,9 +2,10 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 
 const userServices = require("../services/userServices");
-const tokenGenerationAndVerification = require("../services/tokenGenerationAndVerification");
 const tokenServices = require("../services/tokenServices");
 const userDataValidation = require("../services/validations/userDataValidation");
+const verifyAccessToken = require("../utils/verifyAccessToken");
+const generateAccessToken = require("../utils/generateAccessToken")
 
 
 
@@ -18,8 +19,8 @@ const isProfileIdValid = async(profileid) => {
 
 const verifyToken = async(user,token) => {
   try {
-    if(!user.isAdmin) tokenGenerationAndVerification.verifyUser(token);
-    if(user.isAdmin) tokenGenerationAndVerification.verifyAdmin(token);
+    if(!user.isAdmin) verifyAccessToken.user(token);
+    if(user.isAdmin) verifyAccessToken.admin(token);
 
     return {tokenValidated:true}
   } catch(err) {
@@ -64,7 +65,7 @@ const editHandler = async(req,res) => {
   if(token === 'undefined' || !token) return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
 
   try{
-    tokenGenerationAndVerification.verifyUser(token)
+    verifyAccessToken.user(token)
 
     const user = await userServices.findById(profileId);
     if(!user) throw {status:400, message:'There is no user with this id!'};
@@ -103,10 +104,10 @@ const loginHandler = async(req,res) => {
 
 
         if(user.isAdmin) 
-          accessToken = tokenGenerationAndVerification.generateAdmin(user);
+          accessToken = generateAccessToken.admin(user);
 
         if(!user.isAdmin) 
-          accessToken = tokenGenerationAndVerification.generateUser(user);
+          accessToken = generateAccessToken.user(user);
   
         await tokenServices.create({profileId:user._id,token:accessToken});
 
