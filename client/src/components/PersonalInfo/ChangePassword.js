@@ -1,7 +1,14 @@
 import {useReducer,useState} from "react"
-import ValidationMessage from "../ValidationMessage/validationMessage";
+import { useNavigate } from "react-router-dom";
+
+import {useModalsContext} from "../../context/ModalsContext";
+import * as userRequester from "../../services/userRequester"
+
 
 import Input from "./Input";
+import ValidationMessage from "../ValidationMessage/validationMessage";
+import SuccessModal from "../Modals/SuccessModal";
+import AttentionModal from "../Modals/AttentionModal";
 
 const reducerPasswordsState = (state,{type,payload}) => {
     switch (type) {
@@ -9,19 +16,25 @@ const reducerPasswordsState = (state,{type,payload}) => {
             return {
                 oldPassword: payload,
                 newPassword: state.newPassword,
-                repeatPassword: state.repeatPassword,
+                repeatNewPassword: state.repeatPassword,
             }
         case "newPassword":
             return {
                 oldPassword: state.oldPassword,
                 newPassword: payload,
-                repeatPassword: state.repeatPassword,
+                repeatNewPassword: state.repeatPassword,
             }
-        case "repeatPassword":
+        case "repeatNewPassword":
             return {
                 oldPassword: state.oldPassword,
                 newPassword: state.newPassword,
-                repeatPassword: payload,
+                repeatNewPassword: payload,
+            }
+        case "resetPasswordState":
+            return {
+                oldPassword: '',
+                newPassword: '',
+                repeatNewPassword: '',
             }
         default:
             break;
@@ -29,27 +42,67 @@ const reducerPasswordsState = (state,{type,payload}) => {
 }
 
 
-const ChangePassword = () => {
+const ChangePassword = ({
+    user,
+    login
+}) => {
+    const navigate = useNavigate();
     const [validationMessages,setValidationMessages] = useState([]);
     const [passwordsState,dispatch] = useReducer(reducerPasswordsState,{
         oldPassword: '',
         newPassword:'',
-        repeatPassword:''
+        repeatNewPassword:''
     })
+    
+    const {modalsState,resetModals,setSuccessModal,setFailedModal} = useModalsContext();
+
 
     const changePasswordsState = (passwordField,event) => {
         dispatch({type:passwordField,payload:event.target.value})
     }
 
-    const submitHandler = (event) => {
+    const submitHandler = async(event) => {
         event.preventDefault();
-        if(passwordsState.newPassword !== passwordsState.repeatPassword) return setValidationMessages(["New Password and Repeat Passwords does not match !"])
+        if(passwordsState.newPassword !== passwordsState.repeatNewPassword) return setValidationMessages(["New Password and Repeat Passwords does not match !"]);
+        try{
+            const response = await userRequester.changePassword({...passwordsState},user._id,user.accessToken);
+            const jsonResponse = await response.json();
+            if(response.status !== 200) throw {message:jsonResponse.message}
+            if(response === 200) {
+                login(jsonResponse.user);
+                return setSuccessModal(jsonResponse.message)
+            }
+        }catch(err){
+            return setFailedModal(err.message)
+        }
         
     }
 
+    const successModalButtonHandler = () => {
+        resetModals();
+        navigate('/');
+    }
 
     return (
         <>
+        {modalsState.isFailed.value 
+        ? <AttentionModal
+            titleMessage={"something went wrong!"}
+            descriptionMessage={modalsState.isFailed.message}
+            buttonName={"Try again"}
+            buttonHandler={resetModals}
+        />
+        :null
+        }
+        {modalsState.isSuccess.value 
+        ? <SuccessModal
+            titleMessage={"Success!"}
+            descriptionMessage={modalsState.isSuccess.message}
+            buttonName={"Go to home page"}
+            buttonHandler={successModalButtonHandler}
+        />
+        :null
+        }
         <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">Change Password</h1>
         { validationMessages.length 
         ? validationMessages.map((x) => <ValidationMessage key={x} message={x}/>)
@@ -58,7 +111,7 @@ const ChangePassword = () => {
         <form onSubmit={submitHandler} className="mt-2">
             <Input labelName={"Enter Old Password"} changeState={changePasswordsState.bind(null,"oldPassword")} type={"password"}/>
             <Input labelName={"Enter New Password"} changeState={changePasswordsState.bind(null,"newPassword")} type={"password"}/>
-            <Input labelName={"Repeat New Password"} changeState={changePasswordsState.bind(null,"repeatPassword")} type={"password"}/>
+            <Input labelName={"Repeat New Password"} changeState={changePasswordsState.bind(null,"repeatNewPassword")} type={"password"}/>
             <div className="flex justify-center">
                 <button className="mt-4 mb-4 py-2 px-16 rounded-lg bg-[#00df9a] text-white italic font-bold text-xl hover:bg-green-300 ease-in-out duration-500" >Submit</button>
             </div>
