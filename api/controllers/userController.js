@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 const userServices = require("../services/userServices");
 const tokenServices = require("../services/tokenServices");
 const userDataValidation = require("../validations/userDataValidation");
-const verifyAccessToken = require("../utils/verifyAccessToken");
-const generateAccessToken = require("../utils/generateAccessToken")
+const verifyAccessToken = require("../utils/tokens/verifyAccessToken");
+const generateAccessToken = require("../utils/tokens/generateAccessToken")
 
 
 

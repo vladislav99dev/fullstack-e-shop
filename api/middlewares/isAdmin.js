@@ -1,4 +1,4 @@
-const verifyAccessToken = require('../utils/verifyAccessToken');
+const verifyAccessToken = require('../utils/tokens/verifyAccessToken');
 
 const isAdmin = (req, res, next) => {
     const token = req.headers.authorization;
