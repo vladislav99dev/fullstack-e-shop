@@ -158,22 +158,6 @@ const removeFromFavouritesHandler = async(req,res) => {
 
 
 
-// const getHandler = async(req,res) => {
-//     console.log(`POST ${req.originalUrl}`);
-//     const {profileId} = req.body;
-
-//     try {
-//         const user = await userServices.findByIdPopulated(profileId);
-//         if(!user) return res.status(400).json({message: "There is no user with this id!"});
-//         res.status(200).json(user)
-//     }catch(err) {
-//         console.log(err);
-//         if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
-//     }
-// };
-
-
-
 
 router.post('/:productId/favourites-add', isLoggedIn, addToFavouritesHandler)
 router.delete('/:productId/favourites-remove', isLoggedIn, removeFromFavouritesHandler)
