@@ -54,7 +54,8 @@ const ChangePassword = ({
         repeatNewPassword:''
     })
     
-    const {modalsState,resetModals,setSuccessModal,setFailedModal} = useModalsContext();
+    const {modalState,resetModals,setSuccessModal,setFailedModal} = useModalsContext();
+
 
 
     const changePasswordsState = (passwordField,event) => {
@@ -63,12 +64,13 @@ const ChangePassword = ({
 
     const submitHandler = async(event) => {
         event.preventDefault();
+        setValidationMessages([]);
         if(passwordsState.newPassword !== passwordsState.repeatNewPassword) return setValidationMessages(["New Password and Repeat Passwords does not match !"]);
         try{
             const response = await userRequester.changePassword({...passwordsState},user._id,user.accessToken);
             const jsonResponse = await response.json();
             if(response.status !== 200) throw {message:jsonResponse.message}
-            if(response === 200) {
+            if(response.status === 200) {
                 login(jsonResponse.user);
                 return setSuccessModal(jsonResponse.message)
             }
@@ -85,19 +87,19 @@ const ChangePassword = ({
 
     return (
         <>
-        {modalsState.isFailed.value 
+        {modalState.isFailed.value 
         ? <AttentionModal
-            titleMessage={"something went wrong!"}
-            descriptionMessage={modalsState.isFailed.message}
+            titleMessage={"Something went wrong!"}
+            descriptionMessage={modalState.isFailed.message}
             buttonName={"Try again"}
             buttonHandler={resetModals}
         />
         :null
         }
-        {modalsState.isSuccess.value 
+        {modalState.isSuccess.value 
         ? <SuccessModal
             titleMessage={"Success!"}
-            descriptionMessage={modalsState.isSuccess.message}
+            descriptionMessage={modalState.isSuccess.message}
             buttonName={"Go to home page"}
             buttonHandler={successModalButtonHandler}
         />
