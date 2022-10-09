@@ -5,7 +5,7 @@ const userServices = require("../services/userServices");
 const productServices = require("../services/productsServices");
 const orderSerices = require("../services/orderServices");
 
-const orderDataValidation = require("../services/validations/orderDataValidation")
+const orderDataValidation = require("../validations/orderDataValidation")
 
 const getPopulatedProfile = async(profileId) => {
     const user = await userServices.findByIdAndPopulate(profileId);
