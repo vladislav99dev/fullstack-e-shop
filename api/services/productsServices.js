@@ -7,7 +7,7 @@ const Product = require('../models/Product')
 const findById = (id) => {
     return Product.findById(id)
 } 
-const findByIdAndUpdate = (data,id) => {
+const findByIdAndUpdate = (id,data) => {
     return Product.findByIdAndUpdate(id,data)
 }
 
