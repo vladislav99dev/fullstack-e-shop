@@ -94,7 +94,18 @@ userSchema.pre("save", function (next) {
   const user = this;
   bcrypt.hash(user.password, salt, function (err, hash) {
     if (err) {
-      //can throw custom message for failing hash
+      next(err);
+    } else {
+      user.password = hash;
+      next();
+    }
+  });
+});
+
+userSchema.pre("updateOne", function (next) {
+  const user = this._update;
+  bcrypt.hash(user.password, salt, function (err, hash) {
+    if (err) {
       next(err);
     } else {
       user.password = hash;
