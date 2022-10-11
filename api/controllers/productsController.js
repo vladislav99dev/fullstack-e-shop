@@ -1,13 +1,9 @@
 const router = require('express').Router();
 
+const productsServices = require("../services/products/productsServices");
 
-const findAllProducts = require("../utils/products/findAllProducts");
-const findByGender = require("../utils/products/findByGender");
-const findAndFilterProducts = require("../utils/products/findAndFilterProducts");
-const findProductById = require("../utils/products/findProductById");
 const extractEmptyPropsAndSizesFromFilter = require("../utils/products/extractEmptyPropsAndSizesFromFilter");
 const filterProductsBySize = require("../utils/products/filterProductsBySize");
-
 
 const getManyHandler = async(req,res) => {
     console.log(`GET ${req.originalUrl}`);
@@ -23,9 +19,9 @@ const getManyHandler = async(req,res) => {
     && gender !== 'all') return res.status(400).json({message:"No such gender found in database!"})
 
     try{
-        if(gender === 'all') products = await findAllProducts();
+        if(gender === 'all') products = await productsServices.findAll();
 
-        if(gender !== 'all') products = await findByGender(gender);
+        if(gender !== 'all') products = await productsServices.findByGender(gender);
 
         res.status(200).json(products);
     }catch(err){
@@ -41,7 +37,7 @@ const getManyFiltered = async(req,res) => {
     const {filterData,filterSizes} = extractEmptyPropsAndSizesFromFilter(data);
 
     try {
-        let products = await findAndFilterProducts(filterData);
+        let products = await productsServices.findAndFilter(filterData);
 
         if(products.length === 0 ) return res.status(200).json({products:products});
 
@@ -62,11 +58,12 @@ const getOneHandler = async(req,res) => {
     const {productId} = req.params
 
     try{
-        const product = await findProductById(productId);
+        const product = await productsServices.findById(productId);
 
         res.status(200).json(product)
 
     } catch(err){
+        if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
         if(err.status) return res.status(err.status).jsson({message:err.message})
     }
 }
