@@ -63,8 +63,8 @@ const Checkout = () => {
         const jsonResponse = await response.json();
         setIsLoading(false);
         
-        if(response.status !== 200) throw {responseStatus:response.status,message:jsonResponse.message};
-        if(response.status === 200) {
+        if(response.status !== 201) throw {responseStatus:response.status,message:jsonResponse.message};
+        if(response.status === 201) {
           if(user.email) login(jsonResponse.user);
           return setSuccessModal(jsonResponse.message);
         }
