@@ -2,21 +2,13 @@ const router = require("express").Router();
 
 const userDataValidation = require("../validations/userDataValidation");
 
-const findUserByEmail = require("../utils/users/findUserByEmail");
-const createUser = require("../utils/users/createUser")
-const findUserById = require("../utils/users/findUserById");
-const findUserByIdAndUpdate = require("../utils/users/findUserByIdAndUpdate");
-const findUserByIdAndPopulate = require("../utils/users/findUserByIdAndPopulate");
-const checkUserPassword = require("../utils/users/checkUserPassword");
-const findUserByIdAndUpdatePassword = require("../utils/users/findUserByIdAndUpdatePassword");
-const checkIfEmailRegistered = require("../utils/users/checkIfEmailRegistered");
-
-const findUserAccessToken = require("../utils/tokens/findUserAccessToken");
-const createUserAccessToken = require("../utils/tokens/createUserAccessToken");
-const verifyAccessToken = require("../utils/tokens/verifyAccessToken");
-const deleteUserAccessToken = require("../utils/tokens/deleteUserAccessToken");
-
 const userProductsController = require("./userProductsController");
+
+const userServices = require("../services/user/userServices");
+const tokenServices = require("../services/token/tokenServices");
+
+const checkUserPassword = require("../utils/users/checkUserPassword");
+const verifyAccessToken = require("../utils/tokens/verifyAccessToken");
 
 
 
@@ -28,9 +20,10 @@ const registerHandler = async(req,res)=> {
   try {
       userDataValidation.validateRegisterData(data);
 
-      await checkIfEmailRegistered(data.email);
+      const user = await userServices.findByEmail(data.email);
+      if(user) throw {status:409,message:"User with this email already exists!"}
       
-      await createUser(data);
+      await userServices.create(data);
       
       return res.status(201).json({message:"You successfully created new user profile!"});
 
@@ -46,21 +39,26 @@ const editHandler = async(req,res) => {
   const data = req.body;
 
   try{
-    const user = await findUserById(profileId);
+    const user = await userServices.findById(profileId);
     
-    const token = await findUserAccessToken(profileId);
+    const token = await tokenServices.findByUserId(profileId);
 
-    await verifyAccessToken(user,token)
+    const isExpired = await verifyAccessToken(user,token);
+    if(isExpired) {
+      await tokenServices.deleteByUserId(user._id);
+      throw {status:401,message:'Access token expired,you should re-login!'}
+    }
 
     userDataValidation.validateEditData(data);
 
-    await findUserByIdAndUpdate(user._id,data);
+    await userServices.findByIdAndUpdate(user._id,data);
 
-    const populatedUser = await findUserByIdAndPopulate(profileId);
+    const populatedUser = await userServices.findByIdAndPopulate(profileId);
 
     return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser});
 
   }catch(err) {
+    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return res.status(err.status).json({message:err.message});
   }
 }
@@ -73,17 +71,19 @@ const loginHandler = async(req,res) => {
   try {
     userDataValidation.validateLoginData(data);
 
-    const user = await findUserByEmail(data.email);
+    const user = await userServices.findByEmail(data.email);
+    if(!user) throw {status:404,message:"Incorect Email or Password"}
 
-    await checkUserPassword(data.password,user.password)
+    await checkUserPassword(data.password,user.password) 
 
-    await createUserAccessToken(user);
+    await tokenServices.create(user);
 
-    const populatedUser = await findUserByIdAndPopulate(user._id);
+    const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
     return res.status(200).json({user:populatedUser,message:'You have successfully logged in!'});
   
   } catch(err){
+    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return  res.status(err.status).json({message:err.message});
   }
 }
@@ -97,24 +97,29 @@ const changePasswordHandler = async(req,res) => {
   if(newPassword !== repeatNewPassword) return res.status(400).json({message:"Passwords does not match!"});
 
   try {
-    const user = await findUserById(profileId);
+    const user = await userServices.findById(profileId);
 
-    const [{token}] = await findUserAccessToken(user._id)
+    const token = await tokenServices.findByUserId(user._id);
 
-    await verifyAccessToken(user,token)
+    const isExpired = await verifyAccessToken(user,token);
+    if(isExpired) {
+      await tokenServices.deleteByUserId(user._id);
+      throw {status:401,message:'Access token expired,you should re-login!'}
+    }
 
     await checkUserPassword(oldPassword,user.password);
 
     user.password = newPassword;
 
-    const updatedUser = await findUserByIdAndUpdatePassword(user);
+    await userServices.findByIdAndUpdatePassword(user._id,user);
 
-    const populatedUser = await findUserByIdAndPopulate(user._id);
+    const populatedUser = await userServices.findByIdAndPopulate(user._id);
     
     return res.status(200).json({user:populatedUser,message:"You successfully updated your password!"});
+  
   }catch(err) {
+    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"})
     if(err.status) return res.status(err.status).json({message:err.message})
-    console.log(err)
   }
 }
 
@@ -125,16 +130,14 @@ const logoutHandler = async(req,res) => {
   const {profileId} = req.params;
 
   try{
-    const user = await findUserById(profileId);
-    console.log(user);
-    const [{token}] = await findUserAccessToken(user._id);
+    const user = await userServices.findById(profileId);
 
-    await verifyAccessToken(user,token);
-
-    await deleteUserAccessToken(user._id);
+    await tokenServices.deleteByUserId(user._id);
 
     return res.status(200).json({successMessage: 'You have successfully loged out!'});
+  
   } catch(err){
+    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"})
     if(err.status) return res.status(err.status).json({message:err.message})
   }
 }
@@ -149,4 +152,5 @@ router.use("/products", userProductsController);
 
 
 module.exports = router;
+
 
