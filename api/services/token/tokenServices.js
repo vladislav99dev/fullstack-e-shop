@@ -14,7 +14,7 @@ const create = async(user) => {
 const findByUserId = async(id) => {
     const foundToken = await Token.findOne({profileId : id});
     if(!foundToken) throw {status:404,message:"There is no token generated for this user!"}
-    return foundToken.token;
+    return foundToken;
 }
 
 const deleteByUserId = async(id) => {
