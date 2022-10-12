@@ -76,15 +76,17 @@ const loginHandler = async(req,res) => {
 
     await checkUserPassword(data.password,user.password) 
 
-    await tokenServices.create(user);
+    const tokenDocument = await tokenServices.create(user);
 
     const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-    return res.status(200).json({user:populatedUser,message:'You have successfully logged in!'});
+    if(user.isAdmin) return res.status(200).json({user:{...populatedUser,accessToken:tokenDocument.token}})
+    if(!user.isAdmin) return res.status(200).json({user:populatedUser,message:'You have successfully logged in!'});
   
   } catch(err){
     if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return  res.status(err.status).json({message:err.message});
+    console.log(err)
   }
 }
 
