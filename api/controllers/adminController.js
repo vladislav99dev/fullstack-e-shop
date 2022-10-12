@@ -66,7 +66,7 @@ const checkAccessToken = async (req,res) => {
     return res.status(200).json({isAdmin:true});
 }
 
-router.get("/checkToken", checkAccessToken);
+router.post("/checkToken", checkAccessToken);
 router.post("/products/create", createProductHandler);
 router.put("/products/:productId/edit", editProductHandler);
 router.delete("/products/:productId/delete", deleteProductHandler);
