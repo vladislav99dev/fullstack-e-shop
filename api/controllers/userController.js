@@ -28,7 +28,8 @@ const registerHandler = async(req,res)=> {
       return res.status(201).json({message:"You successfully created new user profile!"});
 
   } catch(err){
-      if(err.status) res.status(err.status).json({message:err.message});
+    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
+    if(err.status) return res.status(err.status).json({message:err.message});
   }
 }
 
@@ -41,10 +42,10 @@ const editHandler = async(req,res) => {
   try{
     const user = await userServices.findById(profileId);
     
-    const token = await tokenServices.findByUserId(profileId);
+    const {token} = await tokenServices.findByUserId(profileId);
 
-    const isExpired = await verifyAccessToken(user,token);
-    if(isExpired) {
+    const isVerified = await verifyAccessToken(user,token);
+    if(!isVerified) {
       await tokenServices.deleteByUserId(user._id);
       throw {status:401,message:'Access token expired,you should re-login!'}
     }
@@ -86,7 +87,6 @@ const loginHandler = async(req,res) => {
   } catch(err){
     if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return  res.status(err.status).json({message:err.message});
-    console.log(err)
   }
 }
 
@@ -101,10 +101,10 @@ const changePasswordHandler = async(req,res) => {
   try {
     const user = await userServices.findById(profileId);
 
-    const token = await tokenServices.findByUserId(user._id);
+    const {token} = await tokenServices.findByUserId(user._id);
 
-    const isExpired = await verifyAccessToken(user,token);
-    if(isExpired) {
+    const isVerified = await verifyAccessToken(user,token);
+    if(!isVerified) {
       await tokenServices.deleteByUserId(user._id);
       throw {status:401,message:'Access token expired,you should re-login!'}
     }
