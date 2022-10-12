@@ -67,7 +67,6 @@ const Login = () => {
         setIsLoading(false)
         return setFailedModal(jsonResponse.message)
       }
-
       Object.assign(userData,jsonResponse.user)
 
       if(products.length > 0) {
