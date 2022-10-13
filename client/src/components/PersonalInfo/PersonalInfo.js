@@ -4,6 +4,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 import EditProfile from "./EditProfile";
 import ChangePassword from "./ChangePassword";
+import Orders from "./Orders";
 
 const initialButtonsState = {
     edit:false,
@@ -51,6 +52,8 @@ const PersonalInfo = () => {
             <div className="w-[40%] border-2 border-[#00df9a] border-l-0">
                 { buttonsState.edit ? <EditProfile user={user} login={login}/> : null }
                 { buttonsState.changePassword ? <ChangePassword user={user} login={login}/> : null}
+                { buttonsState.orders ? <Orders orders={user.orders}/> : null}
+
             </div>
         </div>
     )
