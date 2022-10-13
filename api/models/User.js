@@ -78,12 +78,6 @@ const userSchema = new mongoose.Schema({
       quantity:Number
     }  
   ],
-  orders: [
-    {
-      order:{type:mongoose.Types.ObjectId,
-      ref: 'Order'}
-    }
-  ],
   isAdmin: {
     type:Boolean,
     default:false
