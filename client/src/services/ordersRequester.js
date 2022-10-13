@@ -29,7 +29,7 @@ const userOrdersRequester = (method, data, profileId, products) => {
     });
   }
   if (method === "POST") return fetch(fetchUrl, options);
-  if (method === "GET") return fetchUrl(fetchUrl);
+  if (method === "GET") return fetch(`${fetchUrl}/${profileId}`);
 };
 
 const adminOrdersRequester = (method, data, token, orderId) => {
@@ -66,5 +66,6 @@ const getUserOrders = userOrdersRequester.bind(null, "GET");
 
 const ordersRequester = {
     createOrder,
+    getUserOrders,
 }
 export default ordersRequester;
