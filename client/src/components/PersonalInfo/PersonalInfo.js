@@ -47,12 +47,12 @@ const PersonalInfo = () => {
             <div className="w-[15%] border-4 border-[#28282B]">
                 <button onClick={btnClickHandler.bind(null,"edit")} className="py-4 border-b-4 border-[#28282B] w-full text-left font-extrabold text-[#28282B]">Edit Profile</button>
                 <button onClick={btnClickHandler.bind(null,"changePassword")} className="py-4 border-b-4 border-[#28282B] w-full text-left font-extrabold text-[#28282B]">Change Password</button>
-                <button onClick={btnClickHandler.bind(null,"orders")} className="py-4 border-b-4 border-[#28282B] w-full text-left font-extrabold text-[#28282B]">Orders</button>
+                <button onClick={btnClickHandler.bind(null,"orders")} className="py-4 border-b-4 border-[#28282B] w-full text-left font-extrabold text-[#28282B]">My Orders</button>
             </div>
             <div className="w-[40%] border-2 border-[#00df9a] border-l-0">
                 { buttonsState.edit ? <EditProfile user={user} login={login}/> : null }
                 { buttonsState.changePassword ? <ChangePassword user={user} login={login}/> : null}
-                { buttonsState.orders ? <Orders orders={user.orders}/> : null}
+                { buttonsState.orders ? <Orders profileId={user._id}/> : null}
 
             </div>
         </div>
