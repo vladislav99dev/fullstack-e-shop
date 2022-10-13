@@ -23,12 +23,6 @@ const User = require("../../models/User");
                 path:'_id',
                 model:'Product'
             }
-        }).populate({
-            path:'orders',
-            populate:{
-                path:'_id',
-                model:'Order'
-            }
         }).populate('favourites').lean();
         return user;
     }
