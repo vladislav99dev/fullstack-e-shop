@@ -51,8 +51,25 @@ const createOrderHandler = async(req,res) => {
     }
 }
 
+const getUserOrdersHandler =async(req,res) => {
+    console.log(`GET ${req.originalUrl}`);
+
+    const {profileId} = req.params;
+
+    try {
+       const orders = await  orderServices.findByUserId(profileId);
+
+       return res.status(200).json({orders})
+       
+    } catch(err){
+        if(err.path === "profileId") return res.status(400).json({message:"Id is not in valid format"});
+    }
+
+}
 
 
 router.post('/create',createOrderHandler)
+router.get('/:profileId',getUserOrdersHandler)
+
 
 module.exports = router;
