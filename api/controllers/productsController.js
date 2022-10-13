@@ -63,7 +63,7 @@ const getOneHandler = async(req,res) => {
         res.status(200).json(product)
 
     } catch(err){
-        if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
+        if(err.path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
         if(err.status) return res.status(err.status).jsson({message:err.message})
     }
 }

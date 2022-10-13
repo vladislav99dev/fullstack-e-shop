@@ -23,7 +23,7 @@ const isAdmin = async(req, res, next) => {
         }
 
     } catch(err){
-        if(err.path === '_id') return res.status(400).json({message:'Profile id is invalid!'});
+        if(err.path === '_id' || err.path === 'profileId') return res.status(400).json({message:'Profile id is invalid!'});
         if(err.status) return res.status(err.status).json({message:err.message});
     }
     next()

@@ -28,7 +28,7 @@ const registerHandler = async(req,res)=> {
       return res.status(201).json({message:"You successfully created new user profile!"});
 
   } catch(err){
-    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
+    if(err.path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return res.status(err.status).json({message:err.message});
   }
 }
@@ -59,7 +59,7 @@ const editHandler = async(req,res) => {
     return res.status(200).json({message:"You successfully updated your profile!",user:populatedUser});
 
   }catch(err) {
-    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
+    if(err.path === '_id' || err.path === 'profileId') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return res.status(err.status).json({message:err.message});
   }
 }
@@ -85,7 +85,7 @@ const loginHandler = async(req,res) => {
     if(!user.isAdmin) return res.status(200).json({user:populatedUser,message:'You have successfully logged in!'});
   
   } catch(err){
-    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
+    if(err.path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
     if(err.status) return  res.status(err.status).json({message:err.message});
   }
 }
@@ -120,7 +120,7 @@ const changePasswordHandler = async(req,res) => {
     return res.status(200).json({user:populatedUser,message:"You successfully updated your password!"});
   
   }catch(err) {
-    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"})
+    if(err.path === '_id' || err.path === 'profileId') return res.status(400).json({message:"ProfileId is invalid!"})
     if(err.status) return res.status(err.status).json({message:err.message})
   }
 }
@@ -139,7 +139,7 @@ const logoutHandler = async(req,res) => {
     return res.status(200).json({successMessage: 'You have successfully loged out!'});
   
   } catch(err){
-    if(err._path === '_id') return res.status(400).json({message:"ProfileId is invalid!"})
+    if(err.path === '_id') return res.status(400).json({message:"ProfileId is invalid!"})
     if(err.status) return res.status(err.status).json({message:err.message})
   }
 }
