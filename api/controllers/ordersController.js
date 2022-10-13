@@ -8,7 +8,7 @@ const orderServices = require("../services/orders/orderServices");
 const orderDataValidation = require("../validations/orderDataValidation")
 
 const formatNonUserProducts = require("../utils/orders/formatNonUserProducts");
-const formatUserBeforeUpdate = require("../utils/orders/formatUserBeforeUpdate");
+const extractUserCartProducts = require("../utils/orders/extractUserCartProducts");
 
 
 const createOrderHandler = async(req,res) => {
@@ -25,13 +25,11 @@ const createOrderHandler = async(req,res) => {
         if(isUserRequest) {
             const user = await userServices.findById(data.profileId);
 
-            const productsWanted = [...user.cart];
+            const {modifiedUser,productsWanted} = extractUserCartProducts(user);
 
-            const order = await orderServices.create({profileId:user._id,productsOrdered:productsWanted});
+            await orderServices.create({profileId:user._id,productsOrdered:productsWanted});
 
-            const formatedUser = formatUserBeforeUpdate(user,order._id);
-
-            await userServices.findByIdAndUpdate(user._id,formatedUser);
+            await userServices.findByIdAndUpdate(user._id,modifiedUser);
 
             const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
