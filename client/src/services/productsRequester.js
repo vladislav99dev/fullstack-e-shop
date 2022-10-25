@@ -1,6 +1,6 @@
 import {url} from '../constants.js'
 
-const productsRequester = (method,data,token,id) => {
+const productsRequester = (method,data,token,productId,profileId) => {
     let fetchUrl =`${url}/admin/products`;
 
     let options ={
@@ -15,21 +15,25 @@ const productsRequester = (method,data,token,id) => {
         fetchUrl = `${fetchUrl}/create`
     }
     if(method === "PUT"){
-        fetchUrl = `${url}/admin/products/${id}/edit`
+        fetchUrl = `${url}/admin/products/${productId}/edit`
     }
 
     if(method === "GET"){
-        fetchUrl = `${url}/products/${id}`
+        fetchUrl = `${url}/products/${productId}`
     }
-    if(method === "GET" && data === "men" || data === "women" || data === "boys" || data === "girls" || data === 'all'){
+    if(method === "GET" && (data === "men" || data === "women" || data === "boys" || data === "girls" || data === 'all')){
         fetchUrl = `${url}/products/${data}`
     }
     if(method === "DELETE") {
-        fetchUrl = `${url}/admin/products/${id}/delete`
+        fetchUrl = `${url}/admin/products/${productId}/delete`
+        options.body = JSON.stringify({
+            profileId:profileId
+        })
     }
 
     if(method === "POST" || method === "PUT"){
         options.body = JSON.stringify({
+            profileId:profileId,
             type:data.type,
             category:data.category,
             name:data.name,
