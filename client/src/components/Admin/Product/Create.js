@@ -45,7 +45,7 @@ const Create = () => {
 
 
         try {
-            const response = await productsRequester.create(formatedData,user.accessToken)
+            const response = await productsRequester.create(formatedData,user.accessToken,null,user._id)
             const jsonResponse = await response.json();
 
             if(response.status !== 201) throw {responseStatus:response.status, message:jsonResponse.message}
