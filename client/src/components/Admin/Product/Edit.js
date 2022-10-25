@@ -171,7 +171,8 @@ const Edit = () => {
       const response = await productsRequester.edit(
         formatedData,
         user.accessToken,
-        product._id
+        product._id,
+        user._id
       );
       const jsonResponse = await response.json();
       
