@@ -24,7 +24,8 @@ const Delete = () => {
       const response = await productsRequester.deleteOne(
         null,
         user.accessToken,
-        productId
+        productId,
+        user._id
       );
       const jsonResponse = await response.json();
       if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
