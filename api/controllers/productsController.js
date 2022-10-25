@@ -43,7 +43,7 @@ const getManyFiltered = async(req,res) => {
 
         const sizeFilteredProducts = filterProductsBySize(products,filterSizes);
 
-        if(sizeFilteredProducts.length === 0) return res.status(200).json({products:sizeFilteredProducts})
+        // if(sizeFilteredProducts.length === 0) return res.status(200).json({products:sizeFilteredProducts})
 
         return res.status(200).json({products:sizeFilteredProducts});
     } catch(err){
