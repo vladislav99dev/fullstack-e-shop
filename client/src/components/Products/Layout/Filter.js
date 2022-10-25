@@ -91,7 +91,7 @@ const Filter = ({
         if(gender === 'all') response = await getManyFiltered({...filterState})
         if(gender !== 'all') response = await getManyFiltered({...filterState,gender})
         const jsonResponse = await response.json();
-        setFilteredProducts(jsonResponse)
+        setFilteredProducts(jsonResponse.products)
     }catch(err) {
       console.log(err);
     }
