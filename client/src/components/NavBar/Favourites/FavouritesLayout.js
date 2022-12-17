@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import { useModalsContext } from "../../../context/ModalsContext";
+import { useAuthContext } from "../../../context/AuthContext";
 import * as favouritesAndCartRequester from "../../../services/favouritesAndCartRequester";
 
 import FavouritesCard from "./FavouritesCard";
@@ -9,15 +10,11 @@ import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
 
-const FavouritesLayout = ({
-  toggleFavouritesMenu,
-  modalState,
-  setFailedModal,
-  resetModals,
-  user,
-  login
-}) => {
+const FavouritesLayout = ({toggleFavouritesMenu}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const {setFailedModal,resetModals,modalState} = useModalsContext();
+  const {user,login} = useAuthContext();
+
 
 
   const removeFromFavouritesHandler = async(productId,event) => {
