@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react";
-
+import { useAuthContext } from "../../../context/AuthContext";
+import { useModalsContext } from "../../../context/ModalsContext";
 
 import { removeFromCart } from "../../../services/favouritesAndCartRequester";
 
@@ -15,17 +16,15 @@ import AttentionModal from "../../Modals/AttentionModal";
 
 const CartLayout = ({
   toggleCartMenu,
-  modalState,
-  setFailedModal,
-  resetModals,
-  user,
-  login
 }) => {
 
   const [isLoading,setIsLoading] = useState(false);
   const [totalPrice,setTotalPrice] = useState(0);
   
   const { products, removeProduct} = useLocalProductsContext();
+
+  const {modalState,setFailedModal,resetModals} = useModalsContext();
+  const {user,login} = useAuthContext();
 
   useEffect(()=> {
     if(user.email) user.cart.map(product => setTotalPrice((prev) => prev + (product._id.price * product.quantity)));
@@ -54,7 +53,6 @@ const CartLayout = ({
       if(response.status !== 200) throw {responseStatus:response.status,message:jsonResponse.message};
       if(response.status === 200) {
         login(jsonResponse.user)
-        console.log(jsonResponse);
         if(jsonResponse.user.cart.length > 0) return jsonResponse.user.cart.map(product => setTotalPrice((product._id.price * product.quantity)));
         if(jsonResponse.user.cart.length <= 0) setTotalPrice(0);
       }
