@@ -12,6 +12,7 @@ app.use(cors())
 app.use(router);
 dotenv.config();
 
+
 databaseConnect(process.env.DB_CONNECTION_STRING)
   .then((response) => {
     app.listen(process.env.PORT, () => {

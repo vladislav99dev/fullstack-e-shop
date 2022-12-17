@@ -22,3 +22,5 @@ router.all('*', (req,res) => {
 
 
 module.exports = router;
+
+// "htps://localhost:3030/products/:productid"
