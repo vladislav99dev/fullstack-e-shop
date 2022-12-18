@@ -19,15 +19,15 @@ const CartCard = ({
               <h3 onClick={toggleCartMenu}>
                 <Link  to={`/products/${product.gender}/details/${product._id}`}>{product.name}</Link>
               </h3>
-              <p className="ml-4">{`$${product.price}`}</p>
+              <p className="text-primary-dark-200 text-lg">{`$${product.price}`}</p>
             </div>
             <p className="mt-1 text-sm text-gray-500 capitalize">{`${product.color}`}</p>
           </div>
           <div className="flex flex-1 items-end justify-between text-sm">
-          <p className="text-gray-500">{`Size: ${size}`}</p>
-            <p className="text-gray-500">{`Qty: ${quantity}`}</p>
+          <p className="text-base text-primary-dark-700">{`Size: ${size}`}</p>
+            <p className="text-base text-primary-dark-700">{`Qty: ${quantity}`}</p>
             <div className="flex">
-              <button onClick={removeHandler} type="button" className="font-medium text-[#00df9a] hover:text-green-300">Remove</button>
+              <button onClick={removeHandler} type="button" className=" text-base font-medium text-primary-dark-800 hover:text-primary-dark-500">Remove</button>
             </div>
           </div>
         </div>

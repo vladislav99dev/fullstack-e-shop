@@ -19,12 +19,12 @@ toggleCartMenu
         </div>
         <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
         <div className="mt-6">
-          <button onClick={checkoutHandler} className="flex items-center justify-center rounded-md border border-transparent w-full bg-[#00df9a] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-green-300">Checkout</button>
+          <button onClick={checkoutHandler} className="flex items-center justify-center rounded-md border border-transparent w-full bg-primary-100 px-6 py-3 text-xl font-medium text-white shadow-sm hover:bg-green-300">Checkout</button>
         </div>
         <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
           <p>
             or
-            <button onClick={toggleCartMenu} type="button" className="font-medium text-[#00df9a] hover:text-green-300">
+            <button onClick={toggleCartMenu} type="button" className="text-base font-medium text-primary-dark-400 hover:text-green-300">
               Continue Shopping
               <span aria-hidden="true"> &rarr;</span>
             </button>
