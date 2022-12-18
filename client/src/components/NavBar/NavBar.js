@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 import CartLayout from "./Cart/CartLayout";
 import FavouritesLayout from "./Favourites/FavouritesLayout";
-import OutsideClickHandler from "react-outside-click-handler";
 
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import { MdFavorite } from "react-icons/md";
@@ -16,24 +15,17 @@ import { AiOutlineClose } from "react-icons/ai";
 import { ImMenu } from "react-icons/im";
 import styles from "./NavBar.module.css";
 
+import modalMessages from "../../HOC/modalMessages";
+
 const NavBar = () => {
-  const { modalState, setFailedModal, resetModals } = useModalsContext();
+  const { setFailedModal, resetModals } = useModalsContext();
   const { user, login } = useAuthContext();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const { toggleCartMenu, toggleFavouritesMenu } = useNavTogglesContext();
-
   const {
+    toggleCartMenu,
+    toggleFavouritesMenu,
     isCartMenuActive,
     isFavouritesMenuActive,
-    // isDesktopUserLinksActive,
-    // toggleDesktopUserMenu,
-    // toggleCartMenu,
-    // toggleFavouritesMenu,
-    // isUserMobileLinksActive,
-    // toggleUserMenu,
-    // isProductsMobileLinksActive,
-    // toggleProductsMenu,
-    // outsideClick,
   } = useNavTogglesContext();
 
   const manageFavouritesAccess = () => {
@@ -42,12 +34,23 @@ const NavBar = () => {
       return toggleFavouritesMenu();
     }
     if (!user.email)
-      return setFailedModal("You should be logged in to use this feature!");
+      setFailedModal(
+        "You should be logged in to use this feature!",
+        "",
+        () => {
+          console.log("hello you clicking it :D");
+        },
+        "Click"
+      );
   };
 
   const Icons = () => (
     <ul className={styles["nav-icons"]}>
-      <MdFavorite onClick={manageFavouritesAccess} size={35} color={"#00df9a"} />
+      <MdFavorite
+        onClick={manageFavouritesAccess}
+        size={35}
+        color={"#00df9a"}
+      />
       <RiShoppingCart2Fill
         size={35}
         color={"#00df9a"}
@@ -109,10 +112,10 @@ const NavBar = () => {
         </Link>
       </li>
       <li className={styles["nav-user-links"]}>
-        <Link to={"products/brands"} className={styles["nav-login-button"]}>
+        <Link to={"users/login"} className={styles["nav-login-button"]}>
           Login
         </Link>
-        <Link to={"products/brands"} className={styles["nav-register-button"]}>
+        <Link to={"users/register"} className={styles["nav-register-button"]}>
           Register
         </Link>
       </li>
@@ -128,17 +131,11 @@ const NavBar = () => {
         <Icons />
         <PageLinks isMobileNavOpen={isMobileNavOpen} />
       </nav>
-      {isCartMenuActive && (
-        <CartLayout
-          toggleCartMenu={toggleCartMenu}
-        />
-      )}
+      {isCartMenuActive && <CartLayout toggleCartMenu={toggleCartMenu} />}
       {isFavouritesMenuActive && (
-        <FavouritesLayout
-          toggleFavouritesMenu={toggleFavouritesMenu}
-        />
+        <FavouritesLayout toggleFavouritesMenu={toggleFavouritesMenu} />
       )}
     </>
   );
 };
-export default NavBar;
+export default modalMessages(NavBar);
