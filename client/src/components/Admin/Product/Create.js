@@ -52,7 +52,6 @@ const Create = () => {
             if(response.status === 201) setSuccessModal("You have successfully create new product!");
         } catch(err){
             if(err.responseStatus) return setFailedModal(err.message);
-            console.log(err);
         }
     };
 

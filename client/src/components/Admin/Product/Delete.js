@@ -32,7 +32,6 @@ const Delete = () => {
       if (response.status === 200) return setSuccessModal(jsonResponse.message);
     } catch (err) {
       if(err.responseStatus) return setFailedModal(err.message);
-      console.log("err");
     }
   };
 

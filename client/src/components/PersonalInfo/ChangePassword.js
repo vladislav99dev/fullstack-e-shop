@@ -75,7 +75,7 @@ const ChangePassword = ({
                 return setSuccessModal(jsonResponse.message)
             }
         }catch(err){
-            return setFailedModal(err.message)
+            return setFailedModal("Something went wrong",err.message,()=>{resetModals()},"Try again")
         }
         
     }
@@ -87,15 +87,6 @@ const ChangePassword = ({
 
     return (
         <>
-        {modalState.isFailed.value 
-        ? <AttentionModal
-            titleMessage={"Something went wrong!"}
-            descriptionMessage={modalState.isFailed.message}
-            buttonName={"Try again"}
-            buttonHandler={resetModals}
-        />
-        :null
-        }
         {modalState.isSuccess.value 
         ? <SuccessModal
             titleMessage={"Success!"}

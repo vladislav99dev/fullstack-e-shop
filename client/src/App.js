@@ -30,7 +30,6 @@ import AttentionModal from "./components/Modals/AttentionModal";
 import TryStuff from "./components/TryStuff.js";
 
 function App() {
-  // const {modalState} = useModalsContext();
   return (
     <AuthProvider>
       <ModalsProvider>
