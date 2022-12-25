@@ -8,8 +8,9 @@ import { isNotLoggedIn } from "../../HOC/routesGuard";
 
 import { useModalsContext } from "../../context/ModalsContext";
 
+import modalMessages from "../../HOC/modalMessages";
+
 import ValidationMessage from "../ValidationMessage/validationMessage";
-import AttentionModal from "../Modals/AttentionModal";
 import SuccessModal from "../Modals/SuccessModal";
 import Spinner from "../Spinner/Spinner";
 
@@ -51,7 +52,7 @@ const Register = () => {
           responseStatus: response.status,
           message: jsonResponse.message,
         };
-      if (response.status === 201) return setSuccessModal(jsonResponse.message);
+      if (response.status === 201) return setSuccessModal("Congrats",jsonResponse.message,navigateToLogin,"Login");
     } catch (err) {
       setIsLoading(false);
       if (err.responseStatus)
@@ -193,4 +194,4 @@ const Register = () => {
     </div>
   );
 };
-export default isNotLoggedIn(Register);
+export default isNotLoggedIn(modalMessages(Register));

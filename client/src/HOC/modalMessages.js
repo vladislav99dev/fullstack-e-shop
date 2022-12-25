@@ -12,21 +12,27 @@ const modalMessages = (Component) => {
 
     if (isFailed.value)
       return (
-        <AttentionModal
-          titleMessage={isFailed.titleMessage}
-          descriptionMessage={isFailed.descriptionMessage}
-          buttonHandler={isFailed.buttonHandler}
-          buttonName={isFailed.buttonName}
-        />
+        <>
+          <Component {...props} />
+          <AttentionModal
+            titleMessage={isFailed.titleMessage}
+            descriptionMessage={isFailed.descriptionMessage}
+            buttonHandler={isFailed.buttonHandler}
+            buttonName={isFailed.buttonName}
+          />
+        </>
       );
     if (isSuccess.value)
       return (
-        <SuccessModal
-          titleMessage={isFailed.titleMessage}
-          descriptionMessage={isFailed.descriptionMessage}
-          buttonHandler={isFailed.buttonHandler}
-          buttonName={isFailed.buttonName}
-        />
+        <>
+          <Component {...props} />
+          <SuccessModal
+            titleMessage={isSuccess.titleMessage}
+            descriptionMessage={isSuccess.descriptionMessage}
+            buttonHandler={isSuccess.buttonHandler}
+            buttonName={isSuccess.buttonName}
+          />
+        </>
       );
     return <Component {...props} />;
   };

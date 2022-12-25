@@ -10,7 +10,8 @@ import CartCard from "./CartCard";
 import CartFooter from "./CartFooter";
 import CartHeader from "./CartHeader";
 import Spinner from "../../Spinner/Spinner";
-import AttentionModal from "../../Modals/AttentionModal";
+
+import modalMessages from "../../../HOC/modalMessages"
 
 
 
@@ -59,7 +60,7 @@ const CartLayout = ({
 
     }catch(err){
       setIsLoading(false)
-      if(err.responseStatus) return setFailedModal(err.message)
+      if(err.responseStatus) return setFailedModal("Something went wrong",err.message, ()=> {resetModals()}, "Try again")
     }
   }
 
@@ -71,14 +72,6 @@ const CartLayout = ({
       role="dialog"
       aria-modal="true"
     >
-      {modalState.isFailed.value 
-      ? <AttentionModal
-      titleMessage={'Something went wrong'}
-      descriptionMessage={modalState.isFailed.message}
-      buttonHandler={resetModals}
-      buttonName={"Try again"}/>
-      :null
-      }
       {/* <!--
     Background backdrop, show/hide based on slide-over state.
     
@@ -158,7 +151,7 @@ const CartLayout = ({
   </>
   );
 };
-export default CartLayout;
+export default modalMessages(CartLayout);
 
 
 

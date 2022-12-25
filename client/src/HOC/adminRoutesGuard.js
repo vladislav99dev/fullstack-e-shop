@@ -7,6 +7,7 @@ import {useAuthContext} from "../context/AuthContext"
 import Spinner from "../components/Spinner/Spinner"
 
 const requester = async(token,profileId) => {
+    console.log(token);
     const response = await fetch(`${url}/admin/checkToken`,{
         method:"POST",
         headers:{
@@ -30,7 +31,9 @@ const isAdmin = (Component) => {
         
         useEffect(() => {
             requester(user.accessToken,user._id).then(({response,jsonResponse}) => {
-                if(response.status !== 200)  navigate('/home')
+                if(response.status !== 200) {
+                    navigate('/home')
+                } 
                 if(response.status === 200)  setIsAdmin(jsonResponse.isAdmin)
             }).catch(err => {
                 console.log(err);

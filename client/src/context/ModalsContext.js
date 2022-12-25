@@ -19,13 +19,7 @@ const initialModalState = {
   },
 };
 
-const reducerModalsState = (
-  state,
-  {
-    type,
-    payload,
-  }
-) => {
+const reducerModalsState = (state, { type, payload }) => {
   switch (type) {
     case "setIsSuccess":
       return {
@@ -95,10 +89,7 @@ export const ModalsProvider = ({ children }) => {
   ) => {
     dispatch({
       type: "setIsSuccess",
-      payload: titleMessage,
-      descriptionMessage,
-      buttonHandler,
-      buttonName,
+      payload: { titleMessage, descriptionMessage, buttonHandler, buttonName },
     });
   };
   const setFailedModal = (

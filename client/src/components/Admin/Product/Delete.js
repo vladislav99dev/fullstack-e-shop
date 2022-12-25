@@ -7,16 +7,16 @@ import { useAuthContext } from "../../../context/AuthContext";
 
 import isAdmin from "../../../HOC/adminRoutesGuard";
 
+import modalMessages from "../../../HOC/modalMessages";
 
 import AttentionModal from "../../Modals/AttentionModal";
-import SuccessModal from "../../Modals/SuccessModal";
 
 const Delete = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
-  
+
   const { modalState, setSuccessModal, setFailedModal, resetModals } =
-  useModalsContext();
+    useModalsContext();
   const { user } = useAuthContext();
 
   const deleteHandler = async () => {
@@ -28,21 +28,33 @@ const Delete = () => {
         user._id
       );
       const jsonResponse = await response.json();
-      if (response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message};
-      if (response.status === 200) return setSuccessModal(jsonResponse.message);
+      if (response.status !== 200)
+        throw {
+          responseStatus: response.status,
+          message: jsonResponse.message,
+        };
+      if (response.status === 200)
+        return setSuccessModal(
+          "Congrats!",
+          jsonResponse.message,
+          () => {
+            modalButtonHandler()
+          },
+          "Go to home"
+        );
     } catch (err) {
-      if(err.responseStatus) return setFailedModal(err.message);
+      if (err.responseStatus) return setFailedModal(err.message);
     }
   };
 
-  const modalButtonHandler = () => {
+  function modalButtonHandler() {
     resetModals();
-    navigate("/");
-  };
+    navigate("/home");
+  }
 
   return (
     <>
-      {!modalState.isFailed.value && !modalState.isSuccess.value ? (
+      {!modalState.isFailed.value && !modalState.isSuccess.value && (
         <AttentionModal
           titleMessage={"Are you sure you want to delete this item?"}
           descriptionMessage={
@@ -51,23 +63,9 @@ const Delete = () => {
           buttonHandler={deleteHandler}
           buttonName={"DELETE"}
         />
-      ) : modalState.isFailed.value ? (
-        <AttentionModal
-          titleMessage={"Something went wrong!"}
-          descriptionMessage={modalState.isFailed.message}
-          buttonHandler={modalButtonHandler}
-          buttonName={"Go to home page"}
-        />
-      ) : (
-        <SuccessModal
-          titleMessage={"Delete successfull!"}
-          descriptionMessage={modalState.isSuccess.message}
-          buttonHandler={modalButtonHandler}
-          buttonName={"Go to home page"}
-        />
       )}
     </>
   );
 };
 
-export default isAdmin(Delete);
+export default isAdmin(modalMessages(Delete));

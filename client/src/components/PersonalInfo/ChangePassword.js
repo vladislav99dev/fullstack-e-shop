@@ -7,8 +7,8 @@ import * as userRequester from "../../services/userRequester"
 
 import Input from "./Input";
 import ValidationMessage from "../ValidationMessage/validationMessage";
-import SuccessModal from "../Modals/SuccessModal";
-import AttentionModal from "../Modals/AttentionModal";
+
+import modalMessages from "../../HOC/modalMessages";
 
 const reducerPasswordsState = (state,{type,payload}) => {
     switch (type) {
@@ -54,7 +54,7 @@ const ChangePassword = ({
         repeatNewPassword:''
     })
     
-    const {modalState,resetModals,setSuccessModal,setFailedModal} = useModalsContext();
+    const {resetModals,setSuccessModal,setFailedModal} = useModalsContext();
 
 
 
@@ -72,30 +72,17 @@ const ChangePassword = ({
             if(response.status !== 200) throw {message:jsonResponse.message}
             if(response.status === 200) {
                 login(jsonResponse.user);
-                return setSuccessModal(jsonResponse.message)
+                return setSuccessModal("Congrats!",jsonResponse.message,()=>{resetModals()},"Try again")
             }
         }catch(err){
+            console.log(err);
             return setFailedModal("Something went wrong",err.message,()=>{resetModals()},"Try again")
         }
         
     }
 
-    const successModalButtonHandler = () => {
-        resetModals();
-        navigate('/');
-    }
-
     return (
         <>
-        {modalState.isSuccess.value 
-        ? <SuccessModal
-            titleMessage={"Success!"}
-            descriptionMessage={modalState.isSuccess.message}
-            buttonName={"Go to home page"}
-            buttonHandler={successModalButtonHandler}
-        />
-        :null
-        }
         <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">Change Password</h1>
         { validationMessages.length 
         ? validationMessages.map((x) => <ValidationMessage key={x} message={x}/>)
@@ -112,4 +99,4 @@ const ChangePassword = ({
         </>
     )
 }
-export default ChangePassword;
+export default  modalMessages(ChangePassword);

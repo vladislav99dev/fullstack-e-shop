@@ -105,6 +105,26 @@
     hover:text-primary-light-800;
 }
 
+.nav-logout-button {
+  @apply w-[40%]
+  min-w-[110px]
+    max-w-[300px]
+    text-primary-dark-100
+    border-primary-dark-100
+    hover:border-primary-light-600 
+    hover:text-primary-light-600;
+}
+
+.nav-profile-button {
+  @apply w-[45%]
+  min-w-[120px]
+    max-w-[300px]
+    text-primary-light-200
+    border-primary-light-200
+    hover:border-primary-light-800 
+    hover:text-primary-light-800;
+}
+
 /*ICONS LIST */
 .nav-icons {
   grid-area: icons;

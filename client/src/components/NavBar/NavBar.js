@@ -2,6 +2,9 @@ import { useNavTogglesContext } from "../../context/NavTogglesContext";
 import { useModalsContext } from "../../context/ModalsContext";
 import { useAuthContext } from "../../context/AuthContext";
 import { useState } from "react";
+import * as userRequester from "../../services/userRequester"
+
+import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 
@@ -15,11 +18,13 @@ import { AiOutlineClose } from "react-icons/ai";
 import { ImMenu } from "react-icons/im";
 import styles from "./NavBar.module.css";
 
+
 import modalMessages from "../../HOC/modalMessages";
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const { setFailedModal, resetModals } = useModalsContext();
-  const { user, login } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const {
     toggleCartMenu,
@@ -42,6 +47,16 @@ const NavBar = () => {
         },
         "Click"
       );
+  };
+
+  const logoutHandler = async () => {
+    try {
+      await userRequester.logout(null, user._id);
+      logout();
+      return navigate("/home");
+    } catch (err) {
+      return setFailedModal("Something went wrong", err.message, ()=> resetModals(), "Go to Home")
+    }
   };
 
   const Icons = () => (
@@ -111,14 +126,28 @@ const NavBar = () => {
           Brands
         </Link>
       </li>
-      <li className={styles["nav-user-links"]}>
-        <Link to={"users/login"} className={styles["nav-login-button"]}>
-          Login
-        </Link>
-        <Link to={"users/register"} className={styles["nav-register-button"]}>
-          Register
-        </Link>
-      </li>
+      {user.email ? (
+        <li className={styles["nav-user-links"]}>
+          <a href="#"
+            onClick={logoutHandler}
+            className={styles["nav-logout-button"]}
+          >
+            Logout
+          </a>
+          <Link to={"users/profile"} className={styles["nav-profile-button"]}>
+            Profile
+          </Link>
+        </li>
+      ) : (
+        <li className={styles["nav-user-links"]}>
+          <Link to={"users/login"} className={styles["nav-login-button"]}>
+            Login
+          </Link>
+          <Link to={"users/register"} className={styles["nav-register-button"]}>
+            Register
+          </Link>
+        </li>
+      )}
     </ul>
   );
 

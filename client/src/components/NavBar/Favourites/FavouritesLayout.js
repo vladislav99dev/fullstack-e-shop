@@ -9,49 +9,61 @@ import FavouritesHeader from "./FavouritesHeader";
 import AttentionModal from "../../Modals/AttentionModal";
 import Spinner from "../../Spinner/Spinner";
 
+import modalMessages from "../../../HOC/modalMessages"
 
-const FavouritesLayout = ({toggleFavouritesMenu}) => {
+const FavouritesLayout = ({ toggleFavouritesMenu }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {setFailedModal,resetModals,modalState} = useModalsContext();
-  const {user,login} = useAuthContext();
+  const { setFailedModal, resetModals, modalState } = useModalsContext();
+  const { user, login } = useAuthContext();
 
-
-
-  const removeFromFavouritesHandler = async(productId,event) => {
+  const removeFromFavouritesHandler = async (productId, event) => {
     event.preventDefault();
-    setIsLoading(true)
-    try{
-      const response = await favouritesAndCartRequester.removeFromFavourties(user._id,productId);
+    setIsLoading(true);
+    try {
+      const response = await favouritesAndCartRequester.removeFromFavourties(
+        user._id,
+        productId
+      );
       const jsonResponse = await response.json();
-      setIsLoading(false)
+      setIsLoading(false);
 
-      if(response.status !== 200) throw {responseStatus:response.status, message:jsonResponse.message}
-      if(response.status === 200) login(jsonResponse.user);
-    }catch(err){
-      setIsLoading(false)
-      if(err.status) return setFailedModal(err.message);
-      console.log(err);
+      if (response.status !== 200)
+        throw {
+          responseStatus: response.status,
+          message: jsonResponse.message,
+        };
+      if (response.status === 200) login(jsonResponse.user);
+    } catch (err) {
+      setIsLoading(false);
+      if (err.status)
+        return setFailedModal(
+          "Something went wrong",
+          err.message,
+          () => {
+            resetModals();
+          },
+          "Try again"
+        );
     }
-  }
+  };
 
   return (
     <div>
       <div
-      className="relative z-30"
-      aria-labelledby="slide-over-title"
-      role="dialog"
-      aria-modal="true"
+        className="relative z-30"
+        aria-labelledby="slide-over-title"
+        role="dialog"
+        aria-modal="true"
       >
-      {modalState.isFailed.value 
-      ? <AttentionModal
-        titleMessage={"Something went wrong"}
-        descriptionMessage={modalState.isFailed.message}
-        buttonHandler={resetModals}
-        buttonName={"Try again"}
-      />
-      : null
-      }
-      {/* //   <!--
+        {modalState.isFailed.value ? (
+          <AttentionModal
+            titleMessage={"Something went wrong"}
+            descriptionMessage={modalState.isFailed.message}
+            buttonHandler={resetModals}
+            buttonName={"Try again"}
+          />
+        ) : null}
+        {/* //   <!--
       //     Background backdrop, show/hide based on slide-over state.
       
       //     Entering: "ease-in-out duration-500"
@@ -61,12 +73,12 @@ const FavouritesLayout = ({toggleFavouritesMenu}) => {
       //       From: "opacity-100"
       //       To: "opacity-0"
       //   --> */}
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-      <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-            {/* // <!--
+        <div className="fixed inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+              {/* // <!--
               //   Slide-over panel, show/hide based on slide-over state.
       
               //   Entering: "transform transition ease-in-out duration-500 sm:duration-700"
@@ -77,41 +89,46 @@ const FavouritesLayout = ({toggleFavouritesMenu}) => {
               //     To: "translate-x-full"
               // --> */}
 
-            <div className="pointer-events-auto w-screen max-w-md">
-              <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
-                  <FavouritesHeader
-                    toggleFavouritesMenu={toggleFavouritesMenu}
-                  />
-                  <div className="mt-8">
-                    <div className="flow-root">
-                      <ul
-                        role="list"
-                        className="-my-6 divide-y divide-gray-200"
-                      >{isLoading 
-                      ? <Spinner/>
-                      : user.favourites.map((favourite) => (
-                        <FavouritesCard
-                          key={favourite._id}
-                          product={favourite}
-                          toggleFavouritesMenu={toggleFavouritesMenu}
-                          removeFromFavouritesHandler={removeFromFavouritesHandler.bind(null,favourite._id)}
-                        />
-                      ))
-                      }
-                      </ul>
+              <div className="pointer-events-auto w-screen max-w-md">
+                <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                  <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+                    <FavouritesHeader
+                      toggleFavouritesMenu={toggleFavouritesMenu}
+                    />
+                    <div className="mt-8">
+                      <div className="flow-root">
+                        <ul
+                          role="list"
+                          className="-my-6 divide-y divide-gray-200"
+                        >
+                          {isLoading ? (
+                            <Spinner />
+                          ) : (
+                            user.favourites.map((favourite) => (
+                              <FavouritesCard
+                                key={favourite._id}
+                                product={favourite}
+                                toggleFavouritesMenu={toggleFavouritesMenu}
+                                removeFromFavouritesHandler={removeFromFavouritesHandler.bind(
+                                  null,
+                                  favourite._id
+                                )}
+                              />
+                            ))
+                          )}
+                        </ul>
+                      </div>
                     </div>
                   </div>
+                  <FavouritesFooter />
                 </div>
-                <FavouritesFooter />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
-export default FavouritesLayout;
+export default modalMessages(FavouritesLayout);

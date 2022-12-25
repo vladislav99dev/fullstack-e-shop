@@ -10,11 +10,11 @@ import { useLocalProductsContext } from "../../context/LocalProductsContext";
 import { useModalsContext } from "../../context/ModalsContext";
 
 import { isNotLoggedIn } from "../../HOC/routesGuard";
-import modalMessages from "../../HOC/modalMessages";
 
 import ValidationMessage from "../ValidationMessage/validationMessage";
 import Spinner from "../Spinner/Spinner";
-import AttentionModal from "../Modals/AttentionModal";
+
+import modalMessages from "../../HOC/modalMessages"
 
 const Login = () => {
   const [validationMessages, setValidationMessages] = useState([]);
@@ -67,8 +67,8 @@ const Login = () => {
       if (response.status !== 200) {
         setIsLoading(false);
         return setFailedModal(
+          "Something went wrong",
           jsonResponse.message,
-          "",
           () => resetModals(),
           "Try again"
         );
@@ -79,8 +79,10 @@ const Login = () => {
         const [user, failedAddMessages] =
           await addProductsFromLocalStorageToUserCart(userData._id);
         if (failedAddMessages)
-          setFailedModal(
-            "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)"
+          setFailedModal("Something went wrong",
+            "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)",
+            ()=> {resetModals()},
+            "Go to home"
           );
         if (user.hasOwnProperty("email")) Object.assign(userData, user);
         clearStorage();
@@ -139,4 +141,4 @@ const Login = () => {
   );
 };
 
-export default isNotLoggedIn(Login);
+export default isNotLoggedIn(modalMessages(Login));

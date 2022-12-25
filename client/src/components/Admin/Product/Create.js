@@ -13,9 +13,7 @@ import productData from "../../../utils/productData";
 import isAdmin from "../../../HOC/adminRoutesGuard";
 
 import ValidationMessage from "../../ValidationMessage/validationMessage";
-import AttentionModal from "../../Modals/AttentionModal";
-import SuccessModal from "../../Modals/SuccessModal"
-
+import modalMessages from "../../../HOC/modalMessages";
 
 
 
@@ -24,7 +22,7 @@ const Create = () => {
     const {user} = useAuthContext();
     const [type,setType] = useState('clothing');
     const [validationMessages,setValidationMessages] = useState([]);
-    const {modalState, setSuccessModal, setFailedModal, resetModals} = useModalsContext();
+    const {setSuccessModal, setFailedModal, resetModals} = useModalsContext();
 
     const handleSelect = (event) => {
         setType(event.target.value);
@@ -49,30 +47,14 @@ const Create = () => {
             const jsonResponse = await response.json();
 
             if(response.status !== 201) throw {responseStatus:response.status, message:jsonResponse.message}
-            if(response.status === 201) setSuccessModal("You have successfully create new product!");
+            if(response.status === 201)  setSuccessModal("Congrats!","You have successfully create new product!",()=>{resetModals()},"Make another one");
         } catch(err){
-            if(err.responseStatus) return setFailedModal(err.message);
+            if(err.responseStatus) return setFailedModal("Something went wrong",err.message,()=> {resetModals()}, "Try again");
         }
     };
 
     return(
         <>
-        {modalState.isFailed.value 
-        ? <AttentionModal 
-        titleMessage={'Creation failed!'} 
-        descriptionMessage={modalState.isFailed.message} 
-        buttonHandler={resetModals} 
-        buttonName={'Try again'}/>   
-        : null}
-        
-        {modalState.isSuccess.value
-        ? <SuccessModal 
-        titleMessage={'Success'}
-        descriptionMessage={modalState.isSuccess.message}
-        buttonHandler={resetModals}
-        buttonName={'Create another one'}/> 
-        : null}
-
         <div className="bg-white rounded-3xl mt-6 w-full shadow-lg flex-row py-4">
         <h1 className="text-[#00df9a] text-2xl italic  font-bold w-full text-center mt-2">
             Hello, {user.firstName}
@@ -128,5 +110,5 @@ const Create = () => {
     );
 };
 
-export default isAdmin(Create);
+export default isAdmin(modalMessages(Create));
 
