@@ -13,8 +13,9 @@ const isAdmin = async(req, res, next) => {
 
         const tokenDocument = await tokenServices.findByUserId(profileId)
 
-        if(tokenDocument.token !== token) throw {status:400,message:"Invalid accessToken!"};
 
+        if(tokenDocument.token !== token) throw {status:400,message:"Invalid accessToken!"};
+        
         const isVerified = await verifyAccessToken(user,token);
 
         if(!isVerified) {
