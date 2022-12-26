@@ -14,7 +14,9 @@ import { isNotLoggedIn } from "../../HOC/routesGuard";
 import ValidationMessage from "../ValidationMessage/validationMessage";
 import Spinner from "../Spinner/Spinner";
 
-import modalMessages from "../../HOC/modalMessages"
+import modalMessages from "../../HOC/modalMessages";
+
+import styles from "./Login.module.css";
 
 const Login = () => {
   const [validationMessages, setValidationMessages] = useState([]);
@@ -79,9 +81,12 @@ const Login = () => {
         const [user, failedAddMessages] =
           await addProductsFromLocalStorageToUserCart(userData._id);
         if (failedAddMessages)
-          setFailedModal("Something went wrong",
+          setFailedModal(
+            "Something went wrong",
             "There were some products that we currently dont have as much as you wanted in stock, so we removed them from your cart and added the ones we have.We are sorry for the issues :)",
-            ()=> {resetModals()},
+            () => {
+              resetModals();
+            },
             "Go to home"
           );
         if (user.hasOwnProperty("email")) Object.assign(userData, user);
@@ -97,46 +102,37 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-white pt-6 pb-10  rounded-3xl lg:mt-16 w-full shadow-lg flex-row lg:w-full">
-      {isLoading ? <Spinner /> : null}
-      <>
+    <div className={styles.container}>
+      {isLoading && <Spinner />}
+      <div>
+        {validationMessages.length > 0 &&
+          validationMessages.map((message) => (
+            <ValidationMessage key={message} message={message} />
+          ))}
         {!isLoading ? (
-          <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">
-            Login
-          </h1>
-        ) : null}
-
-        {validationMessages.length > 0
-          ? validationMessages.map((message) => (
-              <ValidationMessage key={message} message={message} />
-            ))
-          : null}
-        {!isLoading ? (
-          <form onSubmit={loginHandler}>
-            <input
-              type="text"
-              name="email"
-              className="py-2 w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] mb-2 mt-6 border-2 border-green-300 hover:border-green-100 rounded-md"
-              placeholder="Email:vladislavdorovski@abv.bg"
-            />
-            <input
-              type="password"
-              name="password"
-              className="py-2 w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] border-2 border-green-300 hover:border-green-100 rounded-md"
-              placeholder="Password:"
-            />
-            <div className="w-2/3 ml-[17%] md:w-1/3 md:ml-[33.5%] flex justify-around mt-4">
-              <p className="italic text-gray-600">You dont have an account?</p>
-              <Link to={"users/register"} className="text-[#00df9a] font-bold">
+          <form className={styles.form} onSubmit={loginHandler}>
+            {!isLoading && <h1 className={styles.heading}>Login</h1>}
+            <div className={styles.inputsContainer}>
+              <input
+                type="text"
+                name="email"
+                className=""
+                placeholder="Email:"
+              />
+              <input type="password" name="password" placeholder="Password:" />
+            </div>
+            <div className={styles.signInContainer}>
+              <p className="">You dont have an account?</p>
+              <Link to={"users/register"} className="text-primary-dark-100">
                 Sign in
               </Link>
             </div>
-            <button className="py-2  border-[#00df9a] w-[25%] ml-[37.5%] mt-4 rounded-md italic font-bold text-xl text-white bg-[#00df9a] hover:bg-green-300 ease-in-out duration-500">
-              Submit
-            </button>
+            <div className={styles.btnContainer}>
+              <button className={styles.submitBtn}>Submit</button>
+            </div>
           </form>
         ) : null}
-      </>
+      </div>
     </div>
   );
 };

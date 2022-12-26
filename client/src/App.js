@@ -32,7 +32,7 @@ function App() {
           <LocalProductsProvider>
             <div id="container">
               <NavBar />
-              <div id="main-content" className="mt-10 h-full w-full">
+              <div id="main-content" className="min-h-[550px] w-full">
                 <Routes>
                   <Route path="/home" element={<Home />} />
 
