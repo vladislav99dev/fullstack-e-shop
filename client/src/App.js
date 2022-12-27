@@ -19,7 +19,7 @@ import Edit from "./components/Admin/Product/Edit/Edit.js";
 import Delete from "./components/Admin/Product/Delete.js";
 
 import ProductsLayout from "./components/Products/Layout/ProductsLayout.js";
-import ProductDetails from "./components/Products/ProductDetails.js";
+import ProductDetails from "./components/Products/ProductDetails/ProductDetails.js";
 
 import ErrorPage from "./components/ErrorPage.js";
 import Checkout from "./components/Checkout/Checkout.js";
