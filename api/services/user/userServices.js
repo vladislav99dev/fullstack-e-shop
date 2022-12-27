@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const checkUserData = require('../../utils/users/checkUserData');
 
     const create = async(data) => {
         const user = await User.create({...data})
@@ -16,6 +17,11 @@ const User = require("../../models/User");
         return user;
     }
 
+    const findByIdAndUpdate = async(id,data) => {
+        const user = await User.findByIdAndUpdate(id,data,{returnDocument:'after'});
+        return user;
+    }
+
     const findByIdAndPopulate = async(id) => {
         const user = await User.findById(id).populate({
             path:'cart',
@@ -24,13 +30,14 @@ const User = require("../../models/User");
                 model:'Product'
             }
         }).populate('favourites').lean();
-        return user;
+        // const checkedUser = checkUserData(user);
+        // if(_isEqual(checkedUser, user)) return user;
+        // if(!_isEqual(checkedUser, user)) {
+        //     find
+        // };
+        return user
     }
 
-    const findByIdAndUpdate = async(id,data) => {
-        const user = await User.findByIdAndUpdate(id,data,{returnDocument:'after'});
-        return user;
-    }
 
     const findByIdAndUpdatePassword = async(id,data) => {
         const user = await User.updateOne({_id:id},data,{returnDocument:'after'});

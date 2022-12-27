@@ -141,6 +141,7 @@ const logoutHandler = async(req,res) => {
   } catch(err){
     if(err.path === '_id') return res.status(400).json({message:"ProfileId is invalid!"})
     if(err.status) return res.status(err.status).json({message:err.message})
+    console.log(err);
   }
 }
 
