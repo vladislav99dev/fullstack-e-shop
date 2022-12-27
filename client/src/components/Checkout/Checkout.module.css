@@ -1,5 +1,6 @@
 .container {
   @apply lg:py-10 px-5 
+  bg-primary-lightest
   lg:grid lg:grid-cols-2 lg:gap-x-5;
 }
 .form-header {

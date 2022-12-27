@@ -1,20 +1,22 @@
 import { useEffect, useState, useReducer } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { useAuthContext } from "../../../context/AuthContext";
-import { useModalsContext } from "../../../context/ModalsContext";
+import { useAuthContext } from "../../../../context/AuthContext";
+import { useModalsContext } from "../../../../context/ModalsContext";
 
-import * as productsRequester from "../../../services/productsRequester";
-import productsValidations from "../../../validations/productsValidations";
-import { productSizeFormater } from "../../../services/dataServices";
+import * as productsRequester from "../../../../services/productsRequester";
+import productsValidations from "../../../../validations/productsValidations";
+import { productSizeFormater } from "../../../../services/dataServices";
 
-import isAdmin from "../../../HOC/adminRoutesGuard";
+import isAdmin from "../../../../HOC/adminRoutesGuard";
 
-import ValidationMessage from "../../ValidationMessage/validationMessage";
+import ValidationMessage from "../../../ValidationMessage/validationMessage";
 
-import productData from "../../../utils/productData";
+import productData from "../../../../utils/productData";
 
-import modalMessages from "../../../HOC/modalMessages";
+import modalMessages from "../../../../HOC/modalMessages";
+
+import styles from "./Edit.module.css";
 
 const initialSelectStates = { type: "", category: "", gender: "", brand: "" };
 
@@ -77,8 +79,7 @@ const Edit = () => {
   const { productId } = useParams();
 
   const { user } = useAuthContext();
-  const { modalState, setFailedModal, setSuccessModal, resetModals } =
-    useModalsContext();
+  const { setFailedModal, setSuccessModal, resetModals } = useModalsContext();
 
   useEffect(() => {
     initialRequest(user.accessToken, productId)
@@ -201,32 +202,27 @@ const Edit = () => {
 
   return (
     <>
-      <div className="bg-white rounded-3xl mt-6 w-full shadow-lg flex-row py-4">
-        <h1 className="text-[#00df9a] text-2xl italic  font-bold w-full text-center mt-2">
+      <div className={styles.container}>
+        <h1 className={styles.heading}>
           Hello, {user.firstName}
           <br />
           what we will edit today?
         </h1>
-        {validationMessages.length > 0
-          ? validationMessages.map((message) => (
-              <ValidationMessage key={message} message={message} />
-            ))
-          : null}
-        <form onSubmit={submitHandler}>
+        {validationMessages.length > 0 &&
+          validationMessages.map((message) => (
+            <ValidationMessage key={message} message={message} />
+          ))}
+        <form className={styles.form} onSubmit={submitHandler}>
           <select
             type="text"
             name="type"
             onChange={setSelectState.bind(null, "type")}
             value={selectStates.type}
-            className="form-input capitalize font-semibold text-gray-700"
+            className={styles.select}
             placeholder=""
           >
             {productData.types.map((type) => (
-              <option
-                className="text-center font-semibold text-gray-700"
-                key={type}
-                value={type}
-              >
+              <option key={type} value={type}>
                 {type}
               </option>
             ))}
@@ -236,26 +232,17 @@ const Edit = () => {
             type="input"
             name="category"
             id="category"
-            className="form-input capitalize font-semibold text=gray-700 mt-0"
             value={selectStates.category}
             onChange={setSelectState.bind(null, "category")}
           >
             {selectStates.type === "clothing"
               ? sortedClothingOptions.map((option) => (
-                  <option
-                    className="text-center font-semibold text-gray-700"
-                    key={option}
-                    value={option}
-                  >
+                  <option key={option} value={option}>
                     {option}
                   </option>
                 ))
               : sortedShoeOptions.map((option) => (
-                  <option
-                    className="text-center font-semibold text-gray-700"
-                    key={option}
-                    value={option}
-                  >
+                  <option key={option} value={option}>
                     {option}
                   </option>
                 ))}{" "}
@@ -263,7 +250,6 @@ const Edit = () => {
 
           <input
             type="text"
-            className="form-input mt-0 capitalize text-center font-semibold text-gray-700"
             name="name"
             id="name"
             defaultValue={product.name}
@@ -273,16 +259,11 @@ const Edit = () => {
             type="input"
             name="gender"
             id="gender"
-            className="form-input mt-0 capitalize font-semibold text-gray-700"
             onChange={setSelectState.bind(null, "gender")}
             value={selectStates.gender}
           >
             {sortedGenders.map((gender) => (
-              <option
-                className="font-semibold text-gray-700 text-center"
-                key={gender}
-                value={gender}
-              >
+              <option key={gender} value={gender}>
                 {gender}
               </option>
             ))}
@@ -292,16 +273,11 @@ const Edit = () => {
             type="input"
             name="brand"
             id="brand"
-            className="form-input mt-0 text-center font-semibold text-grey-700 capitalize"
             onChange={setSelectState.bind(null, "brand")}
             value={selectStates.brand}
           >
             {sortedBrands.map((brand) => (
-              <option
-                className="font-semibold text-gray-700 text-center"
-                key={brand}
-                value={brand}
-              >
+              <option key={brand} value={brand}>
                 {brand}
               </option>
             ))}
@@ -317,14 +293,12 @@ const Edit = () => {
                 : "ex: 43:10, 46:15, 42:13 You should add comma as shown in example"
             }
             id="sizes"
-            className="form-input mt-0 text-center font-semibold text-gray-700 mb-[0.25rem]"
           ></textarea>
 
           <input
             type="input"
             name="imageUrl"
             id="imageUrl"
-            className="form-input mt-0 text-center font-semibold text-gray-700"
             placeholder="ImageUrl:"
             defaultValue={product.imageUrl}
           />
@@ -333,15 +307,10 @@ const Edit = () => {
             type="input"
             name="color"
             id="color"
-            className="form-input mt-0 text-center font-semibold text-grey-700 capitalize"
             defaultValue={product.color}
           >
             {productData.colors.map((color) => (
-              <option
-                className="font-semibold text-gray-700 text-center"
-                key={color}
-                value={color}
-              >
+              <option key={color} value={color}>
                 {color}
               </option>
             ))}
@@ -351,17 +320,15 @@ const Edit = () => {
             type="number"
             name="price"
             id="price"
-            className="form-input mt-0 text-center font-semibold text-gray-700"
             placeholder="Price:"
             defaultValue={product.price}
           />
-          <button className="py-2 border-[#00df9a] w-[25%] ml-[37.5%] mt-4 rounded-md italic font-bold text-xl text-white bg-[#00df9a] hover:bg-green-300 ease-in-out duration-500">
-            Submit
-          </button>
+          <div className={styles.btnContainer}>
+            <button className={styles["submit-btn"]}>Submit</button>
+          </div>
         </form>
       </div>
     </>
   );
 };
 export default isAdmin(modalMessages(Edit));
-

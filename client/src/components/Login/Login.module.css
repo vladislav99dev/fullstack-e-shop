@@ -31,7 +31,7 @@
     py-2
     rounded-md
     border-primary-darkest
-    bg-primary-lightest
+    hover:border-primary-dark-200
 }
 .signInContainer{
     @apply
