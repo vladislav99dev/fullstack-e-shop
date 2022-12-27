@@ -14,7 +14,7 @@ import Login from "./components/Login/Login.js";
 import Register from "./components/Register/Register.js";
 import PersonalInfo from "./components/PersonalInfo/PersonalInfo.js";
 
-import Create from "./components/Admin/Product/Create.js";
+import Create from "./components/Admin/Product/Create/Create.js";
 import Edit from "./components/Admin/Product/Edit/Edit.js";
 import Delete from "./components/Admin/Product/Delete.js";
 
