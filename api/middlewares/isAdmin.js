@@ -5,7 +5,6 @@ const userServices = require("../services/user/userServices");
 const isAdmin = async(req, res, next) => {
     const token = req.headers.authorization;
     const {profileId} = req.body;
-
     if(!token) return res.status(401).json({isAdmin:false, message: 'Access token is not provided!'})
     
     try{

@@ -50,21 +50,25 @@ const deleteProductHandler = async(req,res) => {
   const {productId} = req.params;
 
   try {
-    await productServices.findById(productId);
-
-    await productServices.deleteById(productId);
+    const product = await productServices.findById(productId);
+    product.inStock = false;
+    for (const size in product.sizes) {
+      product.sizes[size] = 0
+      
+    }
+    await productServices.findByIdAndUpdate(product._id,product);
 
     res.status(200).json({message:"You successfully deleteted this product!"});
 
   }catch(err){
     if(err.path === "_id") res.status(400).json({message:"ProductId is not in valid format"});
     if(err.status) return res.status(err.status).json({message:err.message});
+    console.log(err);
   }
 }
 
 const checkAccessToken = async (req,res) => {
     console.log(`POST ${req.originalUrl}`);
-    
     return res.status(200).json({isAdmin:true});
 }
 

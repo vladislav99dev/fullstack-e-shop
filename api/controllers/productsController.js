@@ -1,78 +1,84 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
 const productsServices = require("../services/products/productsServices");
 
 const extractEmptyPropsAndSizesFromFilter = require("../utils/products/extractEmptyPropsAndSizesFromFilter");
 const filterProductsBySize = require("../utils/products/filterProductsBySize");
 
-const getManyHandler = async(req,res) => {
-    console.log(`GET ${req.originalUrl}`);
+const getManyHandler = async (req, res) => {
+  console.log(`GET ${req.originalUrl}`);
 
-    const gender = req.path.split('/')[1];
+  const gender = req.path.split("/")[1];
 
-    let products = [];
+  let products = [];
 
-    if(gender !== 'men' 
-    && gender !== 'women' 
-    && gender !=='boys' 
-    && gender !== 'girls' 
-    && gender !== 'all') return res.status(400).json({message:"No such gender found in database!"})
+  if (
+    gender !== "men" &&
+    gender !== "women" &&
+    gender !== "boys" &&
+    gender !== "girls" &&
+    gender !== "all"
+  )
+    return res
+      .status(400)
+      .json({ message: "No such gender found in database!" });
 
-    try{
-        if(gender === 'all') products = await productsServices.findAll();
+  try {
+    if (gender === "all") products = await productsServices.findAll();
 
-        if(gender !== 'all') products = await productsServices.findByGender(gender);
+    if (gender !== "all")
+      products = await productsServices.findByGender(gender);
 
-        res.status(200).json(products);
-    }catch(err){
-        if(err.status) return res.status(err.status).json({message:err.message});
-    }
+    res.status(200).json(products);
+  } catch (err) {
+    if (err.status)
+      return res.status(err.status).json({ message: err.message });
+  }
 };
 
-const getManyFiltered = async(req,res) => {
-    console.log(`POST ${req.originalUrl}`);
+const getManyFiltered = async (req, res) => {
+  console.log(`POST ${req.originalUrl}`);
 
-    const data = req.body;
+  const data = req.body;
 
-    const {filterData,filterSizes} = extractEmptyPropsAndSizesFromFilter(data);
+  const { filterData, filterSizes } = extractEmptyPropsAndSizesFromFilter(data);
 
-    try {
-        let products = await productsServices.findAndFilter(filterData);
+  try {
+    let products = await productsServices.findAndFilter(filterData);
 
-        if(products.length === 0 ) return res.status(200).json({products:products});
+    if (products.length === 0)
+      return res.status(200).json({ products: products });
 
-        const sizeFilteredProducts = filterProductsBySize(products,filterSizes);
+    const sizeFilteredProducts = filterProductsBySize(products, filterSizes);
 
-        // if(sizeFilteredProducts.length === 0) return res.status(200).json({products:sizeFilteredProducts})
+    // if(sizeFilteredProducts.length === 0) return res.status(200).json({products:sizeFilteredProducts})
 
-        return res.status(200).json({products:sizeFilteredProducts});
-    } catch(err){
-        if(err.status) return res.status(err.status).json({message:err.message});
-    }
-}
+    return res.status(200).json({ products: sizeFilteredProducts });
+  } catch (err) {
+    if (err.status)
+      return res.status(err.status).json({ message: err.message });
+  }
+};
 
+const getOneHandler = async (req, res) => {
+  console.log(`GET ${req.originalUrl}`);
 
-const getOneHandler = async(req,res) => {
-    console.log(`GET ${req.originalUrl}`);
+  const { productId } = req.params;
 
-    const {productId} = req.params
+  try {
+    const product = await productsServices.findById(productId);
 
-    try{
-        const product = await productsServices.findById(productId);
+    res.status(200).json(product);
+  } catch (err) {
+    if (err.path === "_id")
+      return res.status(400).json({ message: "ProfileId is invalid!" });
+    if (err.status)
+      return res.status(err.status).jsson({ message: err.message });
+  }
+};
 
-        res.status(200).json(product)
+router.get(["/men", "/women", "/girls", "/boys", "/all"], getManyHandler);
+router.post("/filter", getManyFiltered);
+router.get("/:productId", getOneHandler);
 
-    } catch(err){
-        if(err.path === '_id') return res.status(400).json({message:"ProfileId is invalid!"});
-        if(err.status) return res.status(err.status).jsson({message:err.message})
-    }
-}
-
-
-
-
-router.get(["/men","/women","/girls","/boys","/all"], getManyHandler)
-router.post("/filter",getManyFiltered)
-router.get("/:productId", getOneHandler)
-
-module.exports = router; 
+module.exports = router;

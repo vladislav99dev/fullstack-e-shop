@@ -1,137 +1,198 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const productsServices = require('../services/products/productsServices');
-const userServices = require('../services/user/userServices');
+const productsServices = require("../services/products/productsServices");
+const userServices = require("../services/user/userServices");
+const tokenServices = require("../services/token/tokenServices");
 
-const isLoggedIn = require('../middlewares/isLoggedIn');
-const isProductAlreadyAddedToCart = require('../utils/users/isProductAlreadyAddedToCart');
-const incrementCartProductQuantity = require('../utils/users/incrementCartProductQuantity.js');
-const addProductToCart = require('../utils/users/addProductToCart');
-const removeProductFromCart = require('../utils/users/removeProductFromCart');
+const isLoggedIn = require("../middlewares/isLoggedIn");
+const isProductAlreadyAddedToCart = require("../utils/users/isProductAlreadyAddedToCart");
+const incrementCartProductQuantity = require("../utils/users/incrementCartProductQuantity.js");
+const addProductToCart = require("../utils/users/addProductToCart");
+const removeProductFromCart = require("../utils/users/removeProductFromCart");
 const isSizeValid = require("../utils/users/addingToCartCheckIsSizeValid");
 
-const addToCartHandler = async(req,res) => {
-    console.log(`POST ${req.originalUrl}`);
-    
-    const {profileId,size,quantity} = req.body;
-    const {productId} = req.params;
+const addToCartHandler = async (req, res) => {
+  console.log(`POST ${req.originalUrl}`);
 
-    let modifiedUser = {};
+  const { profileId, size, quantity } = req.body;
+  const { productId } = req.params;
 
-    try{
-        const user = await userServices.findById(profileId);
+  let modifiedUser = {};
 
-        const product = await productsServices.findById(productId);
+  try {
+    const user = await userServices.findById(profileId);
 
-        isSizeValid(product,size);
+    const product = await productsServices.findById(productId);
 
-        const isAlreadyAdded = isProductAlreadyAddedToCart(user,productId,size);
-        if(isAlreadyAdded) modifiedUser = incrementCartProductQuantity(user,productId,size,quantity);
-        if(!isAlreadyAdded) modifiedUser = addProductToCart(user,productId,size,quantity);
+    const tokenDocument = await tokenServices.findByUserId(user._id);
 
-        await userServices.findByIdAndUpdate(user._id,modifiedUser);
+    isSizeValid(product, size);
 
-        const populatedUser = await userServices.findByIdAndPopulate(user._id);
+    const isAlreadyAdded = isProductAlreadyAddedToCart(user, productId, size);
+    if (isAlreadyAdded)
+      modifiedUser = incrementCartProductQuantity(
+        user,
+        productId,
+        size,
+        quantity
+      );
+    if (!isAlreadyAdded)
+      modifiedUser = addProductToCart(user, productId, size, quantity);
 
-        return res.status(200).json({user:populatedUser})
+    await userServices.findByIdAndUpdate(user._id, modifiedUser);
 
-    }catch(err){
-        if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
-        if(err.status) return res.status(err.status).json({message:err.message});
-    }
-}
+    const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-const removeFromCartHandler = async(req,res) => {
-    console.log(`DELETE ${req.originalUrl}`);
-    
-    const {profileId, size} = req.body;
-    const {productId} = req.params;
+    delete user.populatedUser;
 
-    try{
-        const user = await userServices.findById(profileId);
+    return res
+      .status(200)
+      .json({ user: { ...populatedUser, accessToken: tokenDocument.token } });
+  } catch (err) {
+    if (err.path === "_id")
+      return res
+        .status(400)
+        .json({
+          message:
+            "One or all of the id's you provided are not in valid format.",
+        });
+    if (err.status)
+      return res.status(err.status).json({ message: err.message });
+  }
+};
 
-        const product = await productsServices.findById(productId);
+const removeFromCartHandler = async (req, res) => {
+  console.log(`DELETE ${req.originalUrl}`);
 
-        let modifiedUser = removeProductFromCart(user,productId,size);
+  const { profileId, size } = req.body;
+  const { productId } = req.params;
 
-        await userServices.findByIdAndUpdate(user._id,modifiedUser);
+  try {
+    const user = await userServices.findById(profileId);
 
-        const populatedUser = await userServices.findByIdAndPopulate(user._id);
+    const product = await productsServices.findById(productId);
 
-        return res.status(200).json({user:populatedUser});
+    const tokenDocument = await tokenServices.findByUserId(user._id);
 
-    }catch(err){
-        if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."});
-        if(err.status) return res.status(err.status).json({message:err.message});
-    }
-}
+    let modifiedUser = removeProductFromCart(user, productId, size);
 
-const addToFavouritesHandler = async(req,res) => {
-    console.log(`POST ${req.originalUrl}`);
+    await userServices.findByIdAndUpdate(user._id, modifiedUser);
 
-    const {profileId} = req.body;
-    const {productId} = req.params;
+    const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-    try{
-        const user = await userServices.findById(profileId);
+    delete populatedUser.password
 
-        const product = await productsServices.findById(productId);
+    return res
+      .status(200)
+      .json({ user: { ...populatedUser, accessToken: tokenDocument.token } });
+  } catch (err) {
+    if (err.path === "_id")
+      return res
+        .status(400)
+        .json({
+          message:
+            "One or all of the id's you provided are not in valid format.",
+        });
+    if (err.status)
+      return res.status(err.status).json({ message: err.message });
+  }
+};
 
-        if(user.favourites.includes(productId)) throw {status:409, message:`Product ${product.name} is already added to favourites!`};
-        user.favourites.push(productId);
+const addToFavouritesHandler = async (req, res) => {
+  console.log(`POST ${req.originalUrl}`);
 
-        await userServices.findByIdAndUpdate(user._id,user);
+  const { profileId } = req.body;
+  const { productId } = req.params;
 
-        const populatedUser = await userServices.findByIdAndPopulate(user._id);
+  try {
+    const user = await userServices.findById(profileId);
 
-        return res.status(200).json({user:populatedUser});
+    const product = await productsServices.findById(productId);
 
-    }catch(err){
-        if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."})
-        if(err.status) return res.status(err.status).json({message:err.message});
-    }
-}
+    const tokenDocument = await tokenServices.findByUserId(user._id);
 
-const removeFromFavouritesHandler = async(req,res) => {
-    console.log(`DELETE ${req.originalUrl}`);
+    if (user.favourites.includes(productId))
+      throw {
+        status: 409,
+        message: `Product ${product.name} is already added to favourites!`,
+      };
+    user.favourites.push(productId);
 
-    const {profileId} = req.body;
-    const {productId} = req.params;
+    await userServices.findByIdAndUpdate(user._id, user);
 
-    try {
-        const user = await userServices.findById(profileId);
+    const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-        const product = await productsServices.findById(productId);
+    delete populatedUser.password
 
-        if(!user.favourites.includes(productId)) throw {status:404,message:`Product ${product.name} is not found in profile favourites!`};
-        
-        const indexOfProduct = user.favourites.indexOf(productId);
-        user.favourites.splice(indexOfProduct,1)
+    return res
+      .status(200)
+      .json({user:{ ...populatedUser, accessToken: tokenDocument.token }});
+  } catch (err) {
+    console.log(err);
+    if (err.path === "_id")
+      return res
+        .status(400)
+        .json({
+          message:
+            "One or all of the id's you provided are not in valid format.",
+        });
+    if (err.status)
+      return res.status(err.status).json({ message: err.message });
+  }
+};
 
-        await userServices.findByIdAndUpdate(user._id,user);
+const removeFromFavouritesHandler = async (req, res) => {
+  console.log(`DELETE ${req.originalUrl}`);
 
-        const populatedUser = await userServices.findByIdAndPopulate(user._id);
+  const { profileId } = req.body;
+  const { productId } = req.params;
 
-        return res.status(200).json({user:populatedUser})
-    } catch (err) {
-        if(err.path === '_id') return res.status(400).json({message: "One or all of the id's you provided are not in valid format."})
-        if(err.status) return res.status(err.status).json({message:err.message});
-    }
-}
+  try {
+    const user = await userServices.findById(profileId);
 
+    const product = await productsServices.findById(productId);
 
+    const tokenDocument = await tokenServices.findByUserId(user._id);
 
+    if (!user.favourites.includes(productId))
+      throw {
+        status: 404,
+        message: `Product ${product.name} is not found in profile favourites!`,
+      };
 
-router.post('/:productId/favourites-add', isLoggedIn, addToFavouritesHandler)
-router.delete('/:productId/favourites-remove', isLoggedIn, removeFromFavouritesHandler)
+    const indexOfProduct = user.favourites.indexOf(productId);
+    user.favourites.splice(indexOfProduct, 1);
 
-router.post('/:productId/cart-add', isLoggedIn, addToCartHandler)
-router.delete('/:productId/cart-remove', isLoggedIn, removeFromCartHandler)
+    await userServices.findByIdAndUpdate(user._id, user);
 
+    const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
+    delete populatedUser.password;
 
-module.exports = router
+    return res
+      .status(200)
+      .json({user:{ ...populatedUser, accessToken: tokenDocument.token }});
+  } catch (err) {
+    if (err.path === "_id")
+      return res
+        .status(400)
+        .json({
+          message:
+            "One or all of the id's you provided are not in valid format.",
+        });
+    if (err.status)
+      return res.status(err.status).json({ message: err.message });
+  }
+};
 
+router.post("/:productId/favourites-add", isLoggedIn, addToFavouritesHandler);
+router.delete(
+  "/:productId/favourites-remove",
+  isLoggedIn,
+  removeFromFavouritesHandler
+);
 
+router.post("/:productId/cart-add", isLoggedIn, addToCartHandler);
+router.delete("/:productId/cart-remove", isLoggedIn, removeFromCartHandler);
 
-
+module.exports = router;

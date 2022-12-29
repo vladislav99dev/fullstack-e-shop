@@ -58,6 +58,12 @@ const requester = (service,data,profileId) => {
             method: "POST"
         })
     }
+
+    if(service === 'checkUserData'){
+        fetchUrl = `${url}/users/${profileId}`
+    }
+
+    if(service === 'checkUserData') return fetch(fetchUrl)
     return fetch(fetchUrl,options)
 }
 
@@ -67,4 +73,5 @@ export const register = requester.bind(null,'register')
 export const edit = requester.bind(null,'edit')
 export const changePassword = requester.bind(null,'change-password')
 export const logout = requester.bind(null,'logout')
+export const checkUserData = requester.bind(null,'checkUserData')
 
