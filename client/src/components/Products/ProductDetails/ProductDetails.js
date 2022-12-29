@@ -143,7 +143,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <>
+    <div>
       {modalState.isFailed.value ? (
         <AttentionModal
           titleMessage={"Something went wrong!"}
@@ -233,37 +233,37 @@ const ProductDetails = () => {
               </div>
             </div>
           </form>
-          {user.accessToken && (
-            <div>
-              <div className={styles["btns-container"]}>
-                <button
-                  className={`${styles["btn-service-default"]} bg-primary-100`}
-                  onClick={editAndDeleteButtonHandlers.bind(
-                    null,
-                    "edit",
-                    product._id
-                  )}
-                >
-                  Edit
-                </button>
-              </div>
-              <div className={styles["btns-container"]}>
-                <button
-                  className={`${styles["btn-service-default"]} bg-red-500 text-white hover:bg-red-300`}
-                  onClick={editAndDeleteButtonHandlers.bind(
-                    null,
-                    "delete",
-                    product._id
-                  )}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       )}
-    </>
+      {user.accessToken && (
+        <div>
+          <div className={styles["btns-container"]}>
+            <button
+              className={`${styles["btn-service-default"]} bg-primary-100`}
+              onClick={editAndDeleteButtonHandlers.bind(
+                null,
+                "edit",
+                product._id
+              )}
+            >
+              Edit
+            </button>
+          </div>
+          <div className={styles["btns-container"]}>
+            <button
+              className={`${styles["btn-service-default"]} bg-red-500 text-white hover:bg-red-300`}
+              onClick={editAndDeleteButtonHandlers.bind(
+                null,
+                "delete",
+                product._id
+              )}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 export default ProductDetails;
