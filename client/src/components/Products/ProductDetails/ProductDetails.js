@@ -41,7 +41,7 @@ const ProductDetails = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.responseStatus) return setFailedModal(err.message);
+        if (err.responseStatus) return setFailedModal("Something went wrong",err.message,()=>{modalButtonHandler()},"Try again");
       });
   }, [productId]);
 
@@ -59,7 +59,7 @@ const ProductDetails = () => {
 
   const addToUserCartHandler = async (event) => {
     event.preventDefault();
-    if (size === "") return setFailedModal("You should select size first");
+    if (size === "") return setFailedModal("Something went wrong","You should select size first",()=>{modalButtonHandler()},"Try again");
     setIsLoading(true);
     try {
       const response = await favouritesAndCartRequester.addToCart(
@@ -69,7 +69,7 @@ const ProductDetails = () => {
         quantity
       );
       const jsonResponse = await response.json();
-      if (response.status !== 200) setFailedModal(jsonResponse.message);
+      if (response.status !== 200) setFailedModal("Something went wrong",jsonResponse.message,()=>{modalButtonHandler()},"Try again");
       if (response.status === 200) {
         login(jsonResponse.user);
         setSize("");
@@ -87,7 +87,7 @@ const ProductDetails = () => {
 
   const addToLocalStorage = async (event) => {
     event.preventDefault();
-    if (!size) return setFailedModal("You should select size first");
+    if (!size) return setFailedModal("Something went wrong","You should select size first",()=>{modalButtonHandler()},"Try again");
     try {
       const response = await productsRequester.getOne(null, null, productId);
       const jsonResponse = await response.json();
@@ -107,7 +107,7 @@ const ProductDetails = () => {
         product._id
       );
       const jsonResponse = await response.json();
-      if (response.status !== 200) setFailedModal(jsonResponse.message);
+      if (response.status !== 200) setFailedModal("Something went wrong",jsonResponse.message,()=>{modalButtonHandler()},"Try again");
       if (response.status === 200) {
         login(jsonResponse.user);
         setIsLoading(false);
@@ -121,7 +121,7 @@ const ProductDetails = () => {
 
   const denyAccessToFavourites = (event) => {
     event.preventDefault();
-    setFailedModal("You should be logged in to use this feature!");
+    setFailedModal("Something went wrong","You should be logged in to use this feature!",()=>{modalButtonHandler()},"Try again");
   };
 
   const setSizeChoice = (event) => {
@@ -144,14 +144,6 @@ const ProductDetails = () => {
 
   return (
     <div>
-      {modalState.isFailed.value ? (
-        <AttentionModal
-          titleMessage={"Something went wrong!"}
-          descriptionMessage={modalState.isFailed.message}
-          buttonHandler={modalButtonHandler}
-          buttonName={"Try again"}
-        />
-      ) : null}
       {isLoading ? (
         <Spinner />
       ) : (

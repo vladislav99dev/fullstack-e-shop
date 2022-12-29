@@ -50,9 +50,9 @@ const PersonalInfo = () => {
                 <button onClick={btnClickHandler.bind(null,"orders")} className="py-4 border-b-4 border-[#28282B] w-full text-left font-extrabold text-[#28282B]">My Orders</button>
             </div>
             <div className="w-[40%] border-2 border-[#00df9a] border-l-0">
-                { buttonsState.edit ? <EditProfile user={user} login={login}/> : null }
-                { buttonsState.changePassword ? <ChangePassword user={user} login={login}/> : null}
-                { buttonsState.orders ? <Orders profileId={user._id}/> : null}
+                { buttonsState.edit && <EditProfile user={user} login={login}/> }
+                { buttonsState.changePassword && <ChangePassword user={user} login={login}/>}
+                { buttonsState.orders && <Orders profileId={user._id}/>}
 
             </div>
         </div>

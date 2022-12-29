@@ -7,9 +7,10 @@ import FavouritesCard from "./FavouritesCard";
 import FavouritesFooter from "./FavouritesFooter";
 import FavouritesHeader from "./FavouritesHeader";
 import AttentionModal from "../../Modals/AttentionModal";
+
+import modalMessages from "../../../HOC/modalMessages";
 import Spinner from "../../Spinner/Spinner";
 
-import modalMessages from "../../../HOC/modalMessages"
 
 const FavouritesLayout = ({ toggleFavouritesMenu }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,14 +56,7 @@ const FavouritesLayout = ({ toggleFavouritesMenu }) => {
         role="dialog"
         aria-modal="true"
       >
-        {modalState.isFailed.value ? (
-          <AttentionModal
-            titleMessage={"Something went wrong"}
-            descriptionMessage={modalState.isFailed.message}
-            buttonHandler={resetModals}
-            buttonName={"Try again"}
-          />
-        ) : null}
+
         {/* //   <!--
       //     Background backdrop, show/hide based on slide-over state.
       

@@ -48,7 +48,7 @@ const EditProfile = ({ user, login }) => {
     phoneNumber: user.phoneNumber,
   });
   const navigate = useNavigate();
-  const { modalState, setFailedModal, setSuccessModal, resetModals } =
+  const {setFailedModal, setSuccessModal, resetModals } =
     useModalsContext();
 
   const changeFormDataState = (type, event) => {

@@ -19,7 +19,7 @@ const Orders = ({
             setOrders(jsonResponse.orders);
             setIsLoading(false);
         }).catch(err => {
-            setFailedModal(err.message);
+            setFailedModal("Something went wrong!",err.message,()=> {resetModals()},"Try again");
             setIsLoading(false);
         })
     },[]);
@@ -30,8 +30,7 @@ const Orders = ({
         if(response.status !== 200) throw {message:jsonResponse.message};
         if(response.status === 200) return jsonResponse;
     };
-
-
+    
 return(
     <>
     {isLoading ? <Spinner/> : null}
