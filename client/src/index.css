@@ -10,6 +10,7 @@
 }
 
   body {
+    font-family: Arial, Helvetica;
     @apply bg-white;
   }
 
