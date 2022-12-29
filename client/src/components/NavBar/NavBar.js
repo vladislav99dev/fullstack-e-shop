@@ -2,7 +2,7 @@ import { useNavTogglesContext } from "../../context/NavTogglesContext";
 import { useModalsContext } from "../../context/ModalsContext";
 import { useAuthContext } from "../../context/AuthContext";
 import { useState } from "react";
-import * as userRequester from "../../services/userRequester"
+import * as userRequester from "../../services/userRequester";
 
 import { useNavigate } from "react-router-dom";
 
@@ -17,14 +17,15 @@ import { GiTigerHead } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { ImMenu } from "react-icons/im";
 import styles from "./NavBar.module.css";
-
+import { url } from "../../constants";
+import { checkUserData } from "../../services/userRequester";
 
 import modalMessages from "../../HOC/modalMessages";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { setFailedModal, resetModals } = useModalsContext();
-  const { user, logout } = useAuthContext();
+  const { user, logout,login } = useAuthContext();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const {
     toggleCartMenu,
@@ -49,13 +50,29 @@ const NavBar = () => {
       );
   };
 
+  const cartHandler = async() => {
+    toggleCartMenu(!isCartMenuActive);
+    try{
+      const response = await  checkUserData(null,user._id);
+      const jsonResponse = await response.json();
+      login(jsonResponse);
+    }catch(err){
+      console.log(err);
+    }
+  };
+
   const logoutHandler = async () => {
     try {
       await userRequester.logout(null, user._id);
       logout();
       return navigate("/home");
     } catch (err) {
-      return setFailedModal("Something went wrong", err.message, ()=> resetModals(), "Go to Home")
+      return setFailedModal(
+        "Something went wrong",
+        err.message,
+        () => resetModals(),
+        "Go to Home"
+      );
     }
   };
 
@@ -66,11 +83,7 @@ const NavBar = () => {
         size={35}
         color={"#00df9a"}
       />
-      <RiShoppingCart2Fill
-        size={35}
-        color={"#00df9a"}
-        onClick={toggleCartMenu}
-      />
+      <RiShoppingCart2Fill size={35} color={"#00df9a"} onClick={cartHandler} />
       <ImMenu
         size={35}
         color={"#00df9a"}
@@ -128,7 +141,8 @@ const NavBar = () => {
       </li>
       {user.email ? (
         <li className={styles["nav-user-links"]}>
-          <a href="#"
+          <a
+            href="#"
             onClick={logoutHandler}
             className={styles["nav-logout-button"]}
           >
@@ -160,7 +174,12 @@ const NavBar = () => {
         <Icons />
         <PageLinks isMobileNavOpen={isMobileNavOpen} />
       </nav>
-      {isCartMenuActive && <CartLayout toggleCartMenu={toggleCartMenu} />}
+      {isCartMenuActive && (
+        <CartLayout
+          toggleCartMenu={toggleCartMenu}
+          isCartMenuActive={isCartMenuActive}
+        />
+      )}
       {isFavouritesMenuActive && (
         <FavouritesLayout toggleFavouritesMenu={toggleFavouritesMenu} />
       )}
