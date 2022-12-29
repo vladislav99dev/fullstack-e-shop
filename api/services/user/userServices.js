@@ -1,5 +1,4 @@
 const User = require("../../models/User");
-const checkUserData = require('../../utils/users/checkUserData');
 
     const create = async(data) => {
         const user = await User.create({...data})
@@ -30,11 +29,6 @@ const checkUserData = require('../../utils/users/checkUserData');
                 model:'Product'
             }
         }).populate('favourites').lean();
-        // const checkedUser = checkUserData(user);
-        // if(_isEqual(checkedUser, user)) return user;
-        // if(!_isEqual(checkedUser, user)) {
-        //     find
-        // };
         return user
     }
 

@@ -18,6 +18,9 @@ const CartCard = ({
             <div className="flex justify-between text-base font-medium text-gray-900">
               <h3 onClick={toggleCartMenu}>
                 <Link  to={`/products/${product.gender}/details/${product._id}`}>{product.name}</Link>
+                {product.inStock  && (
+                  <p>Product is currently not in stock</p>
+                )}
               </h3>
               <p className="text-primary-dark-200 text-lg">{`$${product.price}`}</p>
             </div>
