@@ -39,6 +39,10 @@ const productsSchema = new mongoose.Schema({
     onSale:{
         type:Boolean,
         default: false
+    },
+    inStock:{
+        type:Boolean,
+        default:true
     }
 })
 
