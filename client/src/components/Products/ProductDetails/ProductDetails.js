@@ -10,6 +10,7 @@ import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../../context/LocalProductsContext";
 
 import AttentionModal from "../../Modals/AttentionModal";
+import modalMessages from "../../../HOC/modalMessages";
 import Spinner from "../../Spinner/Spinner";
 import styles from "./ProductDetails.module.css";
 
@@ -258,4 +259,4 @@ const ProductDetails = () => {
     </div>
   );
 };
-export default ProductDetails;
+export default modalMessages(ProductDetails);

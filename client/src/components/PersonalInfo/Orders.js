@@ -6,6 +6,7 @@ import { useModalsContext } from "../../context/ModalsContext";
 
 import Spinner from "../Spinner/Spinner";
 import AttentionModal from "../Modals/AttentionModal";
+import modalMessages from "../../HOC/modalMessages";
 
 const Orders = ({
     profileId
@@ -30,19 +31,10 @@ const Orders = ({
         if(response.status !== 200) throw {message:jsonResponse.message};
         if(response.status === 200) return jsonResponse;
     };
-    
+
 return(
     <>
     {isLoading ? <Spinner/> : null}
-    {modalState.isFailed.value
-    ? <AttentionModal
-    titleMessage={"Something went wrong"}
-    descriptionMessage={modalState.isFailed.message}
-    buttonName={"Try again"}
-    buttonHandler={resetModals}
-    />
-    : null
-}
     {isLoading 
     ? <Spinner/> 
     :   <h1 className="text-[#00df9a] text-2xl italic uppercase font-bold w-full text-center">My Orders</h1>
@@ -63,4 +55,4 @@ return(
 )
 }
 
-export default Orders;
+export default modalMessages(Orders);

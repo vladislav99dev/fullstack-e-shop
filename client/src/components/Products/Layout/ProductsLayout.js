@@ -5,9 +5,9 @@ import * as productsRequester from "../../../services/productsRequester";
 import { useModalsContext } from "../../../context/ModalsContext";
 
 import ProductLayoutCard from "./ProductLayoutCard";
-import AttentionModal from "../../Modals/AttentionModal";
 import Filter from "./Filter";
 import Spinner from "../../Spinner/Spinner";
+import modalMessages from "../../../HOC/modalMessages"
 
 const ProductsLayout = () => {
   const [products, setProducts] = useState([]);
@@ -107,4 +107,4 @@ const ProductsLayout = () => {
   );
 };
 
-export default ProductsLayout;
+export default modalMessages(ProductsLayout);
