@@ -58,7 +58,7 @@ const CartLayout = ({ toggleCartMenu }) => {
           message: jsonResponse.message,
         };
       if (response.status === 200) {
-        login(jsonResponse.user);
+        login(jsonResponse);
         if (jsonResponse.user.cart.length > 0)
           return jsonResponse.user.cart.map((product) =>
             setTotalPrice(product._id.price * product.quantity)

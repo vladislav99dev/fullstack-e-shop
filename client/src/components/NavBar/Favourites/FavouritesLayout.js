@@ -33,7 +33,7 @@ const FavouritesLayout = ({ toggleFavouritesMenu }) => {
           responseStatus: response.status,
           message: jsonResponse.message,
         };
-      if (response.status === 200) login(jsonResponse.user);
+      if (response.status === 200) login(jsonResponse);
     } catch (err) {
       setIsLoading(false);
       if (err.status)
