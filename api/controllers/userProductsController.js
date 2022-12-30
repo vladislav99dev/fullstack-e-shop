@@ -43,19 +43,16 @@ const addToCartHandler = async (req, res) => {
 
     const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-    delete user.populatedUser;
+    delete populatedUser.password;
 
     return res
       .status(200)
-      .json({ user: { ...populatedUser, accessToken: tokenDocument.token } });
+      .json({ ...populatedUser, accessToken: tokenDocument.token });
   } catch (err) {
     if (err.path === "_id")
-      return res
-        .status(400)
-        .json({
-          message:
-            "One or all of the id's you provided are not in valid format.",
-        });
+      return res.status(400).json({
+        message: "One or all of the id's you provided are not in valid format.",
+      });
     if (err.status)
       return res.status(err.status).json({ message: err.message });
   }
@@ -80,19 +77,16 @@ const removeFromCartHandler = async (req, res) => {
 
     const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-    delete populatedUser.password
+    delete populatedUser.password;
 
     return res
       .status(200)
-      .json({ user: { ...populatedUser, accessToken: tokenDocument.token } });
+      .json({ ...populatedUser, accessToken: tokenDocument.token });
   } catch (err) {
     if (err.path === "_id")
-      return res
-        .status(400)
-        .json({
-          message:
-            "One or all of the id's you provided are not in valid format.",
-        });
+      return res.status(400).json({
+        message: "One or all of the id's you provided are not in valid format.",
+      });
     if (err.status)
       return res.status(err.status).json({ message: err.message });
   }
@@ -122,20 +116,17 @@ const addToFavouritesHandler = async (req, res) => {
 
     const populatedUser = await userServices.findByIdAndPopulate(user._id);
 
-    delete populatedUser.password
+    delete populatedUser.password;
 
     return res
       .status(200)
-      .json({user:{ ...populatedUser, accessToken: tokenDocument.token }});
+      .json({ ...populatedUser, accessToken: tokenDocument.token });
   } catch (err) {
     console.log(err);
     if (err.path === "_id")
-      return res
-        .status(400)
-        .json({
-          message:
-            "One or all of the id's you provided are not in valid format.",
-        });
+      return res.status(400).json({
+        message: "One or all of the id's you provided are not in valid format.",
+      });
     if (err.status)
       return res.status(err.status).json({ message: err.message });
   }
@@ -171,15 +162,12 @@ const removeFromFavouritesHandler = async (req, res) => {
 
     return res
       .status(200)
-      .json({user:{ ...populatedUser, accessToken: tokenDocument.token }});
+      .json({ ...populatedUser, accessToken: tokenDocument.token });
   } catch (err) {
     if (err.path === "_id")
-      return res
-        .status(400)
-        .json({
-          message:
-            "One or all of the id's you provided are not in valid format.",
-        });
+      return res.status(400).json({
+        message: "One or all of the id's you provided are not in valid format.",
+      });
     if (err.status)
       return res.status(err.status).json({ message: err.message });
   }

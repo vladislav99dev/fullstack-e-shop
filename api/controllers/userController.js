@@ -145,7 +145,7 @@ const changePasswordHandler = async (req, res) => {
     delete populatedUser.password;
 
     return res.status(200).json({
-      user: populatedUser,
+      user: {...populatedUser,accessToken:token},
       message: "You successfully updated your password!",
     });
   } catch (err) {
@@ -188,7 +188,7 @@ const getCurrentUserData = async (req, res) => {
     const tokenDocument = await tokenServices.findByUserId(profileId);
     delete user.password;
 
-    return res.status(200).json({user:{ ...populatedUser, accessToken: tokenDocument.token }});
+    return res.status(200).json({ ...user, accessToken: tokenDocument.token });
   } catch (err) {
     if (err.path === "_id")
       return res.status(400).json({ message: "ProfileId is invalid!" });
