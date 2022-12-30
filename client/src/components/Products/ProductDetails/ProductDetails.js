@@ -9,7 +9,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { useNavTogglesContext } from "../../../context/NavTogglesContext";
 import { useLocalProductsContext } from "../../../context/LocalProductsContext";
 
-import AttentionModal from "../../Modals/AttentionModal";
+// import AttentionModal from "../../Modals/AttentionModal";
 import modalMessages from "../../../HOC/modalMessages";
 import Spinner from "../../Spinner/Spinner";
 import styles from "./ProductDetails.module.css";
@@ -72,7 +72,7 @@ const ProductDetails = () => {
       const jsonResponse = await response.json();
       if (response.status !== 200) setFailedModal("Something went wrong",jsonResponse.message,()=>{modalButtonHandler()},"Try again");
       if (response.status === 200) {
-        login(jsonResponse.user);
+        login(jsonResponse);
         setSize("");
         setQuantity(1);
         toggleCartMenu();
@@ -110,7 +110,7 @@ const ProductDetails = () => {
       const jsonResponse = await response.json();
       if (response.status !== 200) setFailedModal("Something went wrong",jsonResponse.message,()=>{modalButtonHandler()},"Try again");
       if (response.status === 200) {
-        login(jsonResponse.user);
+        login(jsonResponse);
         setIsLoading(false);
         toggleFavouritesMenu();
       }
@@ -144,7 +144,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div>
+    <div className="p-10">
       {isLoading ? (
         <Spinner />
       ) : (
@@ -158,7 +158,6 @@ const ProductDetails = () => {
 
           <img
             className={styles["product-poster"]}
-            // className="w-full lg:row-span-3 lg:order-first lg:h-[40rem] lg:min-w-[50%] lg:max-w-[60%] xl:max-w-[60%] lg:rounded-xl lg:ml-[15%] xl:ml-[20%]"
             src={`${product.imageUrl}`}
             alt={`${product.name}`}
           />
@@ -209,14 +208,14 @@ const ProductDetails = () => {
               <div className={styles["btns-container"]}>
                 <button
                   type="submit"
-                  className={`${styles["btn-service-default"]} bg-primary-darkest hover:bg-primary-dark-600 text-primary-lightest`}
+                  className={`${styles["btn-service-default"]} bg-primary-darkest hover:bg-primary-dark-600 text-primary-lightest w-[500px]`}
                 >
                   Add to cart
                 </button>
               </div>
               <div className={styles["btns-container"]}>
                 <button
-                  className={`${styles["btn-service-default"]} border-2 border-primary-darkest text-primary-darkest`}
+                  className={`${styles["btn-service-default"]} border-2 border-primary-darkest text-primary-darkest w-[500px]`}
                   onClick={
                     user.email ? addToFavouritesHandler : denyAccessToFavourites
                   }
@@ -229,10 +228,10 @@ const ProductDetails = () => {
         </div>
       )}
       {user.accessToken && (
-        <div>
+        <div className="flex flex-col items-center mt-10">
           <div className={styles["btns-container"]}>
             <button
-              className={`${styles["btn-service-default"]} bg-primary-100`}
+              className={`${styles["btn-service-default"]} bg-primary-100 w-[300px] md:w-[500px]`}
               onClick={editAndDeleteButtonHandlers.bind(
                 null,
                 "edit",
@@ -244,7 +243,7 @@ const ProductDetails = () => {
           </div>
           <div className={styles["btns-container"]}>
             <button
-              className={`${styles["btn-service-default"]} bg-red-500 text-white hover:bg-red-300`}
+              className={`${styles["btn-service-default"]} bg-red-500 text-white hover:bg-red-300 w-[300px] md:w-[500px]`}
               onClick={editAndDeleteButtonHandlers.bind(
                 null,
                 "delete",
