@@ -1,7 +1,7 @@
 import { useNavTogglesContext } from "../../context/NavTogglesContext";
 import { useModalsContext } from "../../context/ModalsContext";
 import { useAuthContext } from "../../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as userRequester from "../../services/userRequester";
 
 import { useNavigate } from "react-router-dom";
@@ -17,22 +17,40 @@ import { GiTigerHead } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { ImMenu } from "react-icons/im";
 import styles from "./NavBar.module.css";
-import { url } from "../../constants";
 import { checkUserData } from "../../services/userRequester";
 
 import modalMessages from "../../HOC/modalMessages";
 
+import checkAdminToken from "../../services/checkAdminToken";
+
 const NavBar = () => {
   const navigate = useNavigate();
   const { setFailedModal, resetModals } = useModalsContext();
-  const { user, logout,login } = useAuthContext();
+  const { user, logout, login } = useAuthContext();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const {
     toggleCartMenu,
     toggleFavouritesMenu,
     isCartMenuActive,
     isFavouritesMenuActive,
   } = useNavTogglesContext();
+
+  useEffect(() => {
+      checkAdminToken(user.accessToken, user._id)
+        .then(({ response, jsonResponse }) => {
+          if (response.status !== 200) {
+            setIsAdmin(false);
+          }
+          if (response.status === 200) {
+            setIsAdmin(true)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }, [user]);
 
   const manageFavouritesAccess = () => {
     if (user.email) {
@@ -50,13 +68,13 @@ const NavBar = () => {
       );
   };
 
-  const cartHandler = async() => {
+  const cartHandler = async () => {
     toggleCartMenu(!isCartMenuActive);
-    try{
-      const response = await  checkUserData(null,user._id);
+    try {
+      const response = await checkUserData(null, user._id);
       const jsonResponse = await response.json();
       login(jsonResponse);
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
   };
