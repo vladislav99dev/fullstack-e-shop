@@ -1,14 +1,10 @@
 .container{
-    display: grid;
-    grid-template-areas: 
-    "poster description" 
-    "poster select"
-    ;
-    grid-template-columns: 50% 50%;
     /* grid-template-rows: 50% 50%; */
     @apply 
     bg-white 
-    p-10
+    flex
+    flex-col
+    items-center
 }
 .product-info{
     grid-area: description;
@@ -17,6 +13,10 @@
    flex-col
    items-center   
    gap-y-2
+   w-3/4
+   text-center
+   mb-8
+   xl:mb-0
 }
 .product-info p:first-child{
     @apply
@@ -51,12 +51,11 @@
     mx-auto
     xs:w-[85%]
     sm:w-2/3
-    lg:order-first
 }
 .form{
     grid-area: select;
     @apply
-    max-w-[900px]
+    max-w-[75%]
 }
 .form p:first-child{
     @apply
@@ -71,6 +70,12 @@
     grid 
     grid-cols-3
     gap-2
+    justify-items-center
+}
+.sizes-container button{
+    @apply
+    min-w-[70px]
+    max-w-[100px]
 }
 .btn-disabled{
     @apply
@@ -120,8 +125,7 @@
 }
 .btn-service-default{
     @apply
-    py-6 
-    w-[500px]  
+    py-6   
     mb-2 
     mt-4 
     rounded-md 
@@ -133,4 +137,15 @@
 
 .adminButtons{
     grid-area: 'adminButtons';
+}
+
+@media(min-width:1280px){
+    .container{
+        display: grid;
+        grid-template-areas: 
+        "poster description" 
+        "poster select"
+        ;
+        grid-template-columns: 50% 50%;
+    }
 }
