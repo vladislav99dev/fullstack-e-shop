@@ -17,6 +17,7 @@ import PersonalInfo from "./components/PersonalInfo/PersonalInfo.js";
 import Create from "./components/Admin/Product/Create/Create.js";
 import Edit from "./components/Admin/Product/Edit/Edit.js";
 import Delete from "./components/Admin/Product/Delete.js";
+import Orders from "./components/Admin/Product/Orders/Orders.js";
 
 import ProductsLayout from "./components/Products/Layout/ProductsLayout.js";
 import ProductDetails from "./components/Products/ProductDetails/ProductDetails.js";
@@ -61,6 +62,8 @@ function App() {
                       path="products/:productId/delete"
                       element={<Delete />}
                     />
+                    <Route path="orders" element={<Orders />} />
+
                   </Route>
 
                   <Route path="*" element={<ErrorPage />} />
