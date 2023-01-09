@@ -91,7 +91,7 @@ const getAllOrdersHandler = async(req,res) => {
   console.log(`GET ${req.originalUrl}`);
   const  orders = await orderServices.getAll();
   console.log(orders);
-  // return orders;
+  res.status(200).json([...orders])
   res.end();
 }
 
