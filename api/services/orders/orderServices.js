@@ -24,7 +24,13 @@ const findById = async(id) => {
 }
 
 const getAll = async(id) => {
-    let orders = await Order.find();
+    let orders = await Order.find().populate({
+        path:'productsOrdered',
+        populate:{
+            path:'_id',
+            model:'Product'
+        }
+    }).populate('profileId');
     return orders
 }
 
