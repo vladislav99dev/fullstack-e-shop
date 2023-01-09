@@ -1,7 +1,8 @@
 const router = require("express").Router();
 
-const productDataValidation = require("../validations/productDataValidation")
+const productDataValidation = require("../validations/productDataValidation");
 const productServices = require("../services/products/productsServices");
+const orderServices = require("../services/orders/orderServices");
 
 
 const createProductHandler = async (req, res) => {
@@ -67,15 +68,47 @@ const deleteProductHandler = async(req,res) => {
   }
 }
 
+
+const editOrderHandler = async (req,res) => {
+  console.log(`EDIT ${req.originalUrl}`);
+
+  const {orderId} = req.params;
+  const {status} = req.body;
+
+  try {
+    const order = await orderServices.findById(orderId);
+    console.log(order);
+    console.log(status);
+
+  } catch (error) {
+    if(err.path === "_id") res.status(400).json({message:"ProductId is not in valid format"});
+    if(err.status) return res.status(err.status).json({message:err.message});
+  }
+
+}
+
+const getAllOrdersHandler = async(req,res) => {
+  console.log(`GET ${req.originalUrl}`);
+  const  orders = await orderServices.getAll();
+  console.log(orders);
+  // return orders;
+  res.end();
+}
+
 const checkAccessToken = async (req,res) => {
     console.log(`POST ${req.originalUrl}`);
     return res.status(200).json({isAdmin:true});
 }
 
 router.post("/checkToken", checkAccessToken);
+
 router.post("/products/create", createProductHandler);
 router.put("/products/:productId/edit", editProductHandler);
 router.delete("/products/:productId/delete", deleteProductHandler);
+
+router.post("/orders", getAllOrdersHandler);
+router.put("/orders/:orderId", editOrderHandler);
+
 
 
 module.exports = router;
