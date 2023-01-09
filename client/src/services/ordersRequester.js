@@ -29,7 +29,7 @@ const userOrdersRequester = (method, data, profileId, products) => {
     });
   }
   if (method === "POST") return fetch(fetchUrl, options);
-  if (method === "GET") return fetch(`${fetchUrl}/${profileId}`);
+  if (method === "GET" && profileId) return fetch(`${fetchUrl}/${profileId}`);
 };
 
 const adminOrdersRequester = (method, data, token, orderId) => {
@@ -41,6 +41,9 @@ const adminOrdersRequester = (method, data, token, orderId) => {
       "content-type": "application/json",
       Authorization: token,
     },
+    body: JSON.stringify({
+      profileId:data.profileId
+    })
   };
 
   if (method === "DELETE" || method === "PUT") {
@@ -54,12 +57,12 @@ const adminOrdersRequester = (method, data, token, orderId) => {
   }
 
   if (method === "DELETE" || method === "PUT") return fetch(fetchUrl, options);
-  if (method === "GET") return fetch(fetchUrl);
+  if (method === "POST") return fetch(fetchUrl,options);
 };
 
 const updateOrder = adminOrdersRequester.bind(null, "PUT");
 const deleteOrder = adminOrdersRequester.bind(null, "DELETE");
-const getAllOrders = adminOrdersRequester.bind(null, "GET");
+const getAllOrders = adminOrdersRequester.bind(null, "POST");
 
 const createOrder = userOrdersRequester.bind(null, "POST");
 const getUserOrders = userOrdersRequester.bind(null, "GET");
@@ -67,5 +70,6 @@ const getUserOrders = userOrdersRequester.bind(null, "GET");
 const ordersRequester = {
     createOrder,
     getUserOrders,
+    getAllOrders,
 }
 export default ordersRequester;
