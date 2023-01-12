@@ -77,8 +77,6 @@ const editOrderHandler = async (req,res) => {
 
   try {
     const order = await orderServices.findById(orderId);
-    console.log(order);
-    console.log(status);
 
   } catch (error) {
     if(err.path === "_id") res.status(400).json({message:"ProductId is not in valid format"});
@@ -90,7 +88,11 @@ const editOrderHandler = async (req,res) => {
 const getAllOrdersHandler = async(req,res) => {
   console.log(`GET ${req.originalUrl}`);
   const  orders = await orderServices.getAll();
-  console.log(orders);
+  for (const order of orders) {
+    if(order.profileId) {
+      order.profileId.password = null
+    }
+  }
   res.status(200).json([...orders])
   res.end();
 }
