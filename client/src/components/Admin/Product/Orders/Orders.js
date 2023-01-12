@@ -21,9 +21,13 @@ const Orders = () => {
 
 
 
-  return <div>
+  return <div className="min-h-[640px]">
     {orders?.map((order) => {
-        console.log(order);
+        return (
+          <div key={order._id}>
+            
+          </div>
+        )
     })}
   </div>;
 };
