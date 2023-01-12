@@ -27,7 +27,7 @@ const DesktopCard = ({ titleName, services,state,clickHandler }) => {
         {services.map((x, index) => (
           <li
             key={index}
-            className=" text-white font-normal hover:cursor-pointer hover:text-green-200 py-2 lg:py-0"
+            className=" text-white font-normal text-base hover:cursor-pointer hover:text-green-200 py-2 lg:py-0"
           >
             {x}
           </li>
