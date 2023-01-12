@@ -125,11 +125,13 @@ const NavBar = () => {
           All
         </Link>
       </li>
+      {isAdmin && (
       <li>
         <Link to={"admin/orders"} className={styles["nav-link"]}>
           Orders
         </Link>
       </li>
+      )}
       <li>
         <Link to="products/men" className={styles["nav-link"]}>
           Men
