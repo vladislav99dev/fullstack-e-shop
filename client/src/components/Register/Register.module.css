@@ -2,7 +2,7 @@
     @apply
     bg-primary-lightest
     p-10
-    min-h-[550px]
+    min-h-[640px]
 }
 .heading{
     @apply

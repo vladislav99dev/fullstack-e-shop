@@ -58,7 +58,7 @@ const PersonalInfo = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center min-h-[640px]">
       <div className="w-[15%] border-4 border-[#28282B]">
         <button
           onClick={btnClickHandler.bind(null, "edit")}

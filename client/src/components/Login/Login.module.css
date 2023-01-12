@@ -1,6 +1,6 @@
 .container{
     @apply
-    min-h-[550px]
+    min-h-[640px]
     flex
     justify-center
     items-center
