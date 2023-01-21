@@ -40,12 +40,13 @@ const Login = () => {
         product.quantity
       );
       const jsonResponse = await response.json();
-      console.log(jsonResponse);
       if (response.status !== 200) failedAddMessages.push(jsonResponse.message);
-      if (response.status === 200) user = jsonResponse.user;
+      if (response.status === 200) user = {...jsonResponse};
     }
     return [user, failedAddMessages.join(" ")];
   };
+
+
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -75,11 +76,13 @@ const Login = () => {
           "Try again"
         );
       }
+
       Object.assign(userData, jsonResponse.user);
 
       if (products.length > 0) {
         const [user, failedAddMessages] =
           await addProductsFromLocalStorageToUserCart(userData._id);
+          // console.log(user,failedAddMessages);
         if (failedAddMessages)
           setFailedModal(
             "Something went wrong",
