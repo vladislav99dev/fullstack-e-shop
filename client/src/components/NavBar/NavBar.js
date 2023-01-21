@@ -41,6 +41,7 @@ const NavBar = () => {
       checkAdminToken(user.accessToken, user._id)
         .then(({ response, jsonResponse }) => {
           if (response.status !== 200) {
+            // console.log(user.accessToken);
             setIsAdmin(false);
           }
           if (response.status === 200) {
@@ -50,6 +51,7 @@ const NavBar = () => {
         .catch((err) => {
           console.log(err);
         });
+
   }, [user]);
 
   const manageFavouritesAccess = () => {
