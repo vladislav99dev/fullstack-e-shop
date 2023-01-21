@@ -26,8 +26,7 @@ const Checkout = () => {
 
   const { user, login } = useAuthContext();
   const { products } = useLocalProductsContext();
-  const { setFailedModal, setSuccessModal, resetModals } =
-    useModalsContext();
+  const { setFailedModal, setSuccessModal, resetModals } = useModalsContext();
 
   useEffect(() => {
     if (user.email)
@@ -86,6 +85,7 @@ const Checkout = () => {
         );
       }
     } catch (err) {
+      console.log(err);
       if (err.responseStatus)
         return setFailedModal(
           "Something went wrong",
@@ -95,6 +95,8 @@ const Checkout = () => {
         );
     }
   };
+
+  
   function modalButtonHandler() {
     resetModals();
     navigate("/home");
@@ -103,8 +105,8 @@ const Checkout = () => {
   return (
     <>
       {isLoading ? <Spinner /> : null}
-      <div className={styles.container}>
-        <form onSubmit={checkoutHandler}>
+      <div>
+        <form className={styles.container} onSubmit={checkoutHandler}>
           {validationMessages.length > 0
             ? validationMessages.map((message) => (
                 <ValidationMessage key={message} message={message} />
@@ -202,59 +204,61 @@ const Checkout = () => {
               defaultValue={useProfileInfo ? `${user.phoneNumber}` : ""}
             />
           </div>
+          <div>
+            <div className={styles["order-summary"]}>
+              <p className={styles["order-summary-header"]}>Order Summary</p>
+
+              {user.email
+                ? user.cart.map((product) => (
+                    <div
+                      key={`${product._id._id}${product.size}`}
+                      className={styles["order-summary-product-container"]}
+                    >
+                      <p>{product._id.name}</p>
+                      <div>
+                        <p>{`Quantity: ${product.quantity}`}</p>
+                        <p className="text-primary-100 text-right">{`$${product._id.price}`}</p>
+                      </div>
+                    </div>
+                  ))
+                : products.map((product) => (
+                    <div
+                      key={`${product.product._id}${product.size}`}
+                      className={styles["order-summary-product-container"]}
+                    >
+                      <p>{product.product.name}</p>
+                      <div>
+                        <p>{`Quantity: ${product.quantity}`}</p>
+                        <p className="text-primary-100 text-right">{`$${product.product.price}`}</p>
+                      </div>
+                    </div>
+                  ))}
+
+              <div className={styles["order-summary-total-price"]}>
+                <p>Total:</p>
+                <p className="text-primary-100">{`$${totalPrice.toFixed(
+                  2
+                )}`}</p>
+              </div>
+            </div>
+
+            <button className={styles["submit-button"]} type="submit">
+              Submit
+            </button>
+
+            <div className={styles.card}>
+              <GiTigerHead size={100} color={"#00c98b"} />
+              <div className={styles["card-text"]}>
+                <p>We are glad you choose us!</p>
+                <p>You will get a free shipping from your next order!</p>
+                <p>Best regards,</p>
+                <p className="text-end font-bold text-xl uppercase text-primary-dark-200 mt-2">
+                  - Supreme fashion shop
+                </p>
+              </div>
+            </div>
+          </div>
         </form>
-        <div>
-          <div className={styles["order-summary"]}>
-            <p className={styles["order-summary-header"]}>Order Summary</p>
-
-            {user.email
-              ? user.cart.map((product) => (
-                  <div
-                    key={`${product._id._id}${product.size}`}
-                    className={styles["order-summary-product-container"]}
-                  >
-                    <p>{product._id.name}</p>
-                    <div>
-                      <p>{`Quantity: ${product.quantity}`}</p>
-                      <p className="text-primary-100 text-right">{`$${product._id.price}`}</p>
-                    </div>
-                  </div>
-                ))
-              : products.map((product) => (
-                  <div
-                    key={`${product.product._id}${product.size}`}
-                    className={styles["order-summary-product-container"]}
-                  >
-                    <p>{product.product.name}</p>
-                    <div>
-                      <p>{`Quantity: ${product.quantity}`}</p>
-                      <p className="text-primary-100 text-right">{`$${product.product.price}`}</p>
-                    </div>
-                  </div>
-                ))}
-
-            <div className={styles["order-summary-total-price"]}>
-              <p>Total:</p>
-              <p className="text-primary-100">{`$${totalPrice.toFixed(2)}`}</p>
-            </div>
-          </div>
-
-          <button className={styles["submit-button"]} type="submit">
-            Submit
-          </button>
-
-          <div className={styles.card}>
-            <GiTigerHead size={100} color={"#00c98b"} />
-            <div className={styles["card-text"]}>
-              <p>We are glad you choose us!</p>
-              <p>You will get a free shipping from your next order!</p>
-              <p>Best regards,</p>
-              <p className="text-end font-bold text-xl uppercase text-primary-dark-200 mt-2">
-                - Supreme fashion shop
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
