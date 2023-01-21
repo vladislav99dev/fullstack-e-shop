@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useReducer } from "react";
 import ordersRequester from "../../../../services/ordersRequester";
 import { useAuthContext } from "../../../../context/AuthContext";
 import isAdmin from "../../../../HOC/adminRoutesGuard";
 import modalMessages from "../../../../HOC/modalMessages";
 import { useModalsContext } from "../../../../context/ModalsContext";
+import Order from "./Order";
+import styles from "./Orders.module.css"
+
 
 const Orders = () => {
   const [orders, setOrders] = useState();
   const { user } = useAuthContext();
   const { setFailedModal } = useModalsContext();
+  const [currImage,setCurrImage] =useState();
 
   useEffect(() => {
     ordersRequester
@@ -21,14 +25,14 @@ const Orders = () => {
 
 
 
-  return <div className="min-h-[640px]">
+  return <div className={styles.container}>
+    <div className={`${styles['orders-container']}`}>
     {orders?.map((order) => {
-        return (
-          <div key={order._id}>
-            
-          </div>
+      return (
+        <Order key={order.orderInfo.orderId} data={order} />
         )
-    })}
+      })}
+      </div>
   </div>;
 };
 
