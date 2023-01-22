@@ -23,6 +23,11 @@ const findById = async(id) => {
     return order
 }
 
+const findByIdAndUpdate = async(id,order) => {
+    let updatedOrder = await Order.findByIdAndUpdate(id,order);
+    return updatedOrder;
+}
+
 const getAll = async(id) => {
     let orders = await Order.find().populate({
         path:'productsOrdered',
@@ -38,7 +43,8 @@ const orderServices = {
     create,
     findByUserId,
     findById,
-    getAll
+    getAll,
+    findByIdAndUpdate
 }
 
 module.exports = orderServices;
