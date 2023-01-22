@@ -52,10 +52,10 @@ const adminOrdersRequester = (method, data, token, orderId) => {
 
   if (method === "PUT") {
     options.body = JSON.stringify({
-      orderdStatus: data.orderStatus,
-    });
+      profileId:data.profileId,
+      orderStatus:data.orderStatus
+    })
   }
-
   if (method === "DELETE" || method === "PUT") return fetch(fetchUrl, options);
   if (method === "POST") return fetch(fetchUrl,options);
 };
@@ -71,5 +71,6 @@ const ordersRequester = {
     createOrder,
     getUserOrders,
     getAllOrders,
+    updateOrder,
 }
 export default ordersRequester;
