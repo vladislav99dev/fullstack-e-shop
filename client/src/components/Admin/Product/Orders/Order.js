@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import ordersRequester from "../../../../services/ordersRequester";
 
 import styles from "./Order.module.css";
 
-const Order = ({ data }) => {
+const Order = ({ data, updateOrderHandler }) => {
   const [order, setOrder] = useState({});
   const [currProduct, setCurrProduct] = useState({});
   const [selectState, setSelectState] = useState("");
@@ -16,13 +17,14 @@ const Order = ({ data }) => {
         productIndex: 0,
         product: data.orderInfo.productsOrdered[0],
       });
-      setSelectState(order?.orderInfo?.orderStatus);
+      setSelectState(data?.orderInfo?.orderStatus);
+      console.log(data);
     }
   }, []);
 
   const handleSelect = (event) => {
-    if (event.target.value === "Not Delivered") setSelectState("Delivered");
-    if (event.target.value === "Delivered") setSelectState("Not Delivered");
+    if (event.target.value === "Delivered") setSelectState("Delivered");
+    if (event.target.value === "Not Delivered") setSelectState("Not Delivered");
   };
 
   const simpleSlider = (direction) => {
@@ -58,7 +60,7 @@ const Order = ({ data }) => {
       <div className={styles.container}>
         <div className="relative">
           <img
-            className="h-[300px]"
+            className="h-[300px] w-[250px]"
             src={currProduct.product?._id?.imageUrl}
             alt=""
           />
@@ -79,32 +81,43 @@ const Order = ({ data }) => {
             </>
           )}
         </div>
-        <div className={styles.productInfoContainer}>
-          <h2>Product information:</h2>
-          <p>{`Size:${currProduct?.product?.size}`}</p>
-          <p>{`Quantity:${currProduct?.product?.quantity}`}</p>
-        </div>
-        <div className={styles.orderInfoContainer}>
-          <h2>Order information:</h2>
-          <p>{`Client name:${order?.clientInfo?.firstName} ${order?.clientInfo?.lastName}`}</p>
-          <p>{`Email:${order?.clientInfo?.email}`}</p>
-          <p>{`Delivery Address:${order?.clientInfo?.city},${order?.clientInfo?.country},str.${order?.clientInfo?.street} N${order?.clientInfo?.unitNumber}`}</p>
-        </div>
-        <div>
-          <div className={styles.selectContainer}>
-            <select
-              type="text"
-              name="type"
-              onChange={handleSelect}
-              defaultValue={selectState}
-            >
-              <option value={`Not Delivered`}>Not Delivered</option>
-              <option value={`Delivered`}>Delivered</option>
-            </select>
 
-            <button>Submit</button>
-          </div>
-        </div>
+          <>
+            <div className={styles.productInfoContainer}>
+              <h2>Product information:</h2>
+              <p>{`Size:${currProduct?.product?.size}`}</p>
+              <p>{`Quantity:${currProduct?.product?.quantity}`}</p>
+            </div>
+            <div className={styles.orderInfoContainer}>
+              <h2>Order information:</h2>
+              <p>{`Client name:${order?.clientInfo?.firstName} ${order?.clientInfo?.lastName}`}</p>
+              <p>{`Email:${order?.clientInfo?.email}`}</p>
+              <p>{`Delivery Address:${order?.clientInfo?.city},${order?.clientInfo?.country},str.${order?.clientInfo?.street} N${order?.clientInfo?.unitNumber}`}</p>
+            </div>
+            <div>
+              <div className={styles.selectContainer}>
+                <select
+                  type="text"
+                  name="type"
+                  onChange={handleSelect}
+                  value={selectState}
+                >
+                  <option value={`Delivered`}>Delivered</option>
+                  <option value={`Not Delivered`}>Not Delivered</option>
+                </select>
+
+                <button
+                  onClick={updateOrderHandler.bind(
+                    null,
+                    order?.orderInfo?.orderId,
+                    selectState
+                  )}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </>
       </div>
     </div>
   );
