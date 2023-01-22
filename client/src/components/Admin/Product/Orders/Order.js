@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import ordersRequester from "../../../../services/ordersRequester";
 
 import styles from "./Order.module.css";
 
