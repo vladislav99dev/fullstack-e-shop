@@ -3,7 +3,7 @@ const router = require("express").Router();
 const productDataValidation = require("../validations/productDataValidation");
 const productServices = require("../services/products/productsServices");
 const orderServices = require("../services/orders/orderServices");
-const formatOrderData = require( "../utils/orders/formatOrderData");
+const formatOrderData = require("../utils/orders/formatOrderData");
 
 const createProductHandler = async (req, res) => {
   console.log(`POST ${req.originalUrl}`);
@@ -26,7 +26,6 @@ const editProductHandler = async (req, res) => {
   console.log(`PUT ${req.originalUrl}`);
 
   const data = req.body;
-
   const { productId } = req.params;
 
   try {
@@ -76,13 +75,17 @@ const editOrderHandler = async (req, res) => {
   console.log(`EDIT ${req.originalUrl}`);
 
   const { orderId } = req.params;
-  const { status } = req.body;
-
+  const { orderStatus } = req.body;
   try {
     const order = await orderServices.findById(orderId);
-  } catch (error) {
+    order.orderStatus = orderStatus;
+    await orderServices.findByIdAndUpdate(order._id, order);
+    const orders = await orderServices.getAll();
+    const formatedOrders = formatOrderData(orders)
+    return res.status(200).json({ message: "SuccessFully updated",formatedOrders});
+  } catch (err) {
     if (err.path === "_id")
-      res.status(400).json({ message: "ProductId is not in valid format" });
+      res.status(400).json({ message: "OrderId is not in valid format" });
     if (err.status)
       return res.status(err.status).json({ message: err.message });
   }
