@@ -80,6 +80,14 @@ const validateIsAllDataSend = (data,messages) => {
     }
   }
 
+  // const validateOnSaleValue = (data,messages) => {
+  //   for (const key in data.sizes) {
+  //       if(isNaN(data.sizes[key])){
+  //           messages.push("Size value is not valid!")
+  //       }
+  //   }
+  // }
+
   const validateDataSizes = (data,messages) => {
     let comparisionArray =[];
     if(data.type === 'clothing') comparisionArray = productData.clothingSizes;

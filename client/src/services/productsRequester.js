@@ -42,7 +42,9 @@ const productsRequester = (method,data,token,productId,profileId) => {
             imageUrl:data.imageUrl,
             color:data.color,
             price:data.price,
-            sizes:data.sizes
+            sizes:data.sizes,
+            onSale:data.onSale,
+            salePercantage:data.salePercantage
         })
     }
     if(method === "GET") return fetch(fetchUrl);

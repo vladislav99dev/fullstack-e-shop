@@ -1,0 +1,168 @@
+	
+	ADMIN {
+
+		ADMID MIDDLEWARE REQUIRES {
+			token in headers.authorization
+			profileId in body
+		},
+
+		admin/checkToken - POST {
+			returns 200 if successfull
+		},
+
+		PRODUCTS {
+			admin/products/create - POST {
+				data in body
+				returns 201 if successfull and the new product !!!
+			}
+	
+			admin/products/productId/edit - PUT {
+				data in body
+				productId in params
+				returns 200 if successfull and message !!!
+			} 
+
+			admin/products/productId/delete - DELETE {
+				productId in params
+				returns 200 if successfull and message !!!
+			} 
+		}
+
+		ORDERS {
+	
+			admin/orders - POST(becouse we need to authorize as admin in the middleware) {
+				returns 200 if successfull and array of orders
+			}
+			
+			admin/orders/orderId - PUT {
+				orderId in params
+				orderStatus in body
+				returns 200 if successfull and an object with a message and updated orders array
+			}
+		}
+	
+	},
+
+
+	ORDER {
+		orders/create - POST {
+			data in body
+			returns 201 if successfull
+		}
+		orders/profileId - GET {
+			profileId in params 
+			returns 200 if successfull and object with user orders
+		}
+	},
+
+	PRODUCTS {
+		orders/men ex. - GET {
+			returns 200 if successfull with all products found by the criteria passed in the url
+		}
+		orders/filter - POST {
+			data in body
+			returns 200 if successfull and the products 
+		}
+		orders/productId - GET {
+			productId in params
+			returns 200 if successfull and the corresponding product
+		}
+	}
+
+	USER PRODUCTS {
+
+		users/products/productdId/favourites-add - POST {
+			profileId in body
+			productId in params
+			returns 200 if successfull and and object with updated user info and accessToken
+		}
+		users/products/productdId/favourites-remove - DELETE {
+			profileId in body
+			productId in params
+			returns 200 if successfull and and object with updated user info and accessToken
+		}
+		users/products/productdId/cart-add - POST {
+			profileId,size,quantity in body
+			productId in params
+			returns 200 if successfull and and object with updated user info and accessToken
+		}
+		users/products/productdId/cart-remove- POST {
+			profileId,size in body
+			productId in params
+			returns 200 if successfull and and object with updated user info and accessToken
+		}
+	}
+	
+	USER {
+		users/register - POST {
+			data in body
+			returns 201 if successfull with a message
+		}
+		users/login - POST {
+			data in body
+			returns 200 if successfull and an object with user ingo and accessToken
+		}
+		users/prodileId/logout - POST {
+			profileId in params
+			returns 200 if successfull and an object with user ingo and accessToken
+		}
+		users/prodileId/change-password - PUT {
+			profileId in params
+			data in body
+			returns 200 if successfull and an object with user ingo and accessToken and message
+		}
+		users/prodileId/EDIT - PUT {
+			profileId in params
+			oldPassword,newPassword,repeatPassword in body
+			returns 200 if successfull and an object with user ingo and accessToken and message
+		}
+		users/profileId - GET {
+			profileId in params
+			returns 200 if successfull and an object with userdata and accessToken
+		}
+	}
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

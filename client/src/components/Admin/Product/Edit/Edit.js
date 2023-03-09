@@ -17,6 +17,7 @@ import productData from "../../../../utils/productData";
 import modalMessages from "../../../../HOC/modalMessages";
 
 import styles from "./Edit.module.css";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const initialSelectStates = { type: "", category: "", gender: "", brand: "" };
 
@@ -70,6 +71,7 @@ const reducerSelectStates = (state, action) => {
 const Edit = () => {
   const [validationMessages, setValidationMessages] = useState([]);
   const [product, setProduct] = useState({});
+  const [saleState, setSaleState] = useState(false);
 
   const [selectStates, dispatch] = useReducer(
     reducerSelectStates,
@@ -92,6 +94,9 @@ const Edit = () => {
         if (response.status === 200) {
           const result = productDisplaySizeFormatter(jsonResponse);
           setProduct(result);
+          setSaleState(result.onSale)
+          console.log(result);
+
           setAllSelectStates("all", {
             type: result.type,
             category: result.category,
@@ -132,6 +137,11 @@ const Edit = () => {
     dispatch({ type: state, payload: data });
   };
 
+  const saleButtonHandler = (e) => {
+    if(e.target.value === 'false') setSaleState(false)
+    if(e.target.value === 'true') setSaleState(true)
+  }
+
   let sortedBrands = productData.brands.sort((a) =>
     a === product.brand ? -1 : 1
   );
@@ -148,10 +158,10 @@ const Edit = () => {
     a === product.type ? -1 : 1
   );
 
-  const modalButtonHandler = () => {
-    resetModals();
-    navigate("/home");
-  };
+  // const modalButtonHandler = () => {
+  //   resetModals();
+  //   navigate("/home");
+  // };
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -161,10 +171,15 @@ const Edit = () => {
 
     const formatedData = productSizeFormater(data);
 
+    console.log(formatedData);
+
     let validationsResponse = productsValidations.validateAllData(formatedData);
     if (validationsResponse.length > 0)
       return setValidationMessages(validationsResponse);
     if (!validationsResponse.length) setValidationMessages([]);
+
+
+    console.log(formatedData);
 
     try {
       const response = await productsRequester.edit(
@@ -206,7 +221,7 @@ const Edit = () => {
         <h1 className={styles.heading}>
           Hello, {user.firstName}
           <br />
-          what we will edit today?
+          what will we edit today?
         </h1>
         {validationMessages.length > 0 &&
           validationMessages.map((message) => (
@@ -322,6 +337,33 @@ const Edit = () => {
             id="price"
             placeholder="Price:"
             defaultValue={product.price}
+          />
+          <fieldset className="flex justify-center text-xl gap-x-4">
+            <div className="flex gap-x-1">
+              {saleState ? (
+                <input type="radio" id="onSale" name="onSale" defaultChecked  value={true} onClick={(e) => saleButtonHandler(e)} />
+                ) : (
+                  <input type="radio" id="onSale" name="onSale" value={true} onClick={(e) => saleButtonHandler(e)} />
+              )}
+              <label htmlFor="onSale">On Sale</label>
+            </div>
+            <div className="flex gap-x-1">
+              {saleState  ? (
+                <input type="radio" id="offSale" name="onSale"  value={false} onClick={(e) => saleButtonHandler(e)} />
+              ) : (
+                <input type="radio" id="offSale" name="onSale" defaultChecked value={false} onClick={(e) => saleButtonHandler(e)} />
+              )}
+              <label htmlFor="offSale">Off Sale</label>
+            </div>
+          </fieldset>
+
+          <input
+            type="text"
+            name="salePercantage"
+            id="percantage"
+            placeholder="Percantage Off"
+            disabled={!saleState}
+            defaultValue={product?.salePercantage}
           />
           <div className={styles.btnContainer}>
             <button className={styles["submit-btn"]}>Submit</button>
