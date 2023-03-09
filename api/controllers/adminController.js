@@ -28,6 +28,12 @@ const editProductHandler = async (req, res) => {
   const data = req.body;
   const { productId } = req.params;
 
+  if (data.onSale === "true") data.onSale = true;
+  if (data.onSale === "false") {
+    data.onSale = false;
+    data.salePercantage = 0;
+  }
+
   try {
     productDataValidation.validateAllData(data);
 
@@ -67,7 +73,6 @@ const deleteProductHandler = async (req, res) => {
       res.status(400).json({ message: "ProductId is not in valid format" });
     if (err.status)
       return res.status(err.status).json({ message: err.message });
-    console.log(err);
   }
 };
 
@@ -81,8 +86,10 @@ const editOrderHandler = async (req, res) => {
     order.orderStatus = orderStatus;
     await orderServices.findByIdAndUpdate(order._id, order);
     const orders = await orderServices.getAll();
-    const formatedOrders = formatOrderData(orders)
-    return res.status(200).json({ message: "SuccessFully updated",formatedOrders});
+    const formatedOrders = formatOrderData(orders);
+    return res
+      .status(200)
+      .json({ message: "SuccessFully updated", formatedOrders });
   } catch (err) {
     if (err.path === "_id")
       res.status(400).json({ message: "OrderId is not in valid format" });

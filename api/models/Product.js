@@ -40,6 +40,9 @@ const productsSchema = new mongoose.Schema({
         type:Boolean,
         default: false
     },
+    salePercantage:{
+        type:Number,
+    },
     inStock:{
         type:Boolean,
         default:true
