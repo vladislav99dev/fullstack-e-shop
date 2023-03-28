@@ -146,8 +146,8 @@ const CartLayout = ({ toggleCartMenu }) => {
 
                           {user.email &&
                             user.cart.length > 0 &&
-                            user.cart.map((product) =>
-                              product._id.inStock ? (
+                            user.cart.map((product) => {
+                              return product._id.inStock ? (
                                 <CartCard
                                   key={`${product._id._id}${product.size}`}
                                   product={product._id}
@@ -175,8 +175,8 @@ const CartLayout = ({ toggleCartMenu }) => {
                                     )}
                                   />
                                 </div>
-                              )
-                            )}
+                              );
+                            })}
                         </ul>
                       </div>
                     </div>
@@ -195,26 +195,3 @@ const CartLayout = ({ toggleCartMenu }) => {
   );
 };
 export default modalMessages(CartLayout);
-
-{
-  /* <ul
-role="list"
-className="-my-6 divide-y divide-gray-200"
->{isLoading 
-? <Spinner/>
-: user.cart.length 
-? user.cart.map((product) => (
-    <CartCard
-      key={`${product._id._id}${product.size}`}
-      product={product._id}
-      quantity={product.quantity}
-      size={product.size}
-      toggleCartMenu={toggleCartMenu}
-      profileId={user._id}
-      manageIsLoading={manageIsLoading}
-    />
-  ))
-: <p className="text-md font-bold text-[#00df9a] mt-4">No products added to cart!</p>
-}
-</ul> */
-}
