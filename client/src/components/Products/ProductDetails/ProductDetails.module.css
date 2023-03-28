@@ -37,7 +37,13 @@
     font-semibold
     text-primary-dark-300
 }
-.product-info p:nth-child(4){
+.sale-price{
+    @apply
+    text-2xl
+    font-semibold
+    text-red-600
+}
+.product-info p:nth-child(5){
     @apply
     text-xl
     text-center

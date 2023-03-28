@@ -42,7 +42,15 @@ const ProductDetails = () => {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.responseStatus) return setFailedModal("Something went wrong",err.message,()=>{modalButtonHandler()},"Try again");
+        if (err.responseStatus)
+          return setFailedModal(
+            "Something went wrong",
+            err.message,
+            () => {
+              modalButtonHandler();
+            },
+            "Try again"
+          );
       });
   }, [productId]);
 
@@ -60,7 +68,15 @@ const ProductDetails = () => {
 
   const addToUserCartHandler = async (event) => {
     event.preventDefault();
-    if (size === "") return setFailedModal("Something went wrong","You should select size first",()=>{modalButtonHandler()},"Try again");
+    if (size === "")
+      return setFailedModal(
+        "Something went wrong",
+        "You should select size first",
+        () => {
+          modalButtonHandler();
+        },
+        "Try again"
+      );
     setIsLoading(true);
     try {
       const response = await favouritesAndCartRequester.addToCart(
@@ -70,7 +86,15 @@ const ProductDetails = () => {
         quantity
       );
       const jsonResponse = await response.json();
-      if (response.status !== 200) setFailedModal("Something went wrong",jsonResponse.message,()=>{modalButtonHandler()},"Try again");
+      if (response.status !== 200)
+        setFailedModal(
+          "Something went wrong",
+          jsonResponse.message,
+          () => {
+            modalButtonHandler();
+          },
+          "Try again"
+        );
       if (response.status === 200) {
         login(jsonResponse);
         setSize("");
@@ -88,7 +112,15 @@ const ProductDetails = () => {
 
   const addToLocalStorage = async (event) => {
     event.preventDefault();
-    if (!size) return setFailedModal("Something went wrong","You should select size first",()=>{modalButtonHandler()},"Try again");
+    if (!size)
+      return setFailedModal(
+        "Something went wrong",
+        "You should select size first",
+        () => {
+          modalButtonHandler();
+        },
+        "Try again"
+      );
     try {
       const response = await productsRequester.getOne(null, null, productId);
       const jsonResponse = await response.json();
@@ -108,7 +140,15 @@ const ProductDetails = () => {
         product._id
       );
       const jsonResponse = await response.json();
-      if (response.status !== 200) setFailedModal("Something went wrong",jsonResponse.message,()=>{modalButtonHandler()},"Try again");
+      if (response.status !== 200)
+        setFailedModal(
+          "Something went wrong",
+          jsonResponse.message,
+          () => {
+            modalButtonHandler();
+          },
+          "Try again"
+        );
       if (response.status === 200) {
         login(jsonResponse);
         setIsLoading(false);
@@ -122,7 +162,14 @@ const ProductDetails = () => {
 
   const denyAccessToFavourites = (event) => {
     event.preventDefault();
-    setFailedModal("Something went wrong","You should be logged in to use this feature!",()=>{modalButtonHandler()},"Try again");
+    setFailedModal(
+      "Something went wrong",
+      "You should be logged in to use this feature!",
+      () => {
+        modalButtonHandler();
+      },
+      "Try again"
+    );
   };
 
   const setSizeChoice = (event) => {
@@ -152,7 +199,14 @@ const ProductDetails = () => {
           <div className={styles["product-info"]}>
             <p>{`${product.gender}'s ${product.type}`}</p>
             <p>{product.name}</p>
-            <p>{`USD $${product.price}`}</p>
+            <p
+              className={`${product.onSale && "line-through !text-black"}`}
+            >{`USD $${product.price}`}</p>
+            {product.onSale && (
+              <p className={styles["sale-price"]}>{`USD $${
+                product.price - product.price * (product.salePercantage / 100)
+              }`}</p>
+            )}
             <p>{product.type === "clothing" ? clothingText : shoeText}</p>
           </div>
 
