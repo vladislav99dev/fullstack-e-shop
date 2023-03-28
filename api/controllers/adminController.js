@@ -37,6 +37,10 @@ const editProductHandler = async (req, res) => {
   try {
     productDataValidation.validateAllData(data);
 
+    for (const key in data.sizes) {
+      if (data.sizes[key] > 0) data.inStock = true;
+    }
+
     await productServices.findById(productId);
 
     await productServices.findByIdAndUpdate(productId, data);
