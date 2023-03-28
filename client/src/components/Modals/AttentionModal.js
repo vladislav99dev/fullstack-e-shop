@@ -6,12 +6,12 @@ const AttentionModal = ({
   descriptionMessage,
   buttonHandler,
   buttonName,
+  cancelBtnHandler,
 }) => {
-  const navigate = useNavigate();
   const { resetModals } = useModalsContext();
   const cancelHandler = () => {
+    if (cancelBtnHandler) cancelBtnHandler();
     resetModals();
-    navigate("/");
   };
   return (
     <div
