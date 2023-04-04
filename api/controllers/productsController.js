@@ -30,7 +30,6 @@ const getManyHandler = async (req, res) => {
 
     if (gender !== "all" && gender !== "sale")
       products = await productsServices.findByGender(gender);
-    console.log(products);
     res.status(200).json(products);
   } catch (err) {
     if (err.status)
