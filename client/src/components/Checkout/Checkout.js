@@ -31,11 +31,29 @@ const Checkout = () => {
   useEffect(() => {
     if (user.email)
       user.cart.map((product) =>
-        setTotalPrice((prev) => prev + product._id.price * product.quantity)
+        setTotalPrice((prev) => {
+          if (product._id.onSale)
+            return (
+              prev +
+              (product._id.price -
+                product._id.price * (product._id.salePercantage / 100)) *
+                product.quantity
+            );
+          return prev + product._id.price * product.quantity;
+        })
       );
     if (!user.email)
       products.map((product) =>
-        setTotalPrice((prev) => prev + product.product.price * product.quantity)
+        setTotalPrice((prev) => {
+          if (product.product.onSale)
+            return (
+              prev +
+              (product.product.price -
+                product.product.price * (product.product.salePercantage / 100)) *
+                product.quantity
+            );
+          return prev + product.product.price * product.quantity;
+        })
       );
 
     return () => {
@@ -96,7 +114,6 @@ const Checkout = () => {
     }
   };
 
-  
   function modalButtonHandler() {
     resetModals();
     navigate("/home");
@@ -217,7 +234,16 @@ const Checkout = () => {
                       <p>{product._id.name}</p>
                       <div>
                         <p>{`Quantity: ${product.quantity}`}</p>
-                        <p className="text-primary-100 text-right">{`$${product._id.price}`}</p>
+                        {!product._id.onSale ? (
+                          <p className="text-primary-100 text-right text-lg">{`$${product._id.price}`}</p>
+                        ) : (
+                          <p className="text-lg text-red-600 text-right">{`$${
+                            product._id.price -
+                            product._id.price *
+                              (product._id.salePercantage / 100)
+                          }`}</p>
+                        )}
+                        {/* <p className="text-primary-100 text-right">{`$${product._id.price}`}</p> */}
                       </div>
                     </div>
                   ))
@@ -229,7 +255,15 @@ const Checkout = () => {
                       <p>{product.product.name}</p>
                       <div>
                         <p>{`Quantity: ${product.quantity}`}</p>
-                        <p className="text-primary-100 text-right">{`$${product.product.price}`}</p>
+                        {!product.product.onSale ? (
+                          <p className="text-primary-100 text-right text-lg">{`$${product.product.price}`}</p>
+                        ) : (
+                          <p className="text-lg text-red-600 text-right">{`$${
+                            product.product.price -
+                            product.product.price *
+                              (product.product.salePercantage / 100)
+                          }`}</p>
+                        )}
                       </div>
                     </div>
                   ))}

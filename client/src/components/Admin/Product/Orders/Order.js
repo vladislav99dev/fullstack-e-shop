@@ -5,6 +5,7 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import styles from "./Order.module.css";
 
 const Order = ({ data, updateOrderHandler }) => {
+  console.log(data);
   const [order, setOrder] = useState({});
   const [currProduct, setCurrProduct] = useState({});
   const [selectState, setSelectState] = useState("");

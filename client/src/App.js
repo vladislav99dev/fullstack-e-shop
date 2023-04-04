@@ -35,7 +35,7 @@ function App() {
               <NavBar />
               <div id="main-content" className="min-h-[550px] w-full">
                 <Routes>
-                  <Route path="/home" element={<Home />} />
+                  <Route path="/" element={<Home />} />
 
                   <Route path="/users/">
                     <Route path="login" element={<Login />} />
@@ -49,6 +49,8 @@ function App() {
                       path=":gender/details/:productId"
                       element={<ProductDetails />}
                     />
+                    <Route path="sale" element={<ProductsLayout />} />
+
                   </Route>
 
                   <Route path="/order/">

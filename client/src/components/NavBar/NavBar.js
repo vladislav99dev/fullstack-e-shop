@@ -51,8 +51,6 @@ const NavBar = () => {
         .catch((err) => {
           console.log(err);
         });
-        console.log(isAdmin);
-
   }, [user]);
 
   const manageFavouritesAccess = () => {

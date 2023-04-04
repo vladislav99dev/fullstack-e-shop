@@ -25,12 +25,31 @@ const CartLayout = ({ toggleCartMenu }) => {
   useEffect(() => {
     if (user.email) {
       user.cart.map((product) =>
-        setTotalPrice((prev) => prev + product._id.price * product.quantity)
+        setTotalPrice((prev) => {
+          if (product._id.onSale)
+            return (
+              prev +
+              (product._id.price -
+                product._id.price * (product._id.salePercantage / 100)) *
+                product.quantity
+            );
+          return prev + product._id.price * product.quantity;
+        })
       );
     }
     if (!user.email)
       products.map((product) =>
-        setTotalPrice((prev) => prev + product.product.price * product.quantity)
+        setTotalPrice((prev) => {
+          if (product.product.onSale)
+            return (
+              prev +
+              (product.product.price -
+                product.product.price *
+                  (product.product.salePercantage / 100)) *
+                product.quantity
+            );
+          return prev + product.product.price * product.quantity;
+        })
       );
   }, []);
 
@@ -38,9 +57,16 @@ const CartLayout = ({ toggleCartMenu }) => {
     event.preventDefault();
     removeProduct(product, size);
     if (products.length > 0)
-      return products.map((product) =>
-        setTotalPrice(product.product.price * product.quantity)
-      );
+      return products.map((product) => {
+        if (product.product.onSale)
+          return setTotalPrice(
+            product.product.price -
+              product.product.price *
+                (product.product.salePercantage / 100) *
+                product.quantity
+          );
+        return setTotalPrice(product.product.price * product.quantity);
+      });
     if (products.length <= 0) setTotalPrice(0);
   };
 
@@ -59,11 +85,21 @@ const CartLayout = ({ toggleCartMenu }) => {
         };
       if (response.status === 200) {
         login(jsonResponse);
-        if (jsonResponse.user.cart.length > 0)
-          return jsonResponse.user.cart.map((product) =>
-            setTotalPrice(product._id.price * product.quantity)
-          );
-        if (jsonResponse.user.cart.length <= 0) setTotalPrice(0);
+        if (jsonResponse.cart.length > 0)
+          return jsonResponse.cart.map((product) => {
+            if (product._id.onSale)
+              return setTotalPrice(
+                product._id.price -
+                  product._id.price *
+                    (product._id.salePercantage / 100) *
+                    product.quantity
+              );
+
+            return setTotalPrice(product._id.price * product.quantity);
+          });
+        if (jsonResponse.cart.length <= 0) {
+          setTotalPrice(0);
+        }
       }
     } catch (err) {
       setIsLoading(false);
