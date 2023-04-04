@@ -49,8 +49,6 @@ function App() {
                       path=":gender/details/:productId"
                       element={<ProductDetails />}
                     />
-                    <Route path="sale" element={<ProductsLayout />} />
-
                   </Route>
 
                   <Route path="/order/">
@@ -65,7 +63,6 @@ function App() {
                       element={<Delete />}
                     />
                     <Route path="orders" element={<Orders />} />
-
                   </Route>
 
                   <Route path="*" element={<ErrorPage />} />

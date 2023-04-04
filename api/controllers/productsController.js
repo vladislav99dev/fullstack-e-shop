@@ -17,6 +17,7 @@ const getManyHandler = async (req, res) => {
     gender !== "women" &&
     gender !== "boys" &&
     gender !== "girls" &&
+    gender !== "sale" &&
     gender !== "all"
   )
     return res
@@ -25,10 +26,11 @@ const getManyHandler = async (req, res) => {
 
   try {
     if (gender === "all") products = await productsServices.findAll();
+    if (gender === "sale") products = await productsServices.findSale();
 
-    if (gender !== "all")
+    if (gender !== "all" && gender !== "sale")
       products = await productsServices.findByGender(gender);
-
+    console.log(products);
     res.status(200).json(products);
   } catch (err) {
     if (err.status)
@@ -77,7 +79,10 @@ const getOneHandler = async (req, res) => {
   }
 };
 
-router.get(["/men", "/women", "/girls", "/boys", "/all"], getManyHandler);
+router.get(
+  ["/men", "/women", "/girls", "/boys", "/all", "/sale"],
+  getManyHandler
+);
 router.post("/filter", getManyFiltered);
 router.get("/:productId", getOneHandler);
 

@@ -33,6 +33,10 @@ const findAndFilter = async(filterData) => {
     const products = await  Product.find({...filterData})
     return products;
 }
+const findSale = async() => {
+    const products = await  Product.find({onSale:true})
+    return products;
+}
 
 const productsServices = {
     create,
@@ -41,6 +45,7 @@ const productsServices = {
     deleteById,
     findByGender,
     findAll,
-    findAndFilter
+    findAndFilter,
+    findSale
 }
 module.exports = productsServices;

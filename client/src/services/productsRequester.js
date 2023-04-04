@@ -21,7 +21,7 @@ const productsRequester = (method,data,token,productId,profileId) => {
     if(method === "GET"){
         fetchUrl = `${url}/products/${productId}`
     }
-    if(method === "GET" && (data === "men" || data === "women" || data === "boys" || data === "girls" || data === 'all')){
+    if(method === "GET" && (data === "men" || data === "women" || data === "boys" || data === "girls" || data === 'all' || data === 'sale')){
         fetchUrl = `${url}/products/${data}`
     }
     if(method === "DELETE") {

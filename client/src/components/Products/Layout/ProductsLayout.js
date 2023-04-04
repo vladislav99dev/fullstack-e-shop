@@ -26,6 +26,7 @@ const ProductsLayout = () => {
       gender !== "women" &&
       gender !== "boys" &&
       gender !== "girls" &&
+      gender !== "sale" &&
       gender !== "all"
     )
       navigate("/");
